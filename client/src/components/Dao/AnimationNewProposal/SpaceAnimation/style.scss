@@ -1,0 +1,147 @@
+
+
+.number-one {
+	transform: translateY(-10px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-10 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-fill-mode: forwards;
+}
+
+.number-two {
+	transform: translateY(-20px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-20 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+.number-three {
+	transform: translateY(-30px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-30 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+.number-four {
+	transform: translateY(-50px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-50 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+.number-five {
+	transform: translateY(-60px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-60 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+.number-six {
+	transform: translateY(-70px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-70 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+.number-seven {
+	transform: translateY(-80px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-80 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+.number-eight {
+	transform: translateY(-90px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-90 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+.number-nine {
+	transform: translateY(-100px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-100 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+.number-ten {
+	transform: translateY(-110px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-110 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+.number-eleven {
+	transform: translateY(-120px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-120 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+.number-twelve {
+	transform: translateY(-150px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-150 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+.number-thirteen {
+	transform: translateY(-160px) translateZ(0);
+	opacity: 0;
+	animation: fadeNumberDown-160 (random(4000) + 2000)+ms ease-in-out infinite;
+	animation-delay: random(6000) * 1ms;
+	animation-fill-mode: forwards;
+}
+
+
+@mixin generateNumAnimation($tstart, $tend) {
+	@keyframes fadeNumberDown-#{$tstart} {
+		0% {
+			transform: translateY(-$tstart * 1px) translateZ(0);
+				opacity: 0;
+				}
+		40% { opacity: 0.4; }
+		60% { opacity: 0.4; }
+		100% {
+			transform: translateY($tend * 1px) translateZ(0);
+			opacity: 0;
+		}
+	}
+}
+
+
+@include generateNumAnimation(10, 140);
+
+@include generateNumAnimation(20, 140);
+
+@include generateNumAnimation(30, 130);
+
+@include generateNumAnimation(50, 110);
+
+@include generateNumAnimation(60, 90);
+
+@include generateNumAnimation(70, 80);
+
+@include generateNumAnimation(80, 80);
+
+@include generateNumAnimation(90, 60);
+
+@include generateNumAnimation(100, 60);
+
+@include generateNumAnimation(110, 30);
+
+@include generateNumAnimation(120, 20);
+
+@include generateNumAnimation(150, 10);
+
+@include generateNumAnimation(160, 10);

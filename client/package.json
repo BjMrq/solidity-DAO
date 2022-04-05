@@ -1,0 +1,81 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.3",
+    "@testing-library/user-event": "^13.5.0",
+    "@typechain/web3-v1": "^5.0.0",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^17.0.21",
+    "@types/ramda": "0.28.0",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
+    "@types/styled-components": "^5.1.24",
+    "@typescript-eslint/eslint-plugin": "^5.12.1",
+    "@typescript-eslint/parser": "^5.12.1",
+    "babel-plugin-styled-components": "^2.0.6",
+    "binance": "^2.0.27",
+    "eslint": "^7.11.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.29.2",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "fs-extra": "^10.0.1",
+    "glob": "^7.2.0",
+    "prettier": "^2.5.1",
+    "ramda": "0.28.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-modal": "^3.14.4",
+    "react-scripts": "4.0.3",
+    "react-toastify": "^8.2.0",
+    "react-use-websocket": "^3.0.0",
+    "styled-components": "^5.3.3",
+    "ts-node": "^10.7.0",
+    "typechain": "^7.0.0",
+    "typescript": "^4.5.5",
+    "web-vitals": "^2.1.4",
+    "web3": "^1.7.0"
+  },
+  "scripts": {
+    "start": "npm run get-contracts && PORT=3333 react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "get-contracts": "node build-contracts-abis.js && copyfiles --exclude \"../contracts/artifacts/**/*.dbg.json\" --exclude \"../contracts/artifacts/build-info/**\" -f \"../contracts/artifacts/**/*.json\" \"./src/contracts/abis/artifacts\" && typechain --target=web3-v1 --out-dir ./src/contracts/types './src/contracts/abis/artifacts/*.json'"
+  },
+  "resolutions": {
+    "//": "See https://github.com/facebook/create-react-app/issues/11773",
+    "react-error-overlay": "6.0.9"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/react-color": "^3.0.6",
+    "@types/react-modal": "^3.13.1",
+    "copyfiles": "^2.4.1",
+    "react-color": "^2.19.3",
+    "react-tooltip": "^4.2.21",
+    "sass": "^1.49.10"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "stylelint-config-recommended",
+    "stylelint-config-styled-components"
+  ],
+  "rules": {
+    "max-empty-lines": 1,
+    "indentation": [
+      2,
+      {
+        "message": "Please use 2 spaces for indentation.",
+        "severity": "error"
+      }
+    ]
+  }
+}

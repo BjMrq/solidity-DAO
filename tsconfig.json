@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "dist"
+  },
+  "include": [
+    "./contracts/deploy",
+    "./contracts/helpers",
+    "./contracts/scripts",
+    "./contracts/tests",
+    "./contracts/typechain-types",
+    "./contracts/node_modules"
+  ],
+  "typeRoots": [
+    "./contracts/node_modules/@types",
+    "./contracts/typechain-types/index.d.ts"
+  ],
+  "types": [
+    "node"
+  ],
+  "files": [
+    "./contracts/hardhat.config.ts"
+  ]
+}
