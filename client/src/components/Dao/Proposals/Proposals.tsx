@@ -10,8 +10,8 @@ const TooltipSpan = styled.span`
   margin-left: 10px;
   `
 const TooltipContent = styled.div`
-    width: 300px;
-    font-size: 25px;
+  width: 300px;
+  font-size: 25px;
 `
 
 export function Proposals() {

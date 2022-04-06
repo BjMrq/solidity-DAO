@@ -24,12 +24,13 @@ const AppBody = styled.div`
 `
 
 const Panel = styled.div`
-  width: 46%;
+  width: 42%;
   margin: 0;
-  padding: 0 2%;
+  padding: 0 4%;
   height: 100%;
  @media screen and (max-width: 1200px) { 
-    width: 100%;
+    width: 92%;
+    padding: 0 4%;
  }
 `
 

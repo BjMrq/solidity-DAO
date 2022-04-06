@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as R from "ramda";
 import React, { Fragment, useCallback, useContext, useEffect, useState } from 'react';
 import styled from "styled-components";
@@ -17,6 +18,7 @@ const ProposalRowWrapper = styled.div`
   background-color: transparent;
   text-overflow: ellipsis;
   overflow-wrap: break-word;
+  width: 100%;
 `
 
 const ProposalSeparator = styled.div`
@@ -67,6 +69,8 @@ const ProposalStatus = styled.div<{color: string}>`
   width: 65px;
   margin-left: auto; 
   margin-right: 0;
+  /* //TODO review */
+  margin-bottom: 30px; 
   font-weight: bold;
 `
 
@@ -328,7 +332,7 @@ export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: 
         <ProposalDescriptionSubLabel>
         Contracts:
         </ProposalDescriptionSubLabel>
-        <ProposalDescription>
+        <ProposalDescription style={{overflowWrap: "anywhere"}}>
           {proposal.targets.join(", ")}
         </ProposalDescription>
         <ProposalDescriptionLabel>
@@ -346,7 +350,7 @@ export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: 
         In Favor: {votes["1"]}
           <br/>
         Against: {votes["0"]}
-        </ProposalDescription>
+        </ProposalDescription> 
         
         <ActionWrapper>
 

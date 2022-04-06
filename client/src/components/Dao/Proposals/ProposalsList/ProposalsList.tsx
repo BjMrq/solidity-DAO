@@ -12,6 +12,10 @@ const GradientCardDiv = styled.div`
   width: 98%;
   padding: 0 40px;
   margin: auto;
+
+  @media screen and (max-width: 1200px) {  
+    width: 100%;
+  }
 `
 
 const CardWrapper = styled.div`

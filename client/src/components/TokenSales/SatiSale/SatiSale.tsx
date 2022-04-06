@@ -10,10 +10,10 @@ const GradientCardDiv = styled.div`
 
   margin: 0 auto;
   
-  width: 90%;
+  width: 100%;
 
   @media screen and (max-width: 600px) {
-    width: 98%;
+    width: 100%;
   }
 `
 
