@@ -1,15 +1,15 @@
 import { neutralColor, successColor, errorColor } from "../style/colors";
 
 export const ProposalStates = {
-  "-1": { name: "", color: neutralColor },
-  "0": { name: "Pending", color: neutralColor },
-  "1": { name: "Active", color: successColor },
-  "2": { name: "Canceled", color: errorColor },
-  "3": { name: "Defeated", color: errorColor },
-  "4": { name: "Succeeded", color: successColor },
-  "5": { name: "Queued", color: neutralColor },
-  "6": { name: "Expired", color: errorColor },
-  "7": { name: "Executed", color: successColor },
+  None: { name: "", color: neutralColor, value: "" },
+  Pending: { name: "Pending", color: neutralColor, value: "0" },
+  Active: { name: "Active", color: successColor, value: "1" },
+  Canceled: { name: "Canceled", color: errorColor, value: "2" },
+  Defeated: { name: "Defeated", color: errorColor, value: "3" },
+  Succeeded: { name: "Succeeded", color: successColor, value: "4" },
+  Queued: { name: "Queued", color: neutralColor, value: "5" },
+  Expired: { name: "Expired", color: errorColor, value: "6" },
+  Executed: { name: "Executed", color: successColor, value: "7" },
 } as const;
 
 export const ProposalSettings = {
@@ -18,5 +18,10 @@ export const ProposalSettings = {
   quorumPercentage: 0,
   executionDelaySeconds: 20,
 } as const;
+
+export const ProposalVotes = {
+  "0": { name: "against" },
+  "1": { name: "for" },
+};
 
 export const DescriptionSeparator = "|:|";

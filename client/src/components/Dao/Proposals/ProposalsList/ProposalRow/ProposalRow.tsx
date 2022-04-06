@@ -1,35 +1,37 @@
-import React, { useContext, useEffect, useState } from 'react';
+import * as R from "ramda";
+import React, { Fragment, useCallback, useContext, useEffect, useState } from 'react';
 import styled from "styled-components";
 import { Web3Context } from "../../../../../contracts/context";
-import { PossibleProposalState } from "../../../../../contracts/types";
-import { DescriptionSeparator, ProposalSettings, ProposalStates } from "../../../../../contracts/variables";
-import { gradientBackgroundCss } from "../../../../../style/card";
-import { backGroundColor, errorColor, successColor } from "../../../../../style/colors";
-import { bordered } from "../../../../../style/input-like";
+import { type PossibleProposalState, type PossibleProposalVotes } from "../../../../../contracts/types";
+import { VoteCast } from "../../../../../contracts/types/GovernanceOrchestrator";
+import { onEventDataDo } from "../../../../../contracts/utils";
+import { DescriptionSeparator, ProposalStates } from "../../../../../contracts/variables";
+import { borderRadius } from "../../../../../style/characteristics";
+import { actionColor, backGroundColor, errorColor, lightColor, neutralColor, successColor } from "../../../../../style/colors";
 import { sleep } from "../../../../../utils/sleep";
 
 
 const ProposalRowWrapper = styled.div`
   font-size: 20px;
-  margin: 5px 0;
-  padding: 20px;
-  background-color: ${backGroundColor};
+  padding: 40px 0;
+  background-color: transparent;
   text-overflow: ellipsis;
   overflow-wrap: break-word;
 `
 
+const ProposalSeparator = styled.div`
+  width: 100%;
+  height: 20px;
+  background-color: ${backGroundColor};
+  border-radius: ${borderRadius};
+`
+
 const GradientUnderline = styled.div`
-  ${gradientBackgroundCss}
+  background-color: ${lightColor};
   width: 30%;
   border-radius: 0;
   height: 4px;
 `
-
-// const ProposalBody = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-// `
 
 const ProposalDescriptionLabel = styled.div`
   text-align: left;
@@ -51,24 +53,24 @@ const ProposalDescription = styled.div`
   text-align: left;
   width: 100%;
   font-size: 18px;
-  margin: 20px 0 35px 0;
+  margin: 20px 0 40px 0;
 `
 
 const ProposalStatus = styled.div<{color: string}>`
   font-size: 10px;
   border-radius: 6px;
-  border: 1.3px solid ${({color}) => color};
-  color:  ${({color}) => color};
-  padding: 3px;
+  border: 1.5px solid ${({color}) => color};
+  color: ${lightColor};
+  background-color: ${({color}) => color};
+  padding: 6px;
   text-align: center;
-  width: 55px;
+  width: 65px;
   margin-left: auto; 
   margin-right: 0;
+  font-weight: bold;
 `
 
-const VoteWrapper = styled.div`
-  margin: 40px auto 15px auto;
-  height: 20px;
+const ActionWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
@@ -76,71 +78,168 @@ const VoteWrapper = styled.div`
   text-align: center;
 `
 
-const VoteOption = styled.div<{color: string}>`
-  background-color: ${({color}) => color};
-  width: 50%;
+const ActionOptionButton = styled.div<{blocked?: boolean, color: string}>`
   height: 45px;
-  margin: 5px;
+  padding: 5px;
   font-weight: bold;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  ${bordered}
+  border-radius: ${borderRadius};
+  width: 100%;
+
+  border: ${({blocked, color}) => Boolean(blocked) ? "none" : `1px solid ${color}`};
+  cursor: ${({blocked}) => Boolean(blocked) ? "default" : "pointer"};
+  background-color: ${({blocked, color}) => Boolean(blocked) ? neutralColor : color };
 
   &:hover,
   &:focus {
-    box-shadow: 0 0.2em 0.2em -0.1em ${({color}) => color};
-    transform: translateY(-0.06em);
+    filter: ${({blocked}) => Boolean(blocked) ? "none" : "brightness(95%)"};
+  }
+  &:active {
+    filter: ${({blocked}) => Boolean(blocked) ? "none" : "brightness(95%)"};
   }
 `
 
-export function ProposalRow({proposalId}: {proposalId: string}) {
-  const { contracts: {governanceOrchestrator}, web3Instance} = useContext(Web3Context);
 
-  const [proposalState, setProposalState] = useState<PossibleProposalState>("-1")
-  const [proposal, setProposal] = useState<{callDescription: string,proposalDescription: string, targets: string[], calldatas: string[]}>({callDescription: "", proposalDescription: "", targets: [], calldatas: []})
+export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: boolean}) {
+  const { contracts: {governanceOrchestrator}, web3Instance, currentAccount, toastContractSend} = useContext(Web3Context);
 
-  const [votes] = useState({
-    for:0,
-    against: 0
+  const [proposalState, setProposalState] = useState<PossibleProposalState>(ProposalStates.None)
+
+  const [proposal, setProposal] = useState<{callDescription: string, proposalDescription: string, description: string, targets: string[], calldatas: string[], values: string[]}>({callDescription: "", proposalDescription: "", description: "", targets: [], calldatas: [], values: []})
+
+  const [canExecute, setCanExecute] = useState(false)
+
+  //TODO Module out 1.votes 2.vote button 3.queue button 4.execute button
+  const [votes, setVotes] = useState({
+    hasVoted: false,
+    "0": "0",
+    "1": "0"
   })
 
-  // const votesAreOpen = () => ProposalState[proposalState].name === "Active"
 
-  const votesAreOpen = (statusName: PossibleProposalState) => ProposalStates[statusName].name === "Active"
+  const votesAreOpen = (proposalState: PossibleProposalState) => proposalState.name === "Active"
 
-  const propositionIsPending = (statusName: PossibleProposalState) => ProposalStates[statusName].name === "Pending"
+  const propositionIsPending = (proposalState: PossibleProposalState) => proposalState.name === "Pending"
+
+  const propositionIsSucceeded = (proposalState: PossibleProposalState) => proposalState.name === "Succeeded"
+
+  const propositionIsQueued = (proposalState: PossibleProposalState) => proposalState.name === "Queued"
   
-  const hasVoted = (vote: string) => {
-    console.log(vote);
-  }
+  const submitVote = async(vote: PossibleProposalVotes) => await toastContractSend(governanceOrchestrator.methods.castVote(proposalId, vote))
 
-  const waitForBlocks = async (blockNumber: number) => {
+  const queueProposition = async () => await toastContractSend(governanceOrchestrator.methods.queue(proposal.targets, proposal.values, proposal.calldatas, web3Instance.utils.keccak256(proposal.description) ))
 
-    let currentBlockNumber = await web3Instance.eth.getBlockNumber()
-    const blockNumberToWaitFor = currentBlockNumber + blockNumber
+  const executeProposition = async () => await toastContractSend(governanceOrchestrator.methods.execute(proposal.targets, proposal.values, proposal.calldatas, web3Instance.utils.keccak256(proposal.description) ))
 
-    while (currentBlockNumber < blockNumberToWaitFor){
-      currentBlockNumber = await web3Instance.eth.getBlockNumber()
+  const getStateFromStateStateValue = (propositionStateValue: PossibleProposalState["value"]) => Object.values(ProposalStates).find(({value}) =>value === propositionStateValue) as PossibleProposalState
+
+
+  const waitForEta = async (executionEta: number) => {
+
+    let currentTime = Math.round((new Date()).getTime() / 1000)
+
+    while (currentTime < executionEta){
       await sleep(4000)
+      currentTime = Math.round((new Date()).getTime() / 1000)
     }
 
     return true
-   
   }
+
+  const waitForBlockNumber = async (blockNumber: number) => {
+
+    let currentBlockNumber = await web3Instance.eth.getBlockNumber()
+
+    while (currentBlockNumber < blockNumber){
+      await sleep(4000)
+      currentBlockNumber = await web3Instance.eth.getBlockNumber()
+    }
+
+    return currentBlockNumber
+  }
+
+  const waitForProposalStateToNotBe = async (proposalStateToPass: PossibleProposalState) => {
+
+    let currentPropositionState = (await governanceOrchestrator.methods.state(proposalId).call()) as PossibleProposalState["value"]
+
+    while (currentPropositionState === proposalStateToPass.value){
+      await sleep(4000)
+      currentPropositionState = (await governanceOrchestrator.methods.state(proposalId).call()) as PossibleProposalState["value"]
+    }
+
+    return currentPropositionState
+  }
+
+  const waitForBlockNumberAndEnsurePropositionStateIsPassed = async (blockNumber: number, propositionStateToHavePassed: PossibleProposalState) => {
+    await waitForBlockNumber(blockNumber)
+
+    const newStateValueAtBlock = (await governanceOrchestrator.methods.state(proposalId).call()) as PossibleProposalState["value"]
+
+    if(newStateValueAtBlock !== propositionStateToHavePassed.value) {
+      setProposalState(
+        getStateFromStateStateValue(newStateValueAtBlock)
+      )
+
+      return newStateValueAtBlock
+    } else {
+
+      const newStateValue = await waitForProposalStateToNotBe(propositionStateToHavePassed)
+
+      setProposalState(
+        getStateFromStateStateValue(newStateValue)
+      )
+
+      return newStateValue
+
+    }
+  }
+
+  const onVoteCastEventReceived = useCallback((castedVote: VoteCast) => {
+    if(castedVote.returnValues.proposalId === proposalId){
+      const voteValue = castedVote.returnValues.support as PossibleProposalVotes
+
+      const newVotesCount = R.assoc( 
+        voteValue,
+        web3Instance.utils.toBN( castedVote.returnValues.weight).add(web3Instance.utils.toBN(votes[voteValue])).toString(),
+        votes
+      )
+
+      setVotes(R.assoc( 
+        "hasVoted",
+        castedVote.returnValues.voter === currentAccount,
+        newVotesCount
+      ))
+    }
+  }, [votes])
 
 
   useEffect(() => {
+
     (async () => {
       //@ts-expect-error
-      const {targets, calldatas , description} = await governanceOrchestrator.methods.getProposal(proposalId).call()
+      const {targets, calldatas , description, 1: values} = await governanceOrchestrator.methods.getProposal(proposalId).call()
 
       const [callDescription, proposalDescription] = description.split(DescriptionSeparator)
 
-      setProposal({targets, calldatas, callDescription, proposalDescription})
+      setProposal({targets, calldatas, description, callDescription, proposalDescription, values})
 
-      setProposalState(await governanceOrchestrator.methods.state(proposalId).call() as PossibleProposalState)
+      setProposalState(
+        getStateFromStateStateValue(
+          await governanceOrchestrator.methods.state(proposalId).call() as PossibleProposalState["value"]
+        ) 
+      )
+
+      const {againstVotes, forVotes} = await governanceOrchestrator.methods.proposalVotes(proposalId).call()
+
+      setVotes({
+        "0": againstVotes, 
+        "1": forVotes,
+        hasVoted: await governanceOrchestrator.methods.hasVoted(proposalId, currentAccount).call()
+      })
     }
     )();
   }, [])
@@ -149,21 +248,57 @@ export function ProposalRow({proposalId}: {proposalId: string}) {
     (async () => {
       
       if(propositionIsPending(proposalState)){
-        await waitForBlocks(ProposalSettings.votingDelayBlocks)
 
-        setProposalState(await governanceOrchestrator.methods.state(proposalId).call() as PossibleProposalState)
+        await waitForBlockNumberAndEnsurePropositionStateIsPassed(
+          Number(await governanceOrchestrator.methods.proposalSnapshot(proposalId).call()),
+          ProposalStates.Pending
+        )
+
+        return () => ({})
       }
-
+      
       if(votesAreOpen(proposalState)){
-        // console.log(await governanceOrchestrator.methods.getVotes(proposalId).call());
 
-        governanceOrchestrator.events.VoteCast().on("data", (thing) => {
-          console.log(thing);
-        })
+        const voteCastListener = governanceOrchestrator.events.VoteCast(onEventDataDo(onVoteCastEventReceived))
+
+        await waitForBlockNumberAndEnsurePropositionStateIsPassed(
+          Number(await governanceOrchestrator.methods.proposalDeadline(proposalId).call()),
+          ProposalStates.Active
+        )
+
+        return () => {
+          voteCastListener.removeAllListeners()
+        }
       }
 
 
+      if(propositionIsSucceeded(proposalState)){
 
+        const proposalQueueListener = governanceOrchestrator.events.ProposalQueued(onEventDataDo((queueEventData) => {
+          if(queueEventData.returnValues.proposalId === proposalId) setProposalState(ProposalStates.Queued)
+        }))
+
+        return () => {
+          proposalQueueListener.removeAllListeners()
+        }
+      }
+
+      if(propositionIsQueued(proposalState)){
+
+        const proposalQueueListener = governanceOrchestrator.events.ProposalExecuted(onEventDataDo((queueEventData) => {
+          if(queueEventData.returnValues.proposalId === proposalId) setProposalState(ProposalStates.Executed)
+        }))
+
+        const executionEta = await governanceOrchestrator.methods.proposalEta(proposalId).call()
+
+        await waitForEta(Number(executionEta))
+
+        setCanExecute(true)
+
+        return () => {
+          proposalQueueListener.removeAllListeners()
+        }
+      }
 
     }
     )();
@@ -172,41 +307,94 @@ export function ProposalRow({proposalId}: {proposalId: string}) {
   //TODO link to explorer
 
   return (
-    <ProposalRowWrapper>
-      <div style={{minWidth: "100%"}}>
-        <ProposalStatus color={ProposalStates[proposalState].color}>
-          {ProposalStates[proposalState].name}
-        </ProposalStatus>
-      </div>
-      <ProposalDescriptionLabel>
+
+    <Fragment>
+      <ProposalRowWrapper>
+        <div style={{minWidth: "100%"}}>
+          <ProposalStatus color={proposalState.color}>
+            {proposalState.name}
+          </ProposalStatus>
+        </div>
+        <ProposalDescriptionLabel>
         Calldata description:
-      </ProposalDescriptionLabel>
-      <GradientUnderline/>
-      <ProposalDescriptionSubLabel>
+        </ProposalDescriptionLabel>
+        <GradientUnderline/>
+        <ProposalDescriptionSubLabel>
         Functions:
-      </ProposalDescriptionSubLabel>
-      <ProposalDescription>
-        {proposal.callDescription}
-      </ProposalDescription>
-      <ProposalDescriptionSubLabel>
+        </ProposalDescriptionSubLabel>
+        <ProposalDescription>
+          {proposal.callDescription}
+        </ProposalDescription>
+        <ProposalDescriptionSubLabel>
         Contracts:
-      </ProposalDescriptionSubLabel>
-      <ProposalDescription>
-        {proposal.targets.join(", ")}
-      </ProposalDescription>
-      <ProposalDescriptionLabel>
+        </ProposalDescriptionSubLabel>
+        <ProposalDescription>
+          {proposal.targets.join(", ")}
+        </ProposalDescription>
+        <ProposalDescriptionLabel>
         Proposal Description:
-      </ProposalDescriptionLabel>
-      <GradientUnderline/>
-      <ProposalDescription>
-        {proposal.proposalDescription}
-      </ProposalDescription>
-      {votesAreOpen(proposalState) && 
-      <VoteWrapper>
-        <VoteOption color={successColor} onClick ={() => hasVoted("for")}>In favor {votes.for}</VoteOption>
-        <VoteOption color={errorColor} onClick ={() => hasVoted("against")}>Against {votes.against}</VoteOption>
-      </VoteWrapper>
-      }
-    </ProposalRowWrapper>
+        </ProposalDescriptionLabel>
+        <GradientUnderline/>
+        <ProposalDescription>
+          {proposal.proposalDescription}
+        </ProposalDescription>
+        <ProposalDescriptionLabel>
+        Votes:
+        </ProposalDescriptionLabel>
+        <GradientUnderline/>
+        <ProposalDescription>
+        In Favor: {votes["1"]}
+          <br/>
+        Against: {votes["0"]}
+        </ProposalDescription>
+        
+        <ActionWrapper>
+
+          {
+            votesAreOpen(proposalState) && 
+     ( votes.hasVoted ? 
+       <ActionOptionButton blocked color={neutralColor}>
+            Voted submitted
+       </ActionOptionButton>
+       : 
+       <Fragment>
+         <ActionOptionButton color={successColor} onClick ={() => submitVote("1")}>
+           In Favor
+         </ActionOptionButton>
+         <div style={{width: "40px"}}/>
+         <ActionOptionButton color={errorColor} onClick ={() => submitVote("0")}>
+           Against
+         </ActionOptionButton>
+       </Fragment>
+     )
+          }
+
+
+          { 
+            propositionIsSucceeded(proposalState) && 
+          <ActionOptionButton onClick ={queueProposition} color={actionColor}>
+          Queue Proposition
+          </ActionOptionButton>
+          }
+
+          { 
+            propositionIsQueued(proposalState) && (
+              canExecute ? 
+                <ActionOptionButton onClick={executeProposition} color={actionColor}>
+          Execute Proposition
+                </ActionOptionButton>
+                :
+                <ActionOptionButton blocked color={neutralColor}>
+          Execute Proposition
+                </ActionOptionButton>
+            )
+
+          }
+
+        </ActionWrapper>
+      </ProposalRowWrapper>
+      { !Boolean(isLast) && <ProposalSeparator/> }
+
+    </Fragment>
   )
 }

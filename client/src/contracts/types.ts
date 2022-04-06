@@ -4,7 +4,7 @@ import { tokenLogos } from "./crypto-logos";
 import { ERC20 } from "./types/ERC20";
 import { ERC20TokensSwap } from "./types/ERC20TokensSwap";
 import { PayableTx } from "./types/types";
-import { ProposalStates } from "./variables";
+import { ProposalStates, ProposalVotes } from "./variables";
 
 export type SellTokenLogos = typeof tokenLogos;
 export type PossibleSwapToken = keyof SellTokenLogos;
@@ -56,4 +56,13 @@ export type Web3ContextFunctions = {
   submitNewColorPropositionToDao: SubmitNewColorPropositionToDao;
 };
 
-export type PossibleProposalState = keyof typeof ProposalStates;
+export type PossibleProposalState =
+  typeof ProposalStates[keyof typeof ProposalStates];
+
+export type PossibleProposalVotes = keyof typeof ProposalVotes;
+
+export type NewProposalEvent = {
+  returnValues: {
+    proposalId: string;
+  };
+};

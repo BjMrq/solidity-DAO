@@ -1,19 +1,21 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import styled from "styled-components";
 import { Web3Context } from "../../../../contracts/context";
+import { ProposalCreated } from "../../../../contracts/types/GovernanceOrchestrator";
 import { onEventDataDo } from "../../../../contracts/utils";
 import { gradientBackgroundCss } from "../../../../style/card";
 import { ProposalRow } from "./ProposalRow/ProposalRow";
 
 const GradientCardDiv = styled.div`
   ${gradientBackgroundCss}
+  box-shadow: 11px 16px 8px rgba(0, 0, 0, 0.4);
   width: 98%;
-  padding: 0 5px;
+  padding: 0 40px;
   margin: auto;
 `
 
 const CardWrapper = styled.div`
-  margin: 60px auto 60px auto;
+  margin: 30px auto 60px auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,31 +36,34 @@ export function ProposalsList() {
   }, [governanceOrchestrator])
 
 
+  const updateNewPropositions = useCallback((newProposal: ProposalCreated) => {
+    setNewProposalIds([...newProposalIds, newProposal.returnValues.proposalId])
+  },[newProposalIds])
+
+
   useEffect(() => {
 
     if(governanceOrchestrator){
+      const proposalCreatedListener = governanceOrchestrator.events.ProposalCreated(onEventDataDo(updateNewPropositions))
 
-      governanceOrchestrator.events.ProposalCreated(onEventDataDo((newProposal) => setNewProposalIds([...newProposalIds, newProposal.returnValues.proposalId])))
-      
-      //TODO SAME PATTERN THAN UP
-      governanceOrchestrator.events.ProposalQueued().on('data', console.log).on('error', console.error)
-  
-      governanceOrchestrator.events.ProposalExecuted().on('data', console.log).on('error', console.error)
+      return () => {
+        proposalCreatedListener.removeAllListeners()
+      }
     }
 
-  },[governanceOrchestrator, proposalIds])
+  },[governanceOrchestrator, updateNewPropositions, proposalIds])
   
   return (
     <CardWrapper>
       <GradientCardDiv>
         {
-          [...newProposalIds].reverse().map((proposalId) => (
-            <ProposalRow key={proposalId} proposalId={proposalId} ></ProposalRow>
+          [...newProposalIds].reverse().map((proposalId, index) => (
+            <ProposalRow key={proposalId} proposalId={proposalId} isLast={index + 1 === newProposalIds.length && proposalIds.length === 0}></ProposalRow>
           ))
         }
         {
-          [...proposalIds].reverse().map((proposalId) => (
-            <ProposalRow key={proposalId} proposalId={proposalId} ></ProposalRow>
+          [...proposalIds].reverse().map((proposalId, index) => (
+            <ProposalRow key={proposalId} proposalId={proposalId} isLast={index + 1 === proposalIds.length}></ProposalRow>
           ))
         }
       </GradientCardDiv>

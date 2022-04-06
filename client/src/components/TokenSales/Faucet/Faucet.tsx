@@ -11,10 +11,10 @@ const FaucetDiv = styled.div`
 `
 
 const FaucetCatchP = styled.div`
-  font-size: 20px
+  font-size: 20px;
 
   @media screen and (max-width: 600px) { 
-    font-size: 14px
+    font-size: 14px;
   }
 `;
 

@@ -83,6 +83,7 @@ export function NewProposal() {
             placeholder="Describe why you want to make this change to the DAO.." 
             spellCheck={true}
             onChange= {({target: {value}}) => setPropositionDescription(value)}
+            value={propositionDescription}
           />
         </PropositionDescriptionDiv>
         <PropositionButtonDiv>

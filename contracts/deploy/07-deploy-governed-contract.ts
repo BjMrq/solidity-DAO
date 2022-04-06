@@ -16,7 +16,7 @@ const deployGovernedContract: DeployFunction = async ({
     (
       await deploy("ColorBox", {
         from: deployer,
-        args: ["#CB6161"],
+        args: ["#6038ca"],
         log: true,
         waitConfirmations: awaitDeployForBlocks(network.name),
       })

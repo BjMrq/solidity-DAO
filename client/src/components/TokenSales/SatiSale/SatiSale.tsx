@@ -20,7 +20,7 @@ const GradientCardDiv = styled.div`
 const SatiSaleCard = styled.div`
   height: 53vh;
   border-radius: 6px;
-  box-shadow: 14px 20px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 11px 16px 8px rgba(0, 0, 0, 0.4);
   padding: 8% 15%;
   display: flex;
   align-items: center;
