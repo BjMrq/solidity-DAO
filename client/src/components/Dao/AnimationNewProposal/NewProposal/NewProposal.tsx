@@ -2,27 +2,29 @@ import React, { useContext } from 'react';
 import { ChromePicker } from 'react-color';
 import styled from "styled-components";
 import { Web3Context } from "../../../../contracts/context";
-import { backGroundColor } from "../../../../style/colors";
+import { borderRadius } from "../../../../style/characteristics";
+import { lightColor } from "../../../../style/colors";
 import { inputLike } from "../../../../style/input-like";
 import { Button } from "../../../../style/tags/button";
 
 
 const NewPropositionCardDiv = styled.div`
-  width: 100%;
-  margin: 60px auto 20px auto;
+  margin: 0 auto;
+  padding: 40px;
+  border-radius: ${borderRadius};
+  border: 2px solid ${lightColor};
+  box-shadow: 11px 16px 8px rgba(0, 0, 0, 0.4);
 `
 
-const NewProposalContent = styled.div`
-  padding: 30px;
-  background-color: ${backGroundColor};
+const NewProposalTitle = styled.div`
   font-weight: bold;
   font-size: 24px;
   text-overflow: ellipsis;
+  margin-bottom: 40px;
 `
 
 const PropositionElements = styled.div`
   display: flex;
-  background-color: ${backGroundColor};
   align-items: stretch;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -30,15 +32,14 @@ const PropositionElements = styled.div`
   height: 100%;
 `
 const PropositionColorPickerDiv = styled.div`
-  margin: 30px auto 0 auto;
-  padding: 0 20px;
+  margin: 0 auto 40px auto;
+  /* width: 100% */
 `
 
 const PropositionDescriptionDiv = styled.div`
-  margin-top: 30px;
   flex-grow: 1;
   min-height: 100%;
-  padding: 0 20px;
+  margin: 0 0 40px 0;
 `
 
 const PropositionDescriptionInput = styled.textarea`
@@ -46,16 +47,15 @@ const PropositionDescriptionInput = styled.textarea`
   width:100%;
   height:100%;
   min-height: 246px;
+  border-radius: ${borderRadius};
 `
 
 const PropositionButtonDiv = styled.div`
-  margin-top: 30px;
   width: 100%;
-  padding: 0 20px;
 `
 
 export function NewProposal() {
-  const { submitNewColorPropositionToDao } = useContext(Web3Context);
+  const { submitNewColorPropositionToDao, canParticipateToDao } = useContext(Web3Context);
 
   const [proposedColor, setProposedColor] = React.useState('#ffffff');
 
@@ -69,15 +69,18 @@ export function NewProposal() {
 
   return (
     <NewPropositionCardDiv>
-      <NewProposalContent>
+      <NewProposalTitle>
         Propose a new color for the animation to the DAO
-      </NewProposalContent>
+      </NewProposalTitle>
       <PropositionElements>
         <PropositionColorPickerDiv>
+          {/* Styling of color picker in index.css */}
           <ChromePicker
             color={proposedColor}
             onChange={(color: {hex: string}) => setProposedColor(color.hex)}/>
         </PropositionColorPickerDiv>
+        <div style={{ width: "40px", flex: "1",
+          overflow: "hidden"}}></div>
         <PropositionDescriptionDiv>
           <PropositionDescriptionInput 
             placeholder="Describe why you want to make this change to the DAO.." 
@@ -87,11 +90,21 @@ export function NewProposal() {
           />
         </PropositionDescriptionDiv>
         <PropositionButtonDiv>
-          <Button 
-            style={{width: "100%"}}
-            onClick={submitProposition}>
+          {
+            canParticipateToDao 
+              ?
+              <Button 
+                style={{width: "100%"}}
+                onClick={submitProposition}>
              Propose
-          </Button>
+              </Button> :
+              <Button 
+                style={{width: "100%", whiteSpace: "normal"}}
+                disabled
+              >
+           Hold STI to make a proposition
+              </Button>
+          }
         </PropositionButtonDiv>
       </PropositionElements>
     </NewPropositionCardDiv>

@@ -2,7 +2,7 @@
 import PropTypes, { InferProps } from "prop-types";
 import React, {
   createContext,
-  ReactElement, useEffect, useRef, useState
+  ReactElement, useCallback, useEffect, useRef, useState
 } from "react";
 import { toast, ToastContentProps } from "react-toastify";
 import Web3 from "web3";
@@ -34,6 +34,7 @@ import { buildDescriptionWithFunctionDetails } from "./utils";
 //State
 const initialWeb3ContextState = {
   connected: false,
+  canParticipateToDao: false,
   currentAccount: "",
   contractsDeployedOnCurrentChain: false,
   web3Instance: new Web3(),
@@ -77,6 +78,7 @@ export default function Web3ContextProvider({
   
   const [web3ContractsState, setWeb3ContractsState] = useState<Web3ContextState["contracts"]>(initialWeb3ContextState.contracts);
   const [mainAccount, setMainAccount] = useState("");
+  const [canParticipateToDao, setCanParticipateDao] = useState(false);
 
   const web3InstanceRef = useRef(ifEthereumAvailableDo(() => new Web3(window.ethereum))());
   const [currentChainId, setCurrentChainId] = useState("");
@@ -142,7 +144,7 @@ export default function Web3ContextProvider({
   const loadSwapContacts = async (factorySwapContract: SwapContractFactory): Promise<SwapContractInfo[]> => await Promise.all((await factorySwapContract.methods.getAllSwapPairs().call()).map(buildSwapPairInfo(factorySwapContract)))
 
 
-  const loadContractsIfDeployedOnChain = async (chainId: DeployedNetwork): Promise<void> => {
+  const loadContractsIfDeployedOnChain = async (chainId: DeployedNetwork) => {
     
     const faucetContract = new web3InstanceRef.current.eth.Contract(
       FaucetAbi.abi as AbiWithNetworks["abi"],
@@ -175,7 +177,6 @@ export default function Web3ContextProvider({
       GovernanceOrchestratorAbi.networks[chainId].address
     ) as unknown as GovernanceOrchestrator
 
-  
     setWeb3ContractsState({
       satiTokenContract,
       faucetContract,
@@ -201,13 +202,21 @@ export default function Web3ContextProvider({
         buildDescriptionWithFunctionDetails("changeColor()", [color], description)
       )
     )
-    
-
   }
 
-  useEffect(() => {
+  const updateDaoParticipationGuard: VoidCall = useCallback(async () => {
+    if(web3ContractsState.satiTokenContract && mainAccount) setCanParticipateDao(await web3ContractsState.satiTokenContract.methods.balanceOf(mainAccount).call() !== "0")
+  }, [web3ContractsState, mainAccount])
 
-    if(areContractsDeployedOnChain(currentChainId)) loadContractsIfDeployedOnChain(currentChainId)
+  useEffect(() => {
+    updateDaoParticipationGuard()
+  }, [updateDaoParticipationGuard])
+
+  useEffect(() => {
+    (async () => {
+      if(areContractsDeployedOnChain(currentChainId)) await loadContractsIfDeployedOnChain(currentChainId)
+    }
+    )();
   
   }, [currentChainId]) 
 
@@ -276,10 +285,12 @@ export default function Web3ContextProvider({
     <Web3Context.Provider
       value={{
         web3Instance: web3InstanceRef.current,
+        canParticipateToDao,
         connected: Boolean( mainAccount),
         contractsDeployedOnCurrentChain: areContractsDeployedOnChain(currentChainId),
         currentAccount: mainAccount,
         contracts: web3ContractsState,
+        updateDaoParticipationGuard,
         initWeb3,
         addTokenToWallet,
         toastContractSend,

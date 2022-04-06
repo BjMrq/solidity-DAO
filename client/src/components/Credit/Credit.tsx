@@ -2,7 +2,7 @@ import React from 'react'
 import styled from "styled-components"
 
 const CreditAnchor = styled.a`
-  padding: 0 0 20px 20px;
+  padding: 60px 0 20px 20px;
   font-size: 10px;
   text-align: left;
   width: 100%;

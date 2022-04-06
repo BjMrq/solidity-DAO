@@ -9,6 +9,7 @@ import { onEventDataDo } from "../../../../../contracts/utils";
 import { DescriptionSeparator, ProposalStates } from "../../../../../contracts/variables";
 import { borderRadius } from "../../../../../style/characteristics";
 import { actionColor, backGroundColor, errorColor, lightColor, neutralColor, successColor } from "../../../../../style/colors";
+import { disabledButton } from "../../../../../style/tags/button";
 import { sleep } from "../../../../../utils/sleep";
 
 
@@ -69,7 +70,7 @@ const ProposalStatus = styled.div<{color: string}>`
   width: 65px;
   margin-left: auto; 
   margin-right: 0;
-  /* //TODO review */
+  vertical-align: middle;
   margin-bottom: 30px; 
   font-weight: bold;
 `
@@ -82,7 +83,7 @@ const ActionWrapper = styled.div`
   text-align: center;
 `
 
-const ActionOptionButton = styled.div<{blocked?: boolean, color: string}>`
+const ActionOptionButton = styled.div<{color: string}>`
   height: 45px;
   padding: 5px;
   font-weight: bold;
@@ -94,22 +95,21 @@ const ActionOptionButton = styled.div<{blocked?: boolean, color: string}>`
   border-radius: ${borderRadius};
   width: 100%;
 
-  border: ${({blocked, color}) => Boolean(blocked) ? "none" : `1px solid ${color}`};
-  cursor: ${({blocked}) => Boolean(blocked) ? "default" : "pointer"};
-  background-color: ${({blocked, color}) => Boolean(blocked) ? neutralColor : color };
+  background-color: ${({ color}) => color };
 
   &:hover,
   &:focus {
-    filter: ${({blocked}) => Boolean(blocked) ? "none" : "brightness(95%)"};
+    filter: brightness(95%);
   }
   &:active {
-    filter: ${({blocked}) => Boolean(blocked) ? "none" : "brightness(95%)"};
+    filter: brightness(95%);
   }
+ ${disabledButton}
 `
 
 
 export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: boolean}) {
-  const { contracts: {governanceOrchestrator}, web3Instance, currentAccount, toastContractSend} = useContext(Web3Context);
+  const { contracts: {governanceOrchestrator}, web3Instance, currentAccount, toastContractSend, canParticipateToDao} = useContext(Web3Context);
 
   const [proposalState, setProposalState] = useState<PossibleProposalState>(ProposalStates.None)
 
@@ -326,7 +326,7 @@ export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: 
         <ProposalDescriptionSubLabel>
         Functions:
         </ProposalDescriptionSubLabel>
-        <ProposalDescription>
+        <ProposalDescription style={{overflowWrap: "anywhere"}}>
           {proposal.callDescription}
         </ProposalDescription>
         <ProposalDescriptionSubLabel>
@@ -352,50 +352,52 @@ export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: 
         Against: {votes["0"]}
         </ProposalDescription> 
         
-        <ActionWrapper>
-
-          {
-            votesAreOpen(proposalState) && 
-     ( votes.hasVoted ? 
-       <ActionOptionButton blocked color={neutralColor}>
-            Voted submitted
-       </ActionOptionButton>
-       : 
-       <Fragment>
-         <ActionOptionButton color={successColor} onClick ={() => submitVote("1")}>
-           In Favor
-         </ActionOptionButton>
-         <div style={{width: "40px"}}/>
-         <ActionOptionButton color={errorColor} onClick ={() => submitVote("0")}>
-           Against
-         </ActionOptionButton>
-       </Fragment>
-     )
-          }
-
-
-          { 
-            propositionIsSucceeded(proposalState) && 
-          <ActionOptionButton onClick ={queueProposition} color={actionColor}>
-          Queue Proposition
-          </ActionOptionButton>
-          }
-
-          { 
-            propositionIsQueued(proposalState) && (
-              canExecute ? 
-                <ActionOptionButton onClick={executeProposition} color={actionColor}>
-          Execute Proposition
+        {
+          canParticipateToDao && 
+          <ActionWrapper>
+            {
+              votesAreOpen(proposalState) && 
+            ( votes.hasVoted ? 
+              <ActionOptionButton aria-disabled color={neutralColor}>
+                    Voted submitted
+              </ActionOptionButton>
+              : 
+              <Fragment>
+                <ActionOptionButton color={successColor} onClick ={() => submitVote("1")}>
+                  In Favor
                 </ActionOptionButton>
-                :
-                <ActionOptionButton blocked color={neutralColor}>
-          Execute Proposition
+                <div style={{width: "40px"}}/>
+                <ActionOptionButton color={errorColor} onClick ={() => submitVote("0")}>
+                  Against
                 </ActionOptionButton>
+              </Fragment>
             )
+            }
 
-          }
 
-        </ActionWrapper>
+            { 
+              propositionIsSucceeded(proposalState) && 
+              <ActionOptionButton onClick ={queueProposition} color={actionColor}>
+              Queue Proposition
+              </ActionOptionButton>
+            }
+
+            { 
+              propositionIsQueued(proposalState) && (
+                canExecute ? 
+                  <ActionOptionButton onClick={executeProposition} color={actionColor}>
+                    Execute Proposition
+                  </ActionOptionButton>
+                  :
+                  <ActionOptionButton aria-disabled color={neutralColor}>
+                    Execute Proposition
+                  </ActionOptionButton>
+              )
+
+            }
+
+          </ActionWrapper>
+        }
       </ProposalRowWrapper>
       { !Boolean(isLast) && <ProposalSeparator/> }
 

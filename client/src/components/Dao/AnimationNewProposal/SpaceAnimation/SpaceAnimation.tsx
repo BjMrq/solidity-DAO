@@ -8,7 +8,7 @@ import './style.scss';
 const HoverDiv = styled.div`
   width: 70%;
 	height: 75%;
-  margin: 120px auto 0 auto;
+  margin: 80px auto 40px auto;
 	animation: hover 5s ease-in-out infinite;
 	animation-fill-mode: forwards;
 
@@ -22,7 +22,7 @@ const HoverDiv = styled.div`
   @media screen and (max-width: 1200px) {  
       width: 80%;
       height: 90%;
-      margin: 0 auto;
+      margin: 20px auto 60px auto;
   }
 `
 

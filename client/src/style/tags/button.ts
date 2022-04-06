@@ -1,6 +1,15 @@
 import styled, { css } from "styled-components";
-import { secondColor } from "../colors";
+import { lightColor, neutralColor, secondColor } from "../colors";
 import { bordered } from "../input-like";
+
+export const disabledButton = css`
+  &:disabled {
+    background-color: ${neutralColor};
+    color: ${lightColor};
+    cursor: default;
+    filter: none;
+  }
+`;
 
 const ButtonBaseCSS = css`
   appearance: none;
@@ -11,9 +20,7 @@ const ButtonBaseCSS = css`
   color: ${secondColor};
   cursor: pointer;
   display: inline-block;
-  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-  font-weight: 500;
+  font-weight: bold;
   line-height: 20px;
   list-style: none;
   position: relative;
@@ -21,26 +28,23 @@ const ButtonBaseCSS = css`
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  vertical-align: middle;
+  vertical-align: top;
   white-space: nowrap;
   word-wrap: break-word;
+  overflow-wrap: break-word;
   &:hover {
     background-color: #f7f3f3;
     text-decoration: none;
     transition-duration: 0.1s;
   }
-  &:disabled {
-    background-color: #ffffff;
-    border-color: rgba(27, 31, 35, 0.15);
-    color: #959da5;
-    cursor: default;
-  }
+  ${disabledButton}
   &:active {
-    background-color: #edeff2;
+    filter: brightness(95%);
     box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
     transition: none 0s;
   }
   &:focus {
+    filter: brightness(95%);
     outline: 1px transparent;
   }
   &:before {
@@ -56,6 +60,7 @@ const ButtonBaseCSS = css`
   }
 `;
 
+//TODO blocked prop
 export const Button = styled.button`
   ${ButtonBaseCSS}
   height: 45px;

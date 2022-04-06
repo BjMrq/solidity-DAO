@@ -1,4 +1,6 @@
-import React, { useContext,  useEffect, useRef, useState } from 'react';
+import axios from "axios";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import useWebSocket from 'react-use-websocket';
 import styled from "styled-components";
 import { Web3Context } from "../../../../contracts/context";
 import { tokenLogos } from "../../../../contracts/crypto-logos";
@@ -8,8 +10,6 @@ import { getPossiblePairedSwapToken, getPossibleSwapContractFromSellToken, getTo
 import { TokenPseudoInput } from "../../../shared/TokenPseudoInput/TokenPseudoInput";
 import { SatiSaleContent } from "../SatiSaleContent";
 import { TokenSelectModal } from "./TokenSelectModal/TokenSelectModal";
-import useWebSocket from 'react-use-websocket';
-import axios from "axios"
 
 const TokenDiv = styled.div`
   width: 100%;
@@ -56,7 +56,7 @@ const noPricePlaceholder = "0"
 
 export function MarketRate() { 
 
-  const { contracts: {swapContracts}, toastContractSend} = useContext(Web3Context);
+  const { contracts: {swapContracts}, toastContractSend, updateDaoParticipationGuard} = useContext(Web3Context);
 
   const [sellTokenSelectionModalOpen, setSellTokenSelectionModalOpen] = useState(false)
   const [buyTokenSelectionModalOpen, setBuyTokenSelectionModalOpen] = useState(false)
@@ -194,6 +194,8 @@ export function MarketRate() {
     await toastContractSend(
       presentedSwapContract.swapContract
         .methods[swapInfo.current.swapMethod](sellTokenAmount), {}, "Swap")
+
+    if(presentedSwapContract.pairName.includes("STI")) updateDaoParticipationGuard()
   }
 
 

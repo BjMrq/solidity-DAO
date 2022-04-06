@@ -13,11 +13,16 @@ export const GlobalStyle = createGlobalStyle`
     padding:0;
     overflow-x: hidden;
     background-color: ${backGroundColor};
-    color: ${lightColor},
+    color: ${lightColor}
+    /* Note, some found can be found in index.css */
   }
   a {
     text-decoration: none !important;
     display: inherit !important;
     color:  inherit !important;
+  }
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
   }
 `;

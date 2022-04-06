@@ -51,6 +51,7 @@ export type SubmitNewColorPropositionToDao = (propositionInfo: {
 
 export type Web3ContextFunctions = {
   initWeb3: VoidCall;
+  updateDaoParticipationGuard: VoidCall;
   addTokenToWallet: AddTokenToWallet;
   toastContractSend: ToastContractSend;
   submitNewColorPropositionToDao: SubmitNewColorPropositionToDao;

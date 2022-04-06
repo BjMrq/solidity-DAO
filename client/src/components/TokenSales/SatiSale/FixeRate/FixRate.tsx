@@ -8,10 +8,14 @@ import { SatiSaleContent } from "../SatiSaleContent";
 
 export function FixRate() {
   const [buyingSatiAmount, setBuyingAmount] = useState("")
-  const { toastContractSend , contracts: {satiSaleContract}, currentAccount} = useContext(Web3Context);
+  const { toastContractSend , contracts: {satiSaleContract}, currentAccount, updateDaoParticipationGuard} = useContext(Web3Context);
 
 
-  const buySati = async () => await toastContractSend(satiSaleContract.methods.buyTokens(currentAccount), {value: toUnit(buyingSatiAmount)}, "Buying Sati")
+  const buySati = async () => {
+    await toastContractSend(satiSaleContract.methods.buyTokens(currentAccount), {value: toUnit(buyingSatiAmount)}, "Buying Sati")
+    await updateDaoParticipationGuard()
+    setBuyingAmount("")
+  }
   
   return (
     <SatiSaleContent 
