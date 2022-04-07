@@ -1,6 +1,6 @@
 import { NetworkConfigInfo } from "./types"
 
-export const SATI_TOKEN_SUPPLY = {
+export const ASTRO_TOKEN_SUPPLY = {
   total: "1000000000",
   sale: "5000000",
   swap: "500000000",
@@ -12,7 +12,7 @@ export const PROPOSAL_SETTINGS = {
   votingDelayBlocks: 1,
   votingPeriodBlocks: 15,
   quorumPercentage: 0,
-  executionDelaySeconds: 20,
+  executionDelaySeconds: 10,
 } as const
 
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000"

@@ -33,13 +33,14 @@ const PropositionElements = styled.div`
 `
 const PropositionColorPickerDiv = styled.div`
   margin: 0 auto 40px auto;
-  /* width: 100% */
+  min-width: 40%;
 `
 
 const PropositionDescriptionDiv = styled.div`
   flex-grow: 1;
   min-height: 100%;
-  margin: 0 0 40px 0;
+  margin: 0 auto 40px auto;
+  min-width: 40%;
 `
 
 const PropositionDescriptionInput = styled.textarea`
@@ -70,7 +71,7 @@ export function NewProposal() {
   return (
     <NewPropositionCardDiv>
       <NewProposalTitle>
-        Propose a new color for the animation to the DAO
+        Propose a new Astro Light color
       </NewProposalTitle>
       <PropositionElements>
         <PropositionColorPickerDiv>
@@ -79,8 +80,7 @@ export function NewProposal() {
             color={proposedColor}
             onChange={(color: {hex: string}) => setProposedColor(color.hex)}/>
         </PropositionColorPickerDiv>
-        <div style={{ width: "40px", flex: "1",
-          overflow: "hidden"}}></div>
+        <div style={{ minWidth: "5%"}}></div>
         <PropositionDescriptionDiv>
           <PropositionDescriptionInput 
             placeholder="Describe why you want to make this change to the DAO.." 
@@ -94,15 +94,15 @@ export function NewProposal() {
             canParticipateToDao 
               ?
               <Button 
-                style={{width: "100%"}}
+                style={{width: "100%", whiteSpace: "normal"}}
                 onClick={submitProposition}>
-             Propose
+                  Emit Proposition 📡
               </Button> :
               <Button 
                 style={{width: "100%", whiteSpace: "normal"}}
                 disabled
               >
-           Hold STI to make a proposition
+                Hold ASTRO to make a proposition
               </Button>
           }
         </PropositionButtonDiv>

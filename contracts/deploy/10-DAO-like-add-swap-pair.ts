@@ -4,9 +4,9 @@ import { deployERC20TokenMock, deployPriceFeedMockWithRateOf } from "../helpers/
 import { SwapTokenAddressInfo } from "../helpers/types"
 import { ethers } from "hardhat"
 import { withAwaitConfirmation } from "../helpers/chain/wait-transactions"
-import { SatiToken, SwapContractFactory } from "../typechain-types"
-import { MOCK_ERC20_SWAP_SUPPLY, ROUGH_POOL_NUMBER, SATI_TOKEN_SUPPLY } from "../helpers/variables"
-import { calculateSatiSupplyWithNumberOfPools } from "../helpers/tokens/supply"
+import { AstroToken, SwapContractFactory } from "../typechain-types"
+import { MOCK_ERC20_SWAP_SUPPLY, ROUGH_POOL_NUMBER, ASTRO_TOKEN_SUPPLY } from "../helpers/variables"
+import { calculateAstroSupplyWithNumberOfPools } from "../helpers/tokens/supply"
 
 const daoLikeAddSwapPair: DeployFunction = async ({
   getNamedAccounts,
@@ -21,11 +21,11 @@ const daoLikeAddSwapPair: DeployFunction = async ({
     deployer
   )
 
-  // const SatiToken = await ethers.getContract<SatiToken>("SatiToken", deployer)
+  // const AstroToken = await ethers.getContract<AstroToken>("AstroToken", deployer)
 
-  // const satiSupplyPerLiquiditySwap = calculateSatiSupplyWithNumberOfPools(
-  //   SATI_TOKEN_SUPPLY.total,
-  //   SATI_TOKEN_SUPPLY.swap,
+  // const astroSupplyPerLiquiditySwap = calculateAstroSupplyWithNumberOfPools(
+  //   ASTRO_TOKEN_SUPPLY.total,
+  //   ASTRO_TOKEN_SUPPLY.swap,
   //   ROUGH_POOL_NUMBER
   // )
 
@@ -36,15 +36,15 @@ const daoLikeAddSwapPair: DeployFunction = async ({
   //       symbol: "MATIC",
   //     },
   //     quoteToken: {
-  //       address: SatiToken.address,
+  //       address: AstroToken.address,
   //     },
   //     priceFeed: {
   //       rate: "140000000",
   //     },
   //     swapContract: {
-  //       pairName: "MATIC/STI",
+  //       pairName: "MATIC/ASTRO",
   //       baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-  //       quoteTokenLiquidity: satiSupplyPerLiquiditySwap,
+  //       quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
   //     },
   //   },
   // ]

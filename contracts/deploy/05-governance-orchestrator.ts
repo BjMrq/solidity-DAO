@@ -9,13 +9,13 @@ const deployGovernanceOrchestrator: DeployFunction = async ({
 }: HardhatRuntimeEnvironment) => {
   const { deployer } = await getNamedAccounts()
 
-  const SatiToken = await get("SatiToken")
+  const AstroToken = await get("AstroToken")
   const GovernanceTimeLock = await get("GovernanceTimeLock")
 
   await deploy("GovernanceOrchestrator", {
     from: deployer,
     args: [
-      SatiToken.address,
+      AstroToken.address,
       GovernanceTimeLock.address,
       PROPOSAL_SETTINGS.votingDelayBlocks,
       PROPOSAL_SETTINGS.votingPeriodBlocks,

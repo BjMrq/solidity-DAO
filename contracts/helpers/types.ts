@@ -21,10 +21,10 @@ type NamedAccounts<TNamedData> = {
   deployer: TNamedData
   faucetFounder: TNamedData
   faucetUser: TNamedData
-  satiSender: TNamedData
-  satiReceiver: TNamedData
-  satiBuyer: TNamedData
-  satiSeller: TNamedData
+  astroSender: TNamedData
+  astroReceiver: TNamedData
+  astroBuyer: TNamedData
+  astroSeller: TNamedData
   maliciousEncounter: TNamedData
 }
 

@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.9;
 
-import "./SatiToken.sol";
+import "./AstroToken.sol";
 import "./Utils.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";

@@ -1,8 +1,8 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types"
 import { DeployFunction } from "hardhat-deploy/types"
-import { MOCK_ERC20_SWAP_SUPPLY, ROUGH_POOL_NUMBER, SATI_TOKEN_SUPPLY } from "../helpers/variables"
+import { MOCK_ERC20_SWAP_SUPPLY, ROUGH_POOL_NUMBER, ASTRO_TOKEN_SUPPLY } from "../helpers/variables"
 import { ethers } from "hardhat"
-import { SatiToken } from "../typechain-types"
+import { AstroToken } from "../typechain-types"
 import { SwapContractFactory } from "../typechain-types/contracts/SwapContractFactory"
 import {
   deployPriceFeedIfNoAddress,
@@ -16,7 +16,7 @@ import {
   PreSwapDeployTokenInfo,
   SwapDeployTokenInfo,
 } from "../helpers/types"
-import { calculateSatiSupplyWithNumberOfPools } from "../helpers/tokens/supply"
+import { calculateAstroSupplyWithNumberOfPools } from "../helpers/tokens/supply"
 import { supplyLiquidityForSwapContracts } from "../helpers/tokens/founding"
 
 // rinkeby: {
@@ -89,22 +89,22 @@ import { supplyLiquidityForSwapContracts } from "../helpers/tokens/founding"
 // ],
 // },
 
-const deploySatiSwaps: DeployFunction = async ({
+const deployAstroSwaps: DeployFunction = async ({
   getNamedAccounts,
   network,
 }: HardhatRuntimeEnvironment) => {
   const { deployer } = await getNamedAccounts()
 
-  const SatiToken = await ethers.getContract<SatiToken>("SatiToken", deployer)
+  const AstroToken = await ethers.getContract<AstroToken>("AstroToken", deployer)
 
   const SwapContractFactory = await ethers.getContract<SwapContractFactory>(
     "SwapContractFactory",
     deployer
   )
 
-  const satiSupplyPerLiquiditySwap = calculateSatiSupplyWithNumberOfPools(
-    SATI_TOKEN_SUPPLY.total,
-    SATI_TOKEN_SUPPLY.swap,
+  const astroSupplyPerLiquiditySwap = calculateAstroSupplyWithNumberOfPools(
+    ASTRO_TOKEN_SUPPLY.total,
+    ASTRO_TOKEN_SUPPLY.swap,
     ROUGH_POOL_NUMBER
   )
 
@@ -117,15 +117,15 @@ const deploySatiSwaps: DeployFunction = async ({
           symbol: "BAT",
         },
         quoteToken: {
-          address: SatiToken.address,
+          address: AstroToken.address,
         },
         priceFeed: {
           rate: "80000000",
         },
         swapContract: {
-          pairName: "BAT/STI",
+          pairName: "BAT/ASTRO",
           baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: satiSupplyPerLiquiditySwap,
+          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
         },
       },
       {
@@ -134,15 +134,15 @@ const deploySatiSwaps: DeployFunction = async ({
           symbol: "BNB",
         },
         quoteToken: {
-          address: SatiToken.address,
+          address: AstroToken.address,
         },
         priceFeed: {
           rate: "38400000000",
         },
         swapContract: {
-          pairName: "BNB/STI",
+          pairName: "BNB/ASTRO",
           baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: satiSupplyPerLiquiditySwap,
+          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
         },
       },
       {
@@ -151,15 +151,15 @@ const deploySatiSwaps: DeployFunction = async ({
           symbol: "USDC",
         },
         quoteToken: {
-          address: SatiToken.address,
+          address: AstroToken.address,
         },
         priceFeed: {
           rate: "100000000",
         },
         swapContract: {
-          pairName: "USDC/STI",
+          pairName: "USDC/ASTRO",
           baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: satiSupplyPerLiquiditySwap,
+          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
         },
       },
       {
@@ -168,15 +168,15 @@ const deploySatiSwaps: DeployFunction = async ({
           symbol: "WBTC",
         },
         quoteToken: {
-          address: SatiToken.address,
+          address: AstroToken.address,
         },
         priceFeed: {
           rate: "4100000000000",
         },
         swapContract: {
-          pairName: "WBTC/STI",
+          pairName: "WBTC/ASTRO",
           baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: satiSupplyPerLiquiditySwap,
+          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
         },
       },
       {
@@ -185,15 +185,15 @@ const deploySatiSwaps: DeployFunction = async ({
           symbol: "DAI",
         },
         quoteToken: {
-          address: SatiToken.address,
+          address: AstroToken.address,
         },
         priceFeed: {
           rate: "100000000",
         },
         swapContract: {
-          pairName: "DAI/STI",
+          pairName: "DAI/ASTRO",
           baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: satiSupplyPerLiquiditySwap,
+          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
         },
       },
       {
@@ -202,15 +202,15 @@ const deploySatiSwaps: DeployFunction = async ({
           symbol: "LINK",
         },
         quoteToken: {
-          address: SatiToken.address,
+          address: AstroToken.address,
         },
         priceFeed: {
           rate: "1500000000",
         },
         swapContract: {
-          pairName: "LINK/STI",
+          pairName: "LINK/ASTRO",
           baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: satiSupplyPerLiquiditySwap,
+          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
         },
       },
       // {
@@ -219,15 +219,15 @@ const deploySatiSwaps: DeployFunction = async ({
       //     symbol: "WLTC",
       //   },
       //   quoteToken: {
-      //     address: SatiToken.address,
+      //     address: AstroToken.address,
       //   },
       //   priceFeed: {
       //     rate: "11000000000",
       //   },
       //   swapContract: {
-      //     pairName: "WLTC/STI",
+      //     pairName: "WLTC/ASTRO",
       //     baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-      //     quoteTokenLiquidity: satiSupplyPerLiquiditySwap,
+      //     quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
       //   },
       // },
       // {
@@ -236,15 +236,15 @@ const deploySatiSwaps: DeployFunction = async ({
       //     symbol: "MATIC",
       //   },
       //   quoteToken: {
-      //     address: SatiToken.address,
+      //     address: AstroToken.address,
       //   },
       //   priceFeed: {
       //     rate: "140000000",
       //   },
       //   swapContract: {
-      //     pairName: "MATIC/STI",
+      //     pairName: "MATIC/ASTRO",
       //     baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-      //     quoteTokenLiquidity: satiSupplyPerLiquiditySwap,
+      //     quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
       //   },
       // },
     ],
@@ -273,6 +273,6 @@ const deploySatiSwaps: DeployFunction = async ({
   //TODO if on rinkeby provide LINK
 }
 
-deploySatiSwaps.tags = ["all", "swap", "sales", "governance", "SwapContractFactory"]
+deployAstroSwaps.tags = ["all", "swap", "sales", "governance", "SwapContractFactory"]
 
-export default deploySatiSwaps
+export default deployAstroSwaps

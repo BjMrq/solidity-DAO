@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
-  "contractName": "SatiToken",
-  "sourceName": "contracts/SatiToken.sol",
+  "contractName": "AstroToken",
+  "sourceName": "contracts/AstroToken.sol",
   "abi": [
     {
       "inputs": [

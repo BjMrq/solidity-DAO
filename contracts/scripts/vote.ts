@@ -1,5 +1,5 @@
 import { executeScriptWith } from "./helpers/execute-script"
-import { GovernanceOrchestrator, SatiToken } from "../typechain-types"
+import { GovernanceOrchestrator, AstroToken } from "../typechain-types"
 import { POSSIBLE_VOTE_VALUES, PROPOSAL_SETTINGS } from "../helpers/variables"
 import { withAwaitConfirmation } from "../helpers/chain/wait-transactions"
 import { moveChainBlocksFor } from "../helpers/chain/move-blocks"
@@ -9,12 +9,12 @@ import { foundAddressWith } from "../helpers/tokens/founding"
 import { toSmallestUnit } from "../helpers/tokens/utils"
 
 export const voteForProposal = async (proposalId: string) => {
-  const { satiBuyer } = (await ethers.getNamedSigners()) as NamedSigners
+  const { astroBuyer } = (await ethers.getNamedSigners()) as NamedSigners
 
-  const SatiToken = await ethers.getContract<SatiToken>("SatiToken")
+  const AstroToken = await ethers.getContract<AstroToken>("AstroToken")
 
-  await foundAddressWith(SatiToken, {
-    addressToFound: satiBuyer.address,
+  await foundAddressWith(AstroToken, {
+    addressToFound: astroBuyer.address,
     amount: toSmallestUnit("80"),
   })
 
@@ -24,7 +24,7 @@ export const voteForProposal = async (proposalId: string) => {
   // await moveChainBlocksFor(PROPOSAL_SETTINGS.votingDelayBlocks)
 
   await withAwaitConfirmation(
-    GovernanceOrchestrator.connect(satiBuyer).castVoteWithReason(
+    GovernanceOrchestrator.connect(astroBuyer).castVoteWithReason(
       proposalId,
       POSSIBLE_VOTE_VALUES.for,
       "That is so true"

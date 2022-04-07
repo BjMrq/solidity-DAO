@@ -11,3 +11,10 @@ export const actionColor = "#f9692a";
 export const neutralColor = "#989797";
 
 export const backGroundColor = "#282c34";
+
+//Oranges
+// export const mainColor = "#d7693d";
+// export const lightMainColor = "#f08054";
+
+// export const secondColor = "#de943f";
+// export const lightSecondColor = "#f7a94f";

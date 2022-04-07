@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
-import { ReactComponent as STILogo } from '../../contracts/crypto-logos/STI.svg';
+import { ReactComponent as ASTROLogo } from '../../contracts/crypto-logos/ASTRO.svg';
 import { PanelWrapper } from "../shared/PanelWrapper/PanelWrapper";
 import { Web3Guard } from "../Web3Guard/Web3Guard";
-import { AddSatiMetamask } from "./AddSatiMetamask/AddSatiMetamask";
+import { AddAstroMetamask } from "./AddAstroMetamask/AddAstroMetamask";
 import { Faucet } from "./Faucet/Faucet";
-import { SatiSale } from "./SatiSale/SatiSale";
+import { TokenSale } from "./TokenSale/TokenSale";
 
 
 const BottomDiv = styled.div`
@@ -37,15 +37,15 @@ export function TokenSales() {
       isFirstPanel={true}
       title={
         <TopDivSale>
-          <STILogo style={{height: "70px", marginRight: "20px"}}></STILogo>
-          <div>Sati token sale</div>
+          <ASTROLogo style={{height: "70px", marginRight: "20px"}}></ASTROLogo>
+          <div>Astro Light</div>
         </TopDivSale>
       }>
       <Web3Guard>
-        <SatiSale/>
+        <TokenSale/>
         <BottomDiv>
           <Faucet/>
-          <AddSatiMetamask/>
+          <AddAstroMetamask/>
         </BottomDiv>
       </Web3Guard>
 

@@ -132,8 +132,8 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/SwapContractFactory.sol": {
-      "lastModificationDate": 1649001829835,
-      "contentHash": "043e633efcedd9f2d94959100e58b365",
+      "lastModificationDate": 1649351299123,
+      "contentHash": "7d6b152084a87a4f269c586459b8de89",
       "sourceName": "contracts/SwapContractFactory.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -166,7 +166,7 @@
         }
       },
       "imports": [
-        "./SatiToken.sol",
+        "./AstroToken.sol",
         "./Utils.sol",
         "@openzeppelin/contracts/access/Ownable.sol",
         "@openzeppelin/contracts/token/ERC20/ERC20.sol",
@@ -177,50 +177,6 @@
       ],
       "artifacts": [
         "SwapContractFactory"
-      ]
-    },
-    "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/SatiToken.sol": {
-      "lastModificationDate": 1648671355662,
-      "contentHash": "e9b4428a522bc66809a55e3baff259dc",
-      "sourceName": "contracts/SatiToken.sol",
-      "solcConfig": {
-        "version": "0.8.9",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.9"
-      ],
-      "artifacts": [
-        "SatiToken"
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/Utils.sol": {
@@ -312,8 +268,8 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/ERC20TokensSwap.sol": {
-      "lastModificationDate": 1648671071733,
-      "contentHash": "fc519a41e6576a8c51d83e9732e74133",
+      "lastModificationDate": 1649351299124,
+      "contentHash": "917894e95ec520f36f00489e7334f0ab",
       "sourceName": "contracts/ERC20TokensSwap.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -346,7 +302,7 @@
         }
       },
       "imports": [
-        "./SatiToken.sol",
+        "./AstroToken.sol",
         "@openzeppelin/contracts/utils/Context.sol",
         "./Swapable.sol",
         "./ISwapable.sol"
@@ -1058,8 +1014,8 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/EthQuoteSwap.sol": {
-      "lastModificationDate": 1648671070573,
-      "contentHash": "836c117ffc6dac5419ba1218812b7488",
+      "lastModificationDate": 1649351467224,
+      "contentHash": "0f1fabba2fe2b9a98e0d480a5f821870",
       "sourceName": "contracts/EthQuoteSwap.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -1092,7 +1048,7 @@
         }
       },
       "imports": [
-        "./SatiToken.sol",
+        "./AstroToken.sol",
         "@openzeppelin/contracts/utils/Context.sol",
         "@openzeppelin/contracts/access/Ownable.sol",
         "./Swapable.sol",
@@ -1103,52 +1059,6 @@
       ],
       "artifacts": [
         "EthQuoteSwap"
-      ]
-    },
-    "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/SatiTokenSale.sol": {
-      "lastModificationDate": 1648679325497,
-      "contentHash": "815d63b8025b33a288f70337bb12f33e",
-      "sourceName": "contracts/SatiTokenSale.sol",
-      "solcConfig": {
-        "version": "0.8.9",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "./Crowdsale.sol",
-        "./KYCValidation.sol",
-        "./Ratable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.9"
-      ],
-      "artifacts": [
-        "SatiTokenSale"
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/Crowdsale.sol": {
@@ -1413,7 +1323,7 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/node_modules/@openzeppelin/contracts/governance/Governor.sol": {
-      "lastModificationDate": 1648743785646,
+      "lastModificationDate": 1649194835590,
       "contentHash": "28514954183285e570ab4889d2dbfe54",
       "sourceName": "@openzeppelin/contracts/governance/Governor.sol",
       "solcConfig": {
@@ -2387,6 +2297,96 @@
       ],
       "artifacts": [
         "console"
+      ]
+    },
+    "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/AstroToken.sol": {
+      "lastModificationDate": 1649351260657,
+      "contentHash": "5f3694ef6e1d174106a6abafd1f9608b",
+      "sourceName": "contracts/AstroToken.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.9"
+      ],
+      "artifacts": [
+        "AstroToken"
+      ]
+    },
+    "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/AstroTokenSale.sol": {
+      "lastModificationDate": 1649351340449,
+      "contentHash": "c4d380c898b046870b8152ef2264809a",
+      "sourceName": "contracts/AstroTokenSale.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./Crowdsale.sol",
+        "./KYCValidation.sol",
+        "./Ratable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.9"
+      ],
+      "artifacts": [
+        "AstroTokenSale"
       ]
     }
   }

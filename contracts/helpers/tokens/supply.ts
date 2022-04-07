@@ -1,6 +1,6 @@
 import { toSmallestUnit } from "./utils"
 
-export const calculateSatiSupplyWithNumberOfPools = (
+export const calculateAstroSupplyWithNumberOfPools = (
   totalSupply: string,
   totalSwapSupply: string,
   numberOfPools: number

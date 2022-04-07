@@ -11,29 +11,20 @@ import type {
   PopulatedTransaction,
   Signer,
   utils,
-} from "ethers";
-import type {
-  FunctionFragment,
-  Result,
-  EventFragment,
-} from "@ethersproject/abi";
-import type { Listener, Provider } from "@ethersproject/providers";
-import type {
-  TypedEventFilter,
-  TypedEvent,
-  TypedListener,
-  OnEvent,
-} from "../common";
+} from "ethers"
+import type { FunctionFragment, Result, EventFragment } from "@ethersproject/abi"
+import type { Listener, Provider } from "@ethersproject/providers"
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "../common"
 
-export interface SatiTokenSaleInterface extends utils.Interface {
+export interface AstroTokenSaleInterface extends utils.Interface {
   functions: {
-    "KYCValidationEnabled()": FunctionFragment;
-    "buyTokens(address)": FunctionFragment;
-    "rate()": FunctionFragment;
-    "toUnit()": FunctionFragment;
-    "wallet()": FunctionFragment;
-    "weiRaised()": FunctionFragment;
-  };
+    "KYCValidationEnabled()": FunctionFragment
+    "buyTokens(address)": FunctionFragment
+    "rate()": FunctionFragment
+    "toUnit()": FunctionFragment
+    "wallet()": FunctionFragment
+    "weiRaised()": FunctionFragment
+  }
 
   getFunction(
     nameOrSignatureOrTopic:
@@ -43,119 +34,111 @@ export interface SatiTokenSaleInterface extends utils.Interface {
       | "toUnit"
       | "wallet"
       | "weiRaised"
-  ): FunctionFragment;
+  ): FunctionFragment
 
-  encodeFunctionData(
-    functionFragment: "KYCValidationEnabled",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "buyTokens", values: [string]): string;
-  encodeFunctionData(functionFragment: "rate", values?: undefined): string;
-  encodeFunctionData(functionFragment: "toUnit", values?: undefined): string;
-  encodeFunctionData(functionFragment: "wallet", values?: undefined): string;
-  encodeFunctionData(functionFragment: "weiRaised", values?: undefined): string;
+  encodeFunctionData(functionFragment: "KYCValidationEnabled", values?: undefined): string
+  encodeFunctionData(functionFragment: "buyTokens", values: [string]): string
+  encodeFunctionData(functionFragment: "rate", values?: undefined): string
+  encodeFunctionData(functionFragment: "toUnit", values?: undefined): string
+  encodeFunctionData(functionFragment: "wallet", values?: undefined): string
+  encodeFunctionData(functionFragment: "weiRaised", values?: undefined): string
 
-  decodeFunctionResult(
-    functionFragment: "KYCValidationEnabled",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "buyTokens", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "rate", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "toUnit", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "wallet", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "weiRaised", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "KYCValidationEnabled", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "buyTokens", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "rate", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "toUnit", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "wallet", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "weiRaised", data: BytesLike): Result
 
   events: {
-    "TokensPurchased(address,address,uint256,uint256)": EventFragment;
-  };
+    "TokensPurchased(address,address,uint256,uint256)": EventFragment
+  }
 
-  getEvent(nameOrSignatureOrTopic: "TokensPurchased"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TokensPurchased"): EventFragment
 }
 
 export interface TokensPurchasedEventObject {
-  purchaser: string;
-  beneficiary: string;
-  value: BigNumber;
-  amount: BigNumber;
+  purchaser: string
+  beneficiary: string
+  value: BigNumber
+  amount: BigNumber
 }
 export type TokensPurchasedEvent = TypedEvent<
   [string, string, BigNumber, BigNumber],
   TokensPurchasedEventObject
->;
+>
 
-export type TokensPurchasedEventFilter = TypedEventFilter<TokensPurchasedEvent>;
+export type TokensPurchasedEventFilter = TypedEventFilter<TokensPurchasedEvent>
 
-export interface SatiTokenSale extends BaseContract {
-  connect(signerOrProvider: Signer | Provider | string): this;
-  attach(addressOrName: string): this;
-  deployed(): Promise<this>;
+export interface AstroTokenSale extends BaseContract {
+  connect(signerOrProvider: Signer | Provider | string): this
+  attach(addressOrName: string): this
+  deployed(): Promise<this>
 
-  interface: SatiTokenSaleInterface;
+  interface: AstroTokenSaleInterface
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined
-  ): Promise<Array<TEvent>>;
+  ): Promise<Array<TEvent>>
 
   listeners<TEvent extends TypedEvent>(
     eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>;
-  listeners(eventName?: string): Array<Listener>;
-  removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
-  ): this;
-  removeAllListeners(eventName?: string): this;
-  off: OnEvent<this>;
-  on: OnEvent<this>;
-  once: OnEvent<this>;
-  removeListener: OnEvent<this>;
+  ): Array<TypedListener<TEvent>>
+  listeners(eventName?: string): Array<Listener>
+  removeAllListeners<TEvent extends TypedEvent>(eventFilter: TypedEventFilter<TEvent>): this
+  removeAllListeners(eventName?: string): this
+  off: OnEvent<this>
+  on: OnEvent<this>
+  once: OnEvent<this>
+  removeListener: OnEvent<this>
 
   functions: {
-    KYCValidationEnabled(overrides?: CallOverrides): Promise<[boolean]>;
+    KYCValidationEnabled(overrides?: CallOverrides): Promise<[boolean]>
 
     buyTokens(
       beneficiary: string,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    ): Promise<ContractTransaction>
 
-    rate(overrides?: CallOverrides): Promise<[BigNumber]>;
+    rate(overrides?: CallOverrides): Promise<[BigNumber]>
 
-    toUnit(overrides?: CallOverrides): Promise<[string]>;
+    toUnit(overrides?: CallOverrides): Promise<[string]>
 
-    wallet(overrides?: CallOverrides): Promise<[string]>;
+    wallet(overrides?: CallOverrides): Promise<[string]>
 
-    weiRaised(overrides?: CallOverrides): Promise<[BigNumber]>;
-  };
+    weiRaised(overrides?: CallOverrides): Promise<[BigNumber]>
+  }
 
-  KYCValidationEnabled(overrides?: CallOverrides): Promise<boolean>;
+  KYCValidationEnabled(overrides?: CallOverrides): Promise<boolean>
 
   buyTokens(
     beneficiary: string,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  ): Promise<ContractTransaction>
 
-  rate(overrides?: CallOverrides): Promise<BigNumber>;
+  rate(overrides?: CallOverrides): Promise<BigNumber>
 
-  toUnit(overrides?: CallOverrides): Promise<string>;
+  toUnit(overrides?: CallOverrides): Promise<string>
 
-  wallet(overrides?: CallOverrides): Promise<string>;
+  wallet(overrides?: CallOverrides): Promise<string>
 
-  weiRaised(overrides?: CallOverrides): Promise<BigNumber>;
+  weiRaised(overrides?: CallOverrides): Promise<BigNumber>
 
   callStatic: {
-    KYCValidationEnabled(overrides?: CallOverrides): Promise<boolean>;
+    KYCValidationEnabled(overrides?: CallOverrides): Promise<boolean>
 
-    buyTokens(beneficiary: string, overrides?: CallOverrides): Promise<void>;
+    buyTokens(beneficiary: string, overrides?: CallOverrides): Promise<void>
 
-    rate(overrides?: CallOverrides): Promise<BigNumber>;
+    rate(overrides?: CallOverrides): Promise<BigNumber>
 
-    toUnit(overrides?: CallOverrides): Promise<string>;
+    toUnit(overrides?: CallOverrides): Promise<string>
 
-    wallet(overrides?: CallOverrides): Promise<string>;
+    wallet(overrides?: CallOverrides): Promise<string>
 
-    weiRaised(overrides?: CallOverrides): Promise<BigNumber>;
-  };
+    weiRaised(overrides?: CallOverrides): Promise<BigNumber>
+  }
 
   filters: {
     "TokensPurchased(address,address,uint256,uint256)"(
@@ -163,48 +146,46 @@ export interface SatiTokenSale extends BaseContract {
       beneficiary?: string | null,
       value?: null,
       amount?: null
-    ): TokensPurchasedEventFilter;
+    ): TokensPurchasedEventFilter
     TokensPurchased(
       purchaser?: string | null,
       beneficiary?: string | null,
       value?: null,
       amount?: null
-    ): TokensPurchasedEventFilter;
-  };
+    ): TokensPurchasedEventFilter
+  }
 
   estimateGas: {
-    KYCValidationEnabled(overrides?: CallOverrides): Promise<BigNumber>;
+    KYCValidationEnabled(overrides?: CallOverrides): Promise<BigNumber>
 
     buyTokens(
       beneficiary: string,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    ): Promise<BigNumber>
 
-    rate(overrides?: CallOverrides): Promise<BigNumber>;
+    rate(overrides?: CallOverrides): Promise<BigNumber>
 
-    toUnit(overrides?: CallOverrides): Promise<BigNumber>;
+    toUnit(overrides?: CallOverrides): Promise<BigNumber>
 
-    wallet(overrides?: CallOverrides): Promise<BigNumber>;
+    wallet(overrides?: CallOverrides): Promise<BigNumber>
 
-    weiRaised(overrides?: CallOverrides): Promise<BigNumber>;
-  };
+    weiRaised(overrides?: CallOverrides): Promise<BigNumber>
+  }
 
   populateTransaction: {
-    KYCValidationEnabled(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    KYCValidationEnabled(overrides?: CallOverrides): Promise<PopulatedTransaction>
 
     buyTokens(
       beneficiary: string,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
+    ): Promise<PopulatedTransaction>
 
-    rate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    rate(overrides?: CallOverrides): Promise<PopulatedTransaction>
 
-    toUnit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    toUnit(overrides?: CallOverrides): Promise<PopulatedTransaction>
 
-    wallet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    wallet(overrides?: CallOverrides): Promise<PopulatedTransaction>
 
-    weiRaised(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-  };
+    weiRaised(overrides?: CallOverrides): Promise<PopulatedTransaction>
+  }
 }

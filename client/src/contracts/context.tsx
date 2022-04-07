@@ -13,20 +13,20 @@ import { stringFromHexadecimalNumber } from "../utils";
 import { dummyErrorParser } from "../utils/error-parser";
 import ERC20TokenAbi from "./abis/artifacts/ERC20.json";
 import SwapAbi from "./abis/artifacts/ERC20TokensSwap.json";
+import AstroAbi from "./abis/deployments/AstroToken.json";
+import AstroSaleAbi from "./abis/deployments/AstroTokenSale.json";
 import ColorBoxAbi from "./abis/deployments/ColorBox.json";
 import FaucetAbi from "./abis/deployments/Faucet.json";
 import GovernanceOrchestratorAbi from "./abis/deployments/GovernanceOrchestrator.json";
-import SatiAbi from "./abis/deployments/SatiToken.json";
-import SatiSaleAbi from "./abis/deployments/SatiTokenSale.json";
 import SwapContractFactoryAbi from "./abis/deployments/SwapContractFactory.json";
 import { AbiWithNetworks, AddTokenToWallet, DeployedNetwork, EthereumAvailableGuard, PossibleSwapToken, SubmitNewColorPropositionToDao, SwapContractInfo, ToastContractSend, VoidCall, Web3ContextFunctions } from "./types";
+import { AstroToken } from "./types/AstroToken";
+import { AstroTokenSale } from "./types/AstroTokenSale";
 import { ColorBox } from "./types/ColorBox";
 import { ERC20 } from "./types/ERC20";
 import { ERC20TokensSwap } from "./types/ERC20TokensSwap";
 import { Faucet } from "./types/Faucet";
 import { GovernanceOrchestrator } from "./types/GovernanceOrchestrator";
-import { SatiToken } from "./types/SatiToken";
-import { SatiTokenSale } from "./types/SatiTokenSale";
 import { SwapContractFactory } from "./types/SwapContractFactory";
 import { buildDescriptionWithFunctionDetails } from "./utils";
 
@@ -40,9 +40,9 @@ const initialWeb3ContextState = {
   web3Instance: new Web3(),
   contracts : {
     faucetContract: undefined as unknown as Faucet, 
-    satiSaleContract: undefined as unknown as SatiTokenSale, 
+    astroSaleContract: undefined as unknown as AstroTokenSale, 
     factorySwapContract: undefined as unknown as SwapContractFactory,
-    satiTokenContract: undefined as unknown as SatiToken,
+    astroTokenContract: undefined as unknown as AstroToken,
     colorBoxContract: undefined as unknown as ColorBox,
     governanceOrchestrator: undefined as unknown as GovernanceOrchestrator,
     swapContracts: [] as SwapContractInfo[]
@@ -151,15 +151,15 @@ export default function Web3ContextProvider({
       FaucetAbi.networks[chainId].address
     ) as unknown as Faucet
 
-    const satiTokenContract = new web3InstanceRef.current.eth.Contract(
-      SatiAbi.abi as AbiWithNetworks["abi"],
-      SatiAbi.networks[chainId].address
-    ) as unknown as SatiToken
+    const astroTokenContract = new web3InstanceRef.current.eth.Contract(
+      AstroAbi.abi as AbiWithNetworks["abi"],
+      AstroAbi.networks[chainId].address
+    ) as unknown as AstroToken
 
-    const satiSaleContract = new web3InstanceRef.current.eth.Contract(
-      SatiSaleAbi.abi as AbiWithNetworks["abi"],
-      SatiSaleAbi.networks[chainId].address
-    ) as unknown as SatiTokenSale
+    const astroSaleContract = new web3InstanceRef.current.eth.Contract(
+      AstroSaleAbi.abi as AbiWithNetworks["abi"],
+      AstroSaleAbi.networks[chainId].address
+    ) as unknown as AstroTokenSale
 
     const factorySwapContract = new web3InstanceRef.current.eth.Contract(
       SwapContractFactoryAbi.abi as AbiWithNetworks["abi"],
@@ -178,9 +178,9 @@ export default function Web3ContextProvider({
     ) as unknown as GovernanceOrchestrator
 
     setWeb3ContractsState({
-      satiTokenContract,
+      astroTokenContract,
       faucetContract,
-      satiSaleContract,
+      astroSaleContract,
       factorySwapContract,
       colorBoxContract,
       governanceOrchestrator,
@@ -205,7 +205,7 @@ export default function Web3ContextProvider({
   }
 
   const updateDaoParticipationGuard: VoidCall = useCallback(async () => {
-    if(web3ContractsState.satiTokenContract && mainAccount) setCanParticipateDao(await web3ContractsState.satiTokenContract.methods.balanceOf(mainAccount).call() !== "0")
+    if(web3ContractsState.astroTokenContract && mainAccount) setCanParticipateDao(await web3ContractsState.astroTokenContract.methods.balanceOf(mainAccount).call() !== "0")
   }, [web3ContractsState, mainAccount])
 
   useEffect(() => {

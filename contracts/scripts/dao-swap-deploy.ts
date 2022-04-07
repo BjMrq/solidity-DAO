@@ -1,15 +1,15 @@
 import { ethers, getNamedAccounts } from "hardhat"
 import { executeScriptWith } from "./helpers/execute-script"
-import { GovernanceOrchestrator, SatiToken, SwapContractFactory } from "../typechain-types"
+import { GovernanceOrchestrator, AstroToken, SwapContractFactory } from "../typechain-types"
 import {
   MOCK_ERC20_SWAP_SUPPLY,
   POSSIBLE_VOTE_VALUES,
   ROUGH_POOL_NUMBER,
-  SATI_TOKEN_SUPPLY,
+  ASTRO_TOKEN_SUPPLY,
   PROPOSAL_SETTINGS,
 } from "../helpers/variables"
 import { withAwaitConfirmation } from "../helpers/chain/wait-transactions"
-import { calculateSatiSupplyWithNumberOfPools } from "../helpers/tokens/supply"
+import { calculateAstroSupplyWithNumberOfPools } from "../helpers/tokens/supply"
 import { getContractsBeforeSwapDeploy } from "../helpers/contracts/deploy"
 import { SwapDeployTokenInfo } from "../helpers/types"
 import { moveChainBlocksFor, moveChainTimeFor } from "../helpers/chain/move-blocks"
@@ -49,7 +49,7 @@ export const proposeNewSwapContractDeployment =
       SwapContractFactory,
       functionCallInfo.functionName,
       functionCallInfo.functionArguments,
-      `Allowing to swap ${pairName} will allow more accessibility to the STI token`
+      `Allowing to swap ${pairName} will allow more accessibility to the ASTRO token`
     )
 
     //@ts-expect-error some accessors are maybe undefined
@@ -118,11 +118,11 @@ export const proposeSwapContractDeploy = async () => {
     deployer
   )
 
-  const SatiToken = await ethers.getContract<SatiToken>("SatiToken", deployer)
+  const AstroToken = await ethers.getContract<AstroToken>("AstroToken", deployer)
 
-  const satiSupplyPerLiquiditySwap = calculateSatiSupplyWithNumberOfPools(
-    SATI_TOKEN_SUPPLY.total,
-    SATI_TOKEN_SUPPLY.swap,
+  const astroSupplyPerLiquiditySwap = calculateAstroSupplyWithNumberOfPools(
+    ASTRO_TOKEN_SUPPLY.total,
+    ASTRO_TOKEN_SUPPLY.swap,
     ROUGH_POOL_NUMBER
   )
 
@@ -133,15 +133,15 @@ export const proposeSwapContractDeploy = async () => {
         symbol: "MATIC",
       },
       quoteToken: {
-        address: SatiToken.address,
+        address: AstroToken.address,
       },
       priceFeed: {
         rate: "140000000",
       },
       swapContract: {
-        pairName: "MATIC/STI",
+        pairName: "MATIC/ASTRO",
         baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-        quoteTokenLiquidity: satiSupplyPerLiquiditySwap,
+        quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
       },
     },
     {
@@ -150,15 +150,15 @@ export const proposeSwapContractDeploy = async () => {
         symbol: "WLTC",
       },
       quoteToken: {
-        address: SatiToken.address,
+        address: AstroToken.address,
       },
       priceFeed: {
         rate: "11000000000",
       },
       swapContract: {
-        pairName: "WLTC/STI",
+        pairName: "WLTC/ASTRO",
         baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-        quoteTokenLiquidity: satiSupplyPerLiquiditySwap,
+        quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
       },
     },
   ]

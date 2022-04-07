@@ -1,10 +1,10 @@
+import { ReactComponent as ASTROLogo } from "./ASTRO.svg";
 import { ReactComponent as BATLogo } from "./BAT.svg";
 import { ReactComponent as BNBLogo } from "./BNB.svg";
 import { ReactComponent as DAILogo } from "./DAI.svg";
 import { ReactComponent as ETHLogo } from "./ETH.svg";
 import { ReactComponent as LINKLogo } from "./LINK.svg";
 import { ReactComponent as MATICLogo } from "./MATIC.svg";
-import { ReactComponent as STILogo } from "./STI.svg";
 import { ReactComponent as TRXLogo } from "./TRX.svg";
 import { ReactComponent as USDCLogo } from "./USDC.svg";
 import { ReactComponent as WBTCLogo } from "./WBTC.svg";
@@ -18,7 +18,7 @@ export const tokenLogos = {
   ETH: { logo: <ETHLogo style={{ maxHeight: "90%" }} />, name: "ETH" },
   LINK: { logo: <LINKLogo style={{ maxHeight: "90%" }} />, name: "LINK" },
   MATIC: { logo: <MATICLogo style={{ maxHeight: "90%" }} />, name: "MATIC" },
-  STI: { logo: <STILogo style={{ maxHeight: "90%" }} />, name: "STI" },
+  ASTRO: { logo: <ASTROLogo style={{ maxHeight: "90%" }} />, name: "ASTRO" },
   TRX: { logo: <TRXLogo style={{ maxHeight: "90%" }} />, name: "TRX" },
   USDC: { logo: <USDCLogo style={{ maxHeight: "90%" }} />, name: "USDC" },
   WBTC: { logo: <WBTCLogo style={{ maxHeight: "90%" }} />, name: "WBTC" },

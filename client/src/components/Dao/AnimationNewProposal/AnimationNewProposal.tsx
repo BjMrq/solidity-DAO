@@ -7,7 +7,7 @@ import { SpaceAnimation } from "./SpaceAnimation/SpaceAnimation"
 
 export function AnimationNewProposal() {
   return (
-    <PanelWrapper title="DAO Animation">
+    <PanelWrapper title="Light Color Governance">
       <Fragment>
         <SpaceAnimation/>
         <Web3Guard>
