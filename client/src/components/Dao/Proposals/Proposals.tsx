@@ -15,12 +15,13 @@ const TooltipContent = styled.div`
 `
 
 export function Proposals() {
-
+ 
 
   return (
     <PanelWrapper title={
       <Fragment>
         Propositions Log<TooltipSpan data-tip data-for='daoInfo'>&#9432;</TooltipSpan>
+        {/* @ts-expect-error :( */}
         <ReactTooltip id='daoInfo' type="dark" effect='float' place="bottom">
           <TooltipContent>
             <div>- For demo purposes we skip the delay between when a proposition closed it vote and when it is executed, this time usually allow tokens holders of the DAO to exit the DAO if they do not support the vote result.</div>

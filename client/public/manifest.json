@@ -3,24 +3,19 @@
   "name": "Sati swap and sale",
   "icons": [
     {
+      "src": "icon-16x16.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "icon-32x32.png",
+      "type": "image/png",
+      "sizes": "24x24 32x32"
+    },
+    {
       "src": "icon-192x192.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-256x256.png",
       "type": "image/png",
-      "sizes": "256x256"
-    },
-    {
-      "src": "icon-192x192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "icon-384x384.png",
-      "type": "image/png",
-      "sizes": "384x384"
+      "sizes": "64x64 192x192"
     },
     {
       "src": "icon-512x512.png",

@@ -1,8 +1,8 @@
-export const mainColor = "#721616";
-export const lightMainColor = "#8b1b1b";
+export const mainColor = "#7d2f20";
+export const lightMainColor = "#A63823";
 
-export const secondColor = "#441868";
-export const lightSecondColor = "#541d81";
+export const secondColor = "#ae4d28";
+export const lightSecondColor = "#F6936D";
 
 export const lightColor = "#ffff";
 export const errorColor = "#e74c3c";

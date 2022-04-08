@@ -11,6 +11,14 @@ export const disabledButton = css`
   }
 `;
 
+export const buttonEffectDarker = css`
+  &:hover,
+  &:focus,
+  &:active {
+    filter: brightness(95%);
+  }
+`;
+
 const ButtonBaseCSS = css`
   appearance: none;
   background-color: #ffffff;
@@ -53,6 +61,7 @@ const ButtonBaseCSS = css`
   &:-webkit-details-marker {
     display: none;
   }
+
   @media screen and (max-width: 600px) {
     height: 35px;
     font-size: 1.1rem;

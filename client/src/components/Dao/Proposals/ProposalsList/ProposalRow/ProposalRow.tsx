@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import * as R from "ramda";
-import React, { Fragment, useCallback, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import styled from "styled-components";
 import { Web3Context } from "../../../../../contracts/context";
-import { type PossibleProposalState, type PossibleProposalVotes } from "../../../../../contracts/types";
-import { VoteCast } from "../../../../../contracts/types/GovernanceOrchestrator";
-import { onEventDataDo } from "../../../../../contracts/utils";
+import { type PossibleProposalState } from "../../../../../contracts/types";
 import { DescriptionSeparator, ProposalStates } from "../../../../../contracts/variables";
 import { borderRadius } from "../../../../../style/characteristics";
-import { actionColor, backGroundColor, errorColor, lightColor, neutralColor, successColor } from "../../../../../style/colors";
-import { disabledButton } from "../../../../../style/tags/button";
-import { sleep } from "../../../../../utils/sleep";
+import { backGroundColor, lightColor } from "../../../../../style/colors";
+import { waitForTime } from "../../../../../utils/sleep";
+import { ProposalAction } from "./PropositionQueue/PropositionQueue";
+import { PropositionVote } from "./PropositionVote/PropositionVote";
+import { waitUtilsForGovernance } from "./state-wait";
+import { ActionWrapper, GradientUnderline, ProposalDescription, ProposalDescriptionLabel, ProposalDescriptionSubLabel } from "./style";
+import { getStateFromStateStateValue, onEventDataIfSamePropositionIdDo, propositionHasPassed, propositionIsPending, propositionIsQueued } from "./utils";
 
 
 const ProposalRowWrapper = styled.div`
@@ -29,35 +29,6 @@ const ProposalSeparator = styled.div`
   border-radius: ${borderRadius};
 `
 
-const GradientUnderline = styled.div`
-  background-color: ${lightColor};
-  width: 30%;
-  border-radius: 0;
-  height: 4px;
-`
-
-const ProposalDescriptionLabel = styled.div`
-  text-align: left;
-  margin: 20px auto 10px auto;
-  width: 100%;
-  font-size: 22px;
-  font-weight: 800;
-`
-
-const ProposalDescriptionSubLabel = styled.div`
-  text-align: left;
-  margin: 20px auto 0 auto;
-  width: 100%;
-  font-size: 20px;
-  font-weight: 700;
-`
-
-const ProposalDescription = styled.div`
-  text-align: left;
-  width: 100%;
-  font-size: 18px;
-  margin: 20px 0 40px 0;
-`
 
 const ProposalStatus = styled.div<{color: string}>`
   font-size: 10px;
@@ -75,151 +46,47 @@ const ProposalStatus = styled.div<{color: string}>`
   font-weight: bold;
 `
 
-const ActionWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-`
-
-const ActionOptionButton = styled.div<{color: string}>`
-  height: 45px;
-  padding: 5px;
-  font-weight: bold;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  border-radius: ${borderRadius};
-  width: 100%;
-
-  background-color: ${({ color}) => color };
-
-  &:hover,
-  &:focus {
-    filter: brightness(95%);
-  }
-  &:active {
-    filter: brightness(95%);
-  }
- ${disabledButton}
-`
+export type ProposalInfo = {callDescription: string, proposalDescription: string, description: string, targets: string[], calldatas: string[], values: string[]}
 
 
-export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: boolean}) {
-  const { contracts: {governanceOrchestrator}, web3Instance, currentAccount, toastContractSend, canParticipateToDao} = useContext(Web3Context);
+export function _ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: boolean}) {
+  const { contracts: {governanceOrchestrator}, web3Instance, canParticipateToDao} = useContext(Web3Context);
 
   const [proposalState, setProposalState] = useState<PossibleProposalState>(ProposalStates.None)
 
-  const [proposal, setProposal] = useState<{callDescription: string, proposalDescription: string, description: string, targets: string[], calldatas: string[], values: string[]}>({callDescription: "", proposalDescription: "", description: "", targets: [], calldatas: [], values: []})
+  const [proposal, setProposal] = useState<ProposalInfo>({callDescription: "", proposalDescription: "", description: "", targets: [], calldatas: [], values: []})
 
   const [canExecute, setCanExecute] = useState(false)
 
-  //TODO Module out 1.votes 2.vote button 3.queue button 4.execute button
-  const [votes, setVotes] = useState({
-    hasVoted: false,
-    "0": "0",
-    "1": "0"
-  })
+  const {waitForBlockNumber, waitForProposalStateToNotBe} = waitUtilsForGovernance(web3Instance, governanceOrchestrator)
 
-
-  const votesAreOpen = (proposalState: PossibleProposalState) => proposalState.name === "Active"
-
-  const propositionIsPending = (proposalState: PossibleProposalState) => proposalState.name === "Pending"
-
-  const propositionIsSucceeded = (proposalState: PossibleProposalState) => proposalState.name === "Succeeded"
-
-  const propositionIsQueued = (proposalState: PossibleProposalState) => proposalState.name === "Queued"
+  //TODO link to explorer to proposition creation
   
-  const submitVote = async(vote: PossibleProposalVotes) => await toastContractSend(governanceOrchestrator.methods.castVote(proposalId, vote))
 
-  const queueProposition = async () => await toastContractSend(governanceOrchestrator.methods.queue(proposal.targets, proposal.values, proposal.calldatas, web3Instance.utils.keccak256(proposal.description) ))
-
-  const executeProposition = async () => await toastContractSend(governanceOrchestrator.methods.execute(proposal.targets, proposal.values, proposal.calldatas, web3Instance.utils.keccak256(proposal.description) ))
-
-  const getStateFromStateStateValue = (propositionStateValue: PossibleProposalState["value"]) => Object.values(ProposalStates).find(({value}) =>value === propositionStateValue) as PossibleProposalState
-
-
-  const waitForEta = async (executionEta: number) => {
-
-    let currentTime = Math.round((new Date()).getTime() / 1000)
-
-    while (currentTime < executionEta){
-      await sleep(4000)
-      currentTime = Math.round((new Date()).getTime() / 1000)
-    }
-
-    return true
-  }
-
-  const waitForBlockNumber = async (blockNumber: number) => {
-
-    let currentBlockNumber = await web3Instance.eth.getBlockNumber()
-
-    while (currentBlockNumber < blockNumber){
-      await sleep(4000)
-      currentBlockNumber = await web3Instance.eth.getBlockNumber()
-    }
-
-    return currentBlockNumber
-  }
-
-  const waitForProposalStateToNotBe = async (proposalStateToPass: PossibleProposalState) => {
-
-    let currentPropositionState = (await governanceOrchestrator.methods.state(proposalId).call()) as PossibleProposalState["value"]
-
-    while (currentPropositionState === proposalStateToPass.value){
-      await sleep(4000)
-      currentPropositionState = (await governanceOrchestrator.methods.state(proposalId).call()) as PossibleProposalState["value"]
-    }
-
-    return currentPropositionState
-  }
-
-  const waitForBlockNumberAndEnsurePropositionStateIsPassed = async (blockNumber: number, propositionStateToHavePassed: PossibleProposalState) => {
-    await waitForBlockNumber(blockNumber)
-
-    const newStateValueAtBlock = (await governanceOrchestrator.methods.state(proposalId).call()) as PossibleProposalState["value"]
-
-    if(newStateValueAtBlock !== propositionStateToHavePassed.value) {
-      setProposalState(
-        getStateFromStateStateValue(newStateValueAtBlock)
-      )
-
-      return newStateValueAtBlock
+  const waitForBlockNumberAndEnsurePropositionStateIsPassed = async (
+    proposalId: string,
+    blockNumber: number,
+    propositionStateToHavePassed: PossibleProposalState
+  ) => {
+    await waitForBlockNumber(blockNumber);
+  
+    const newStateValueAtBlock = (await governanceOrchestrator.methods
+      .state(proposalId)
+      .call()) as PossibleProposalState["value"];
+  
+    if (newStateValueAtBlock !== propositionStateToHavePassed.value) {
+  
+      return setProposalState(getStateFromStateStateValue(newStateValueAtBlock));
     } else {
+      const newStateValue = await waitForProposalStateToNotBe(
+        proposalId,
+        propositionStateToHavePassed
+      );
 
-      const newStateValue = await waitForProposalStateToNotBe(propositionStateToHavePassed)
-
-      setProposalState(
-        getStateFromStateStateValue(newStateValue)
-      )
-
-      return newStateValue
-
+  
+      return setProposalState(getStateFromStateStateValue(newStateValue));
     }
   }
-
-  const onVoteCastEventReceived = useCallback((castedVote: VoteCast) => {
-    if(castedVote.returnValues.proposalId === proposalId){
-      const voteValue = castedVote.returnValues.support as PossibleProposalVotes
-
-      const newVotesCount = R.assoc( 
-        voteValue,
-        web3Instance.utils.toBN( castedVote.returnValues.weight).add(web3Instance.utils.toBN(votes[voteValue])).toString(),
-        votes
-      )
-
-      setVotes(R.assoc( 
-        "hasVoted",
-        castedVote.returnValues.voter === currentAccount,
-        newVotesCount
-      ))
-    }
-  }, [votes])
-
 
   useEffect(() => {
 
@@ -236,66 +103,43 @@ export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: 
           await governanceOrchestrator.methods.state(proposalId).call() as PossibleProposalState["value"]
         ) 
       )
-
-      const {againstVotes, forVotes} = await governanceOrchestrator.methods.proposalVotes(proposalId).call()
-
-      setVotes({
-        "0": againstVotes, 
-        "1": forVotes,
-        hasVoted: await governanceOrchestrator.methods.hasVoted(proposalId, currentAccount).call()
-      })
     }
     )();
   }, [])
 
   useEffect(() => {
     (async () => {
-      
+            
       if(propositionIsPending(proposalState)){
 
         await waitForBlockNumberAndEnsurePropositionStateIsPassed(
+          proposalId,
           Number(await governanceOrchestrator.methods.proposalSnapshot(proposalId).call()),
           ProposalStates.Pending
         )
 
         return () => ({})
       }
-      
-      if(votesAreOpen(proposalState)){
 
-        const voteCastListener = governanceOrchestrator.events.VoteCast(onEventDataDo(onVoteCastEventReceived))
+      if(propositionHasPassed(proposalState)){
 
-        await waitForBlockNumberAndEnsurePropositionStateIsPassed(
-          Number(await governanceOrchestrator.methods.proposalDeadline(proposalId).call()),
-          ProposalStates.Active
-        )
-
-        return () => {
-          voteCastListener.removeAllListeners()
-        }
-      }
-
-
-      if(propositionIsSucceeded(proposalState)){
-
-        const proposalQueueListener = governanceOrchestrator.events.ProposalQueued(onEventDataDo((queueEventData) => {
-          if(queueEventData.returnValues.proposalId === proposalId) setProposalState(ProposalStates.Queued)
-        }))
-
+        const proposalQueueListener = governanceOrchestrator.events
+          .ProposalQueued(onEventDataIfSamePropositionIdDo(proposalId, () => setProposalState(ProposalStates.Queued)))
+  
         return () => {
           proposalQueueListener.removeAllListeners()
         }
       }
 
+
       if(propositionIsQueued(proposalState)){
 
-        const proposalQueueListener = governanceOrchestrator.events.ProposalExecuted(onEventDataDo((queueEventData) => {
-          if(queueEventData.returnValues.proposalId === proposalId) setProposalState(ProposalStates.Executed)
-        }))
+        const proposalQueueListener = governanceOrchestrator.events
+          .ProposalExecuted(onEventDataIfSamePropositionIdDo(proposalId, () => setProposalState(ProposalStates.Executed)))
 
         const executionEta = await governanceOrchestrator.methods.proposalEta(proposalId).call()
 
-        await waitForEta(Number(executionEta))
+        await waitForTime(Number(executionEta))
 
         setCanExecute(true)
 
@@ -308,7 +152,6 @@ export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: 
     )();
   }, [proposalState])
 
-  //TODO link to explorer
 
   return (
 
@@ -342,59 +185,29 @@ export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: 
         <ProposalDescription>
           {proposal.proposalDescription}
         </ProposalDescription>
-        <ProposalDescriptionLabel>
-        Votes:
-        </ProposalDescriptionLabel>
-        <GradientUnderline/>
-        <ProposalDescription>
-        In Favor: {votes["1"]}
-          <br/>
-        Against: {votes["0"]}
-        </ProposalDescription> 
+
+        <PropositionVote 
+          proposalId={proposalId}
+          proposalState={proposalState}
+          waitForBlockNumberAndEnsurePropositionStateIsPassed={waitForBlockNumberAndEnsurePropositionStateIsPassed}
+        />
         
         {
           canParticipateToDao && 
           <ActionWrapper>
-            {
-              votesAreOpen(proposalState) && 
-            ( votes.hasVoted ? 
-              <ActionOptionButton aria-disabled color={neutralColor}>
-                    Voted submitted
-              </ActionOptionButton>
-              : 
-              <Fragment>
-                <ActionOptionButton color={successColor} onClick ={() => submitVote("1")}>
-                  In Favor
-                </ActionOptionButton>
-                <div style={{width: "40px"}}/>
-                <ActionOptionButton color={errorColor} onClick ={() => submitVote("0")}>
-                  Against
-                </ActionOptionButton>
-              </Fragment>
-            )
-            }
+            <ProposalAction 
+              actionName={"queue"}
+              proposal={proposal}
+              actionExecutionCondition={true}
+              actionDisplayCondition={propositionHasPassed(proposalState)}
+            />
 
-
-            { 
-              propositionIsSucceeded(proposalState) && 
-              <ActionOptionButton onClick ={queueProposition} color={actionColor}>
-              Queue Proposition
-              </ActionOptionButton>
-            }
-
-            { 
-              propositionIsQueued(proposalState) && (
-                canExecute ? 
-                  <ActionOptionButton onClick={executeProposition} color={actionColor}>
-                    Execute Proposition
-                  </ActionOptionButton>
-                  :
-                  <ActionOptionButton aria-disabled color={neutralColor}>
-                    Execute Proposition
-                  </ActionOptionButton>
-              )
-
-            }
+            <ProposalAction 
+              actionName={"execute"}
+              proposal={proposal}
+              actionDisplayCondition={propositionIsQueued(proposalState)}
+              actionExecutionCondition={canExecute}
+            />
 
           </ActionWrapper>
         }
@@ -404,3 +217,5 @@ export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: 
     </Fragment>
   )
 }
+
+export const ProposalRow = _ProposalRow

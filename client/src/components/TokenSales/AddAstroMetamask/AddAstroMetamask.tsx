@@ -8,7 +8,7 @@ export function AddAstroMetamask() {
   
   return (
     <Fragment>
-      {astroTokenContract && <AddMetamask displayText="Add Astro Light" tokenContract={astroTokenContract}/>}
+      {astroTokenContract && <AddMetamask displayText="Add Astro" tokenContract={astroTokenContract}/>}
     </Fragment>
   );
 }
