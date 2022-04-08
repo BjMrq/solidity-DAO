@@ -21,17 +21,17 @@ export const waitUtilsForGovernance = (
     proposalId: string,
     proposalStateToPass: PossibleProposalState
   ) => {
-    let currentPropositionState = (await governanceOrchestrator.methods
+    let currentProposalState = (await governanceOrchestrator.methods
       .state(proposalId)
       .call()) as PossibleProposalState["value"];
 
-    while (currentPropositionState === proposalStateToPass.value) {
+    while (currentProposalState === proposalStateToPass.value) {
       await sleep(4000);
-      currentPropositionState = (await governanceOrchestrator.methods
+      currentProposalState = (await governanceOrchestrator.methods
         .state(proposalId)
         .call()) as PossibleProposalState["value"];
     }
 
-    return currentPropositionState;
+    return currentProposalState;
   },
 });

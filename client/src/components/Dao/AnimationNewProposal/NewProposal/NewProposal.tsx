@@ -8,7 +8,7 @@ import { inputLike } from "../../../../style/input-like";
 import { Button } from "../../../../style/tags/button";
 
 
-const NewPropositionCardDiv = styled.div`
+const NewProposalCardDiv = styled.div`
   margin: 0 auto;
   padding: 40px;
   border-radius: ${borderRadius};
@@ -23,7 +23,7 @@ const NewProposalTitle = styled.div`
   margin-bottom: 40px;
 `
 
-const PropositionElements = styled.div`
+const ProposalElements = styled.div`
   display: flex;
   align-items: stretch;
   justify-content: space-between;
@@ -31,19 +31,19 @@ const PropositionElements = styled.div`
   width: 100%;
   height: 100%;
 `
-const PropositionColorPickerDiv = styled.div`
+const ProposalColorPickerDiv = styled.div`
   margin: 0 auto 40px auto;
   min-width: 40%;
 `
 
-const PropositionDescriptionDiv = styled.div`
+const ProposalDescriptionDiv = styled.div`
   flex-grow: 1;
   min-height: 100%;
   margin: 0 auto 40px auto;
   min-width: 40%;
 `
 
-const PropositionDescriptionInput = styled.textarea`
+const ProposalDescriptionInput = styled.textarea`
   ${inputLike}
   width:100%;
   height:100%;
@@ -51,62 +51,62 @@ const PropositionDescriptionInput = styled.textarea`
   border-radius: ${borderRadius};
 `
 
-const PropositionButtonDiv = styled.div`
+const ProposalButtonDiv = styled.div`
   width: 100%;
 `
 
 export function NewProposal() {
-  const { submitNewColorPropositionToDao, canParticipateToDao } = useContext(Web3Context);
+  const { submitNewColorProposalToDao, canParticipateToDao } = useContext(Web3Context);
 
   const [proposedColor, setProposedColor] = React.useState('#ffffff');
 
-  const [propositionDescription, setPropositionDescription] = React.useState('');
+  const [proposalDescription, setProposalDescription] = React.useState('');
 
-  const submitProposition = async () => {
-    await submitNewColorPropositionToDao({color: proposedColor, description: propositionDescription})
-    setPropositionDescription("")
+  const submitProposal = async () => {
+    await submitNewColorProposalToDao({color: proposedColor, description: proposalDescription})
+    setProposalDescription("")
   }
   
 
   return (
-    <NewPropositionCardDiv>
+    <NewProposalCardDiv>
       <NewProposalTitle>
         Propose a new Astro Light color
       </NewProposalTitle>
-      <PropositionElements>
-        <PropositionColorPickerDiv>
+      <ProposalElements>
+        <ProposalColorPickerDiv>
           {/* Styling of color picker in index.css */}
           <ChromePicker
             color={proposedColor}
             onChange={(color: {hex: string}) => setProposedColor(color.hex)}/>
-        </PropositionColorPickerDiv>
+        </ProposalColorPickerDiv>
         <div style={{ minWidth: "5%"}}></div>
-        <PropositionDescriptionDiv>
-          <PropositionDescriptionInput 
+        <ProposalDescriptionDiv>
+          <ProposalDescriptionInput 
             placeholder="Describe why you want to make this change to the DAO.." 
             spellCheck={true}
-            onChange= {({target: {value}}) => setPropositionDescription(value)}
-            value={propositionDescription}
+            onChange= {({target: {value}}) => setProposalDescription(value)}
+            value={proposalDescription}
           />
-        </PropositionDescriptionDiv>
-        <PropositionButtonDiv>
+        </ProposalDescriptionDiv>
+        <ProposalButtonDiv>
           {
             canParticipateToDao 
               ?
               <Button 
                 style={{width: "100%", whiteSpace: "normal"}}
-                onClick={submitProposition}>
-                  Emit Proposition 📡
+                onClick={submitProposal}>
+                  Emit Proposal 📡
               </Button> :
               <Button 
                 style={{width: "100%", whiteSpace: "normal"}}
                 disabled
               >
-                Hold ASTRO to make a proposition
+                Hold ASTRO to make a proposal
               </Button>
           }
-        </PropositionButtonDiv>
-      </PropositionElements>
-    </NewPropositionCardDiv>
+        </ProposalButtonDiv>
+      </ProposalElements>
+    </NewProposalCardDiv>
   );
 }

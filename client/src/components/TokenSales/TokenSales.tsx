@@ -41,7 +41,7 @@ export function TokenSales() {
           <div>Astro Light</div>
         </TopDivSale>
       }>
-      <Web3Guard>
+      <Web3Guard displayButton>
         <TokenSale/>
         <BottomDiv>
           <Faucet/>

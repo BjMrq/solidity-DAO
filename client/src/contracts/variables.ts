@@ -12,13 +12,6 @@ export const ProposalStates = {
   Executed: { name: "Executed", color: successColor, value: "7" },
 } as const;
 
-export const ProposalSettings = {
-  votingDelayBlocks: 1,
-  votingPeriodBlocks: 15,
-  quorumPercentage: 0,
-  executionDelaySeconds: 20,
-} as const;
-
 export const ProposalVotes = {
   "0": { name: "against" },
   "1": { name: "for" },

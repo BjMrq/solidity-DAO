@@ -1,22 +1,26 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as R from "ramda";
 import React, { Fragment, useCallback, useContext, useEffect, useState } from 'react';
 import { Web3Context } from "../../../../../../contracts/context";
 import { PossibleProposalState, PossibleProposalVotes } from "../../../../../../contracts/types";
 import { VoteCast } from "../../../../../../contracts/types/GovernanceOrchestrator";
 import { ProposalStates } from "../../../../../../contracts/variables";
-import { errorColor, neutralColor, successColor } from "../../../../../../style/colors";
+import { actionColor, errorColor, neutralColor, successColor } from "../../../../../../style/colors";
+import { ifMountedSetDataStateWith } from "../../../../../../utils/state-update";
+import { toToken } from "../../../../../../utils/token";
 import { ActionOptionButton, ActionWrapper, GradientUnderline, ProposalDescription, ProposalDescriptionLabel } from "../style";
-import { onEventDataIfSamePropositionIdDo, votesAreOpen } from "../utils";
+import { onEventDataIfSameProposalIdDo, proposalIsPending, votesAreOpen } from "../utils";
 
 
-export function PropositionVote({
+export function ProposalVote({
   proposalId, 
   proposalState, 
-  waitForBlockNumberAndEnsurePropositionStateIsPassed}: 
+  waitForBlockNumberAndEnsureProposalStateIsPassed}: 
 {
-  proposalId: string, proposalState: PossibleProposalState, waitForBlockNumberAndEnsurePropositionStateIsPassed: (proposalId: string, blockNumber: number, propositionStateToHavePassed: PossibleProposalState) => Promise<void>
+  proposalId: string, proposalState: PossibleProposalState, waitForBlockNumberAndEnsureProposalStateIsPassed: (proposalId: string, blockNumber: number, proposalStateToHavePassed: PossibleProposalState) => Promise<void>
 }) {
-  const { contracts: {governanceOrchestrator}, web3Instance, currentAccount, toastContractSend, canParticipateToDao} = useContext(Web3Context);
+  const { contracts: {governanceOrchestrator, astroTokenContract}, web3Instance, currentAccount, toastContractSend, canParticipateToDao} = useContext(Web3Context);
+  const [justUpdatedVotingPower, setJustUpdatingVotingPower] = useState(false)
 
   const [votes, setVotes] = useState({
     hasVoted: false,
@@ -24,7 +28,12 @@ export function PropositionVote({
     "1": "0"
   })
 
-  const submitVote = async(vote: PossibleProposalVotes) => await toastContractSend(governanceOrchestrator.methods.castVote(proposalId, vote))
+  const registerNewVotingPower = async() => {
+    await toastContractSend(astroTokenContract.methods.delegate(currentAccount), {}, "Self delegation")
+    setJustUpdatingVotingPower(true)
+  }
+
+  const submitVote = async(vote: PossibleProposalVotes) => await toastContractSend(governanceOrchestrator.methods.castVote(proposalId, vote), {}, "Vote for proposal")
 
   const onVoteCastEventReceived = useCallback((castedVote: VoteCast) => {
     const voteValue = castedVote.returnValues.support as PossibleProposalVotes
@@ -42,26 +51,32 @@ export function PropositionVote({
     ))
   }, [votes])
 
-  useEffect(() => {
-    (async () => {
-      const {againstVotes, forVotes} = await governanceOrchestrator.methods.proposalVotes(proposalId).call()
+  const getVoteState = async () => {
+    const {againstVotes, forVotes} = await governanceOrchestrator.methods.proposalVotes(proposalId).call()
 
-      setVotes({
-        "0": againstVotes, 
-        "1": forVotes,
-        hasVoted: await governanceOrchestrator.methods.hasVoted(proposalId, currentAccount).call()
-      })
+    const hasVoted = await governanceOrchestrator.methods.hasVoted(proposalId, currentAccount).call()
+
+    return {
+      "0": againstVotes, 
+      "1": forVotes,
+      hasVoted
     }
-    )();
+  }
+
+  //token more snapshot create
+
+
+  useEffect(() => {
+    return ifMountedSetDataStateWith(getVoteState, setVotes)
   }, [])
 
   useEffect(() => {
     (async () => {
       if(votesAreOpen(proposalState)){
   
-        const voteCastListener = governanceOrchestrator.events.VoteCast(onEventDataIfSamePropositionIdDo(proposalId, onVoteCastEventReceived))
+        const voteCastListener = governanceOrchestrator.events.VoteCast(onEventDataIfSameProposalIdDo(proposalId, onVoteCastEventReceived))
   
-        await waitForBlockNumberAndEnsurePropositionStateIsPassed(
+        await waitForBlockNumberAndEnsureProposalStateIsPassed(
           proposalId,
           Number(await governanceOrchestrator.methods.proposalDeadline(proposalId).call()),
           ProposalStates.Active
@@ -86,9 +101,9 @@ export function PropositionVote({
       <GradientUnderline/>
     
       <ProposalDescription>
-        In Favor: {votes["1"]}
+        In Favor: {toToken(votes["1"])}
         <br/>
-        Against: {votes["0"]}
+        Against: {toToken(votes["0"])}
       </ProposalDescription> 
     
       {
@@ -98,7 +113,7 @@ export function PropositionVote({
           votesAreOpen(proposalState) && 
         ( votes.hasVoted ? 
           <ActionOptionButton disabled color={neutralColor}>
-                Vote submitted
+                Vote Submitted
           </ActionOptionButton>
           : 
           <Fragment>
@@ -111,6 +126,18 @@ export function PropositionVote({
             </ActionOptionButton>
           </Fragment>
         )
+        }
+        {
+          proposalIsPending(proposalState) && (
+            justUpdatedVotingPower ? 
+              <ActionOptionButton disabled color={neutralColor}>
+                Vote Opening Soon
+              </ActionOptionButton>
+              :
+              <ActionOptionButton onClick ={registerNewVotingPower} color={actionColor}>
+                Update Voting Power
+              </ActionOptionButton> 
+          )
         }
       </ActionWrapper>
       }

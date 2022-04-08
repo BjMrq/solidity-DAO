@@ -2,19 +2,19 @@
 import { PossibleProposalState } from "../../../../../contracts/types";
 import { ProposalStates } from "../../../../../contracts/variables";
 
-export const propositionIsPending = (proposalState: PossibleProposalState) =>
+export const proposalIsPending = (proposalState: PossibleProposalState) =>
   proposalState.name === "Pending";
 
-export const propositionIsQueued = (proposalState: PossibleProposalState) =>
+export const proposalIsQueued = (proposalState: PossibleProposalState) =>
   proposalState.name === "Queued";
 
 export const votesAreOpen = (proposalState: PossibleProposalState) =>
   proposalState.name === "Active";
 
-export const propositionHasPassed = (proposalState: PossibleProposalState) =>
+export const proposalHasPassed = (proposalState: PossibleProposalState) =>
   proposalState.name === "Succeeded";
 
-export const onEventDataIfSamePropositionIdDo =
+export const onEventDataIfSameProposalIdDo =
   <TData extends { returnValues: { proposalId: string } }>(
     proposalId: string,
     onEventData: (eventData: TData) => void
@@ -26,8 +26,8 @@ export const onEventDataIfSamePropositionIdDo =
   };
 
 export const getStateFromStateStateValue = (
-  propositionStateValue: PossibleProposalState["value"]
+  proposalStateValue: PossibleProposalState["value"]
 ) =>
   Object.values(ProposalStates).find(
-    ({ value }) => value === propositionStateValue
+    ({ value }) => value === proposalStateValue
   ) as PossibleProposalState;

@@ -19,7 +19,7 @@ import ColorBoxAbi from "./abis/deployments/ColorBox.json";
 import FaucetAbi from "./abis/deployments/Faucet.json";
 import GovernanceOrchestratorAbi from "./abis/deployments/GovernanceOrchestrator.json";
 import SwapContractFactoryAbi from "./abis/deployments/SwapContractFactory.json";
-import { AbiWithNetworks, AddTokenToWallet, DeployedNetwork, EthereumAvailableGuard, PossibleSwapToken, SubmitNewColorPropositionToDao, SwapContractInfo, ToastContractSend, VoidCall, Web3ContextFunctions } from "./types";
+import { AbiWithNetworks, AddTokenToWallet, DeployedNetwork, EthereumAvailableGuard, PossibleSwapToken, SubmitNewColorProposalToDao, SwapContractInfo, ToastContractSend, VoidCall, Web3ContextFunctions } from "./types";
 import { AstroToken } from "./types/AstroToken";
 import { AstroTokenSale } from "./types/AstroTokenSale";
 import { ColorBox } from "./types/ColorBox";
@@ -189,7 +189,7 @@ export default function Web3ContextProvider({
     
   }
 
-  const submitNewColorPropositionToDao: SubmitNewColorPropositionToDao = async ({color, description}) => {
+  const submitNewColorProposalToDao: SubmitNewColorProposalToDao = async ({color, description}) => {
 
     toastContractSend(
       web3ContractsState.governanceOrchestrator.methods.propose(
@@ -294,7 +294,7 @@ export default function Web3ContextProvider({
         initWeb3,
         addTokenToWallet,
         toastContractSend,
-        submitNewColorPropositionToDao
+        submitNewColorProposalToDao
       }}
     >
       {children}

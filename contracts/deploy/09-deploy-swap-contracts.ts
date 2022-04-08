@@ -111,108 +111,108 @@ const deployAstroSwaps: DeployFunction = async ({
   const swapPools = {
     localhost: [],
     hardhat: [
-      {
-        baseToken: {
-          name: "Basic Attention Token",
-          symbol: "BAT",
-        },
-        quoteToken: {
-          address: AstroToken.address,
-        },
-        priceFeed: {
-          rate: "80000000",
-        },
-        swapContract: {
-          pairName: "BAT/ASTRO",
-          baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
-        },
-      },
-      {
-        baseToken: {
-          name: "BNB",
-          symbol: "BNB",
-        },
-        quoteToken: {
-          address: AstroToken.address,
-        },
-        priceFeed: {
-          rate: "38400000000",
-        },
-        swapContract: {
-          pairName: "BNB/ASTRO",
-          baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
-        },
-      },
-      {
-        baseToken: {
-          name: "USD Coin",
-          symbol: "USDC",
-        },
-        quoteToken: {
-          address: AstroToken.address,
-        },
-        priceFeed: {
-          rate: "100000000",
-        },
-        swapContract: {
-          pairName: "USDC/ASTRO",
-          baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
-        },
-      },
-      {
-        baseToken: {
-          name: "Wrapped BTC",
-          symbol: "WBTC",
-        },
-        quoteToken: {
-          address: AstroToken.address,
-        },
-        priceFeed: {
-          rate: "4100000000000",
-        },
-        swapContract: {
-          pairName: "WBTC/ASTRO",
-          baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
-        },
-      },
-      {
-        baseToken: {
-          name: "Dai Stablecoin",
-          symbol: "DAI",
-        },
-        quoteToken: {
-          address: AstroToken.address,
-        },
-        priceFeed: {
-          rate: "100000000",
-        },
-        swapContract: {
-          pairName: "DAI/ASTRO",
-          baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
-        },
-      },
-      {
-        baseToken: {
-          name: "ChainLink Token",
-          symbol: "LINK",
-        },
-        quoteToken: {
-          address: AstroToken.address,
-        },
-        priceFeed: {
-          rate: "1500000000",
-        },
-        swapContract: {
-          pairName: "LINK/ASTRO",
-          baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-          quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
-        },
-      },
+      // {
+      //   baseToken: {
+      //     name: "Basic Attention Token",
+      //     symbol: "BAT",
+      //   },
+      //   quoteToken: {
+      //     address: AstroToken.address,
+      //   },
+      //   priceFeed: {
+      //     rate: "80000000",
+      //   },
+      //   swapContract: {
+      //     pairName: "BAT/ASTRO",
+      //     baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
+      //     quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
+      //   },
+      // },
+      // {
+      //   baseToken: {
+      //     name: "BNB",
+      //     symbol: "BNB",
+      //   },
+      //   quoteToken: {
+      //     address: AstroToken.address,
+      //   },
+      //   priceFeed: {
+      //     rate: "38400000000",
+      //   },
+      //   swapContract: {
+      //     pairName: "BNB/ASTRO",
+      //     baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
+      //     quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
+      //   },
+      // },
+      // {
+      //   baseToken: {
+      //     name: "USD Coin",
+      //     symbol: "USDC",
+      //   },
+      //   quoteToken: {
+      //     address: AstroToken.address,
+      //   },
+      //   priceFeed: {
+      //     rate: "100000000",
+      //   },
+      //   swapContract: {
+      //     pairName: "USDC/ASTRO",
+      //     baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
+      //     quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
+      //   },
+      // },
+      // {
+      //   baseToken: {
+      //     name: "Wrapped BTC",
+      //     symbol: "WBTC",
+      //   },
+      //   quoteToken: {
+      //     address: AstroToken.address,
+      //   },
+      //   priceFeed: {
+      //     rate: "4100000000000",
+      //   },
+      //   swapContract: {
+      //     pairName: "WBTC/ASTRO",
+      //     baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
+      //     quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
+      //   },
+      // },
+      // {
+      //   baseToken: {
+      //     name: "Dai Stablecoin",
+      //     symbol: "DAI",
+      //   },
+      //   quoteToken: {
+      //     address: AstroToken.address,
+      //   },
+      //   priceFeed: {
+      //     rate: "100000000",
+      //   },
+      //   swapContract: {
+      //     pairName: "DAI/ASTRO",
+      //     baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
+      //     quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
+      //   },
+      // },
+      // {
+      //   baseToken: {
+      //     name: "ChainLink Token",
+      //     symbol: "LINK",
+      //   },
+      //   quoteToken: {
+      //     address: AstroToken.address,
+      //   },
+      //   priceFeed: {
+      //     rate: "1500000000",
+      //   },
+      //   swapContract: {
+      //     pairName: "LINK/ASTRO",
+      //     baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
+      //     quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
+      //   },
+      // },
       // {
       //   baseToken: {
       //     name: "Wrapped Litecoin",

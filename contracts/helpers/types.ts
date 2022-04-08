@@ -84,3 +84,9 @@ export type NetworkConfigItem = {
 export type NetworkConfigInfo = {
   [key: string]: NetworkConfigItem
 }
+
+export type ProposedSwapInfo = {
+  proposalId: string
+  encodedDeployNewSwapFunctionToCall: string
+  proposalDescription: string
+}

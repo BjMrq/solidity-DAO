@@ -13,7 +13,7 @@ const ContentDiv = styled.div`
   min-height: 50vh;
 `
 
-export function Web3Guard({children}: { children: JSX.Element | JSX.Element[]}) {
+export function Web3Guard({children, displayButton}: { children: JSX.Element | JSX.Element[], displayButton?: boolean}) {
   const { connected, contractsDeployedOnCurrentChain} = useContext(Web3Context);
 
   return (
@@ -31,7 +31,7 @@ export function Web3Guard({children}: { children: JSX.Element | JSX.Element[]}) 
           </ContentDiv>
         :
         <ContentDiv>
-          <Connect/>
+          {displayButton && <Connect/>}
         </ContentDiv>
       }
     </Fragment>

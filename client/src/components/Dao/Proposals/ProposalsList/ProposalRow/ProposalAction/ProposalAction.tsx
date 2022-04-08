@@ -8,6 +8,7 @@ import { ActionOptionButton } from "../style";
 
 export function ProposalAction({
   actionName,
+  awaitActionDisplayText,
   proposal,
   actionDisplayCondition,
   actionExecutionCondition
@@ -16,12 +17,17 @@ export function ProposalAction({
   actionName: "queue" | "execute",
   proposal: ProposalInfo ,
   actionDisplayCondition: boolean,
+  awaitActionDisplayText?: string,
   actionExecutionCondition?: boolean
 }) {
 
   const { contracts: {governanceOrchestrator}, toastContractSend, web3Instance} = useContext(Web3Context);
 
-  const propositionAction = async () => await toastContractSend(governanceOrchestrator.methods[actionName](proposal.targets, proposal.values, proposal.calldatas, web3Instance.utils.keccak256(proposal.description) ))
+  const proposalAction = async () => await toastContractSend(
+    governanceOrchestrator.methods[actionName](proposal.targets, proposal.values, proposal.calldatas, web3Instance.utils.keccak256(proposal.description) ),  
+    {}, 
+    `${capitalize(actionName)} proposal`
+  )
   
 
   return (
@@ -31,12 +37,12 @@ export function ProposalAction({
       {
         actionDisplayCondition && (
           Boolean(actionExecutionCondition) ? 
-            <ActionOptionButton onClick ={propositionAction} color={actionColor}>
-              {capitalize(actionName)} Proposition
+            <ActionOptionButton onClick ={proposalAction} color={actionColor}>
+              {capitalize(actionName)} Proposal
             </ActionOptionButton> 
             :
             <ActionOptionButton disabled color={neutralColor}>
-              {capitalize(actionName)} Proposition
+              {awaitActionDisplayText}
             </ActionOptionButton>
         )
       

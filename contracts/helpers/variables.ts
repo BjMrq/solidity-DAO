@@ -9,10 +9,10 @@ export const ASTRO_TOKEN_SUPPLY = {
 export const MOCK_ERC20_SWAP_SUPPLY = "500000000000000000000000000" // Half total supply
 
 export const PROPOSAL_SETTINGS = {
-  votingDelayBlocks: 1,
-  votingPeriodBlocks: 15,
+  votingDelayBlocks: 4,
+  votingPeriodBlocks: 16,
   quorumPercentage: 0,
-  executionDelaySeconds: 10,
+  executionDelaySeconds: 5,
 } as const
 
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000"

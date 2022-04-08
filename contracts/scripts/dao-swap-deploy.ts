@@ -3,108 +3,20 @@ import { executeScriptWith } from "./helpers/execute-script"
 import { GovernanceOrchestrator, AstroToken, SwapContractFactory } from "../typechain-types"
 import {
   MOCK_ERC20_SWAP_SUPPLY,
-  POSSIBLE_VOTE_VALUES,
   ROUGH_POOL_NUMBER,
   ASTRO_TOKEN_SUPPLY,
   PROPOSAL_SETTINGS,
 } from "../helpers/variables"
-import { withAwaitConfirmation } from "../helpers/chain/wait-transactions"
 import { calculateAstroSupplyWithNumberOfPools } from "../helpers/tokens/supply"
 import { getContractsBeforeSwapDeploy } from "../helpers/contracts/deploy"
-import { SwapDeployTokenInfo } from "../helpers/types"
 import { moveChainBlocksFor, moveChainTimeFor } from "../helpers/chain/move-blocks"
 import { asyncSequentialMap } from "../helpers/processing"
-import { buildDescriptionWithFunctionDetails } from "./helpers/build-description"
-
-type ProposedSwapInfo = {
-  proposalId: string
-  encodedDeployNewSwapFunctionToCall: string
-  proposalDescription: string
-}
-
-export const proposeNewSwapContractDeployment =
-  (SwapContractFactory: SwapContractFactory, GovernanceOrchestrator: GovernanceOrchestrator) =>
-  async ({
-    baseToken,
-    quoteToken,
-    priceFeed,
-    swapContract: { pairName },
-  }: SwapDeployTokenInfo): Promise<ProposedSwapInfo> => {
-    const functionCallInfo = {
-      functionName: "deployNewSwapContract",
-      functionArguments: [
-        baseToken.contract.address,
-        quoteToken.contract.address,
-        priceFeed.address,
-      ],
-    } as const
-
-    const encodedDeployNewSwapFunctionToCall = SwapContractFactory.interface.encodeFunctionData(
-      //@ts-expect-error pattern matching seem broken here
-      functionCallInfo.functionName,
-      functionCallInfo.functionArguments
-    )
-
-    const proposalDescription = buildDescriptionWithFunctionDetails(
-      SwapContractFactory,
-      functionCallInfo.functionName,
-      functionCallInfo.functionArguments,
-      `Allowing to swap ${pairName} will allow more accessibility to the ASTRO token`
-    )
-
-    //@ts-expect-error some accessors are maybe undefined
-    const proposalId = (
-      await withAwaitConfirmation(
-        GovernanceOrchestrator.propose(
-          [SwapContractFactory.address],
-          [0],
-          [encodedDeployNewSwapFunctionToCall],
-          proposalDescription
-        )
-      )
-    ).events[0].args.proposalId.toString() as string
-
-    return {
-      proposalId,
-      encodedDeployNewSwapFunctionToCall,
-      proposalDescription,
-    }
-  }
-
-const voteForProposition =
-  (GovernanceOrchestrator: GovernanceOrchestrator) =>
-  async ({ proposalId }: ProposedSwapInfo) =>
-    await withAwaitConfirmation(
-      GovernanceOrchestrator.castVoteWithReason(
-        proposalId,
-        POSSIBLE_VOTE_VALUES.for,
-        "We should definitely do that"
-      )
-    )
-
-const queueProposition =
-  (SwapContractFactory: SwapContractFactory, GovernanceOrchestrator: GovernanceOrchestrator) =>
-  async ({ encodedDeployNewSwapFunctionToCall, proposalDescription }: ProposedSwapInfo) =>
-    await withAwaitConfirmation(
-      GovernanceOrchestrator.queue(
-        [SwapContractFactory.address],
-        [0],
-        [encodedDeployNewSwapFunctionToCall],
-        ethers.utils.keccak256(ethers.utils.toUtf8Bytes(proposalDescription))
-      )
-    )
-
-const executeProposition =
-  (SwapContractFactory: SwapContractFactory, GovernanceOrchestrator: GovernanceOrchestrator) =>
-  async ({ encodedDeployNewSwapFunctionToCall, proposalDescription }: ProposedSwapInfo) =>
-    await withAwaitConfirmation(
-      GovernanceOrchestrator.execute(
-        [SwapContractFactory.address],
-        [0],
-        [encodedDeployNewSwapFunctionToCall],
-        ethers.utils.keccak256(ethers.utils.toUtf8Bytes(proposalDescription))
-      )
-    )
+import {
+  proposeNewSwapContractDeployment,
+  voteForProposal,
+  queueProposal,
+  executeProposal,
+} from "../helpers/contracts/propose-swap-dao"
 
 export const proposeSwapContractDeploy = async () => {
   const { deployer } = await getNamedAccounts()
@@ -170,29 +82,23 @@ export const proposeSwapContractDeploy = async () => {
   )
 
   //Deploy swap contracts with DAO
-  const propositions = await asyncSequentialMap(
+  const proposals = await asyncSequentialMap(
     swapPoolsWithTokenContract,
     proposeNewSwapContractDeployment(SwapContractFactory, GovernanceOrchestrator)
   )
 
   await moveChainBlocksFor(PROPOSAL_SETTINGS.votingDelayBlocks)
 
-  await asyncSequentialMap(propositions, voteForProposition(GovernanceOrchestrator))
+  await asyncSequentialMap(proposals, voteForProposal(GovernanceOrchestrator))
 
   await moveChainBlocksFor(PROPOSAL_SETTINGS.votingPeriodBlocks)
 
-  await asyncSequentialMap(
-    propositions,
-    queueProposition(SwapContractFactory, GovernanceOrchestrator)
-  )
+  await asyncSequentialMap(proposals, queueProposal(SwapContractFactory, GovernanceOrchestrator))
 
   await moveChainTimeFor(PROPOSAL_SETTINGS.executionDelaySeconds + 10)
   // await moveChainBlocksFor(2)
 
-  await asyncSequentialMap(
-    propositions,
-    executeProposition(SwapContractFactory, GovernanceOrchestrator)
-  )
+  await asyncSequentialMap(proposals, executeProposal(SwapContractFactory, GovernanceOrchestrator))
 
   console.log(await (await GovernanceOrchestrator.getAllProposalsId()).toString())
 }

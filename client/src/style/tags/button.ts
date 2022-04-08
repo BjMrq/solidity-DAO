@@ -69,7 +69,6 @@ const ButtonBaseCSS = css`
   }
 `;
 
-//TODO blocked prop
 export const Button = styled.button`
   ${ButtonBaseCSS}
   height: 45px;

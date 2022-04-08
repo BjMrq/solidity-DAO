@@ -6,12 +6,12 @@ import { DescriptionSeparator, ProposalStates } from "../../../../../contracts/v
 import { borderRadius } from "../../../../../style/characteristics";
 import { backGroundColor, lightColor } from "../../../../../style/colors";
 import { waitForTime } from "../../../../../utils/sleep";
-import { ProposalAction } from "./PropositionQueue/PropositionQueue";
-import { PropositionVote } from "./PropositionVote/PropositionVote";
+import { ifMountedSetDataStateWith } from "../../../../../utils/state-update";
+import { ProposalAction } from "./ProposalAction/ProposalAction";
+import { ProposalVote } from "./ProposalVote/ProposalVote";
 import { waitUtilsForGovernance } from "./state-wait";
 import { ActionWrapper, GradientUnderline, ProposalDescription, ProposalDescriptionLabel, ProposalDescriptionSubLabel } from "./style";
-import { getStateFromStateStateValue, onEventDataIfSamePropositionIdDo, propositionHasPassed, propositionIsPending, propositionIsQueued } from "./utils";
-
+import { getStateFromStateStateValue, onEventDataIfSameProposalIdDo, proposalHasPassed, proposalIsPending, proposalIsQueued } from "./utils";
 
 const ProposalRowWrapper = styled.div`
   font-size: 20px;
@@ -49,7 +49,7 @@ const ProposalStatus = styled.div<{color: string}>`
 export type ProposalInfo = {callDescription: string, proposalDescription: string, description: string, targets: string[], calldatas: string[], values: string[]}
 
 
-export function _ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: boolean}) {
+export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: boolean}) {
   const { contracts: {governanceOrchestrator}, web3Instance, canParticipateToDao} = useContext(Web3Context);
 
   const [proposalState, setProposalState] = useState<PossibleProposalState>(ProposalStates.None)
@@ -60,13 +60,13 @@ export function _ProposalRow({proposalId, isLast}: {proposalId: string, isLast?:
 
   const {waitForBlockNumber, waitForProposalStateToNotBe} = waitUtilsForGovernance(web3Instance, governanceOrchestrator)
 
-  //TODO link to explorer to proposition creation
+  //TODO link to explorer to proposal creation
   
 
-  const waitForBlockNumberAndEnsurePropositionStateIsPassed = async (
+  const waitForBlockNumberAndEnsureProposalStateIsPassed = async (
     proposalId: string,
     blockNumber: number,
-    propositionStateToHavePassed: PossibleProposalState
+    proposalStateToHavePassed: PossibleProposalState
   ) => {
     await waitForBlockNumber(blockNumber);
   
@@ -74,13 +74,13 @@ export function _ProposalRow({proposalId, isLast}: {proposalId: string, isLast?:
       .state(proposalId)
       .call()) as PossibleProposalState["value"];
   
-    if (newStateValueAtBlock !== propositionStateToHavePassed.value) {
+    if (newStateValueAtBlock !== proposalStateToHavePassed.value) {
   
       return setProposalState(getStateFromStateStateValue(newStateValueAtBlock));
     } else {
       const newStateValue = await waitForProposalStateToNotBe(
         proposalId,
-        propositionStateToHavePassed
+        proposalStateToHavePassed
       );
 
   
@@ -88,31 +88,31 @@ export function _ProposalRow({proposalId, isLast}: {proposalId: string, isLast?:
     }
   }
 
+  const getProposalDescriptionState = async () => {
+    //@ts-expect-error
+    const {targets, calldatas , description, 1: values} = await governanceOrchestrator.methods.getProposal(proposalId).call()
+
+    const [callDescription, proposalDescription] = description.split(DescriptionSeparator)
+
+    return {targets, calldatas, description, callDescription, proposalDescription, values}
+  }
+
+  const getProposalState = async () => getStateFromStateStateValue(await governanceOrchestrator.methods.state(proposalId).call() as PossibleProposalState["value"])
+
   useEffect(() => {
+    return ifMountedSetDataStateWith(getProposalDescriptionState, setProposal)
+  }, [])
 
-    (async () => {
-      //@ts-expect-error
-      const {targets, calldatas , description, 1: values} = await governanceOrchestrator.methods.getProposal(proposalId).call()
-
-      const [callDescription, proposalDescription] = description.split(DescriptionSeparator)
-
-      setProposal({targets, calldatas, description, callDescription, proposalDescription, values})
-
-      setProposalState(
-        getStateFromStateStateValue(
-          await governanceOrchestrator.methods.state(proposalId).call() as PossibleProposalState["value"]
-        ) 
-      )
-    }
-    )();
+  useEffect(() => {
+    return ifMountedSetDataStateWith(getProposalState, setProposalState)
   }, [])
 
   useEffect(() => {
     (async () => {
             
-      if(propositionIsPending(proposalState)){
+      if(proposalIsPending(proposalState)){
 
-        await waitForBlockNumberAndEnsurePropositionStateIsPassed(
+        await waitForBlockNumberAndEnsureProposalStateIsPassed(
           proposalId,
           Number(await governanceOrchestrator.methods.proposalSnapshot(proposalId).call()),
           ProposalStates.Pending
@@ -121,10 +121,10 @@ export function _ProposalRow({proposalId, isLast}: {proposalId: string, isLast?:
         return () => ({})
       }
 
-      if(propositionHasPassed(proposalState)){
+      if(proposalHasPassed(proposalState)){
 
         const proposalQueueListener = governanceOrchestrator.events
-          .ProposalQueued(onEventDataIfSamePropositionIdDo(proposalId, () => setProposalState(ProposalStates.Queued)))
+          .ProposalQueued(onEventDataIfSameProposalIdDo(proposalId, () => setProposalState(ProposalStates.Queued)))
   
         return () => {
           proposalQueueListener.removeAllListeners()
@@ -132,10 +132,10 @@ export function _ProposalRow({proposalId, isLast}: {proposalId: string, isLast?:
       }
 
 
-      if(propositionIsQueued(proposalState)){
+      if(proposalIsQueued(proposalState)){
 
         const proposalQueueListener = governanceOrchestrator.events
-          .ProposalExecuted(onEventDataIfSamePropositionIdDo(proposalId, () => setProposalState(ProposalStates.Executed)))
+          .ProposalExecuted(onEventDataIfSameProposalIdDo(proposalId, () => setProposalState(ProposalStates.Executed)))
 
         const executionEta = await governanceOrchestrator.methods.proposalEta(proposalId).call()
 
@@ -155,7 +155,7 @@ export function _ProposalRow({proposalId, isLast}: {proposalId: string, isLast?:
 
   return (
 
-    <Fragment>
+    <Fragment> 
       <ProposalRowWrapper>
         <div style={{minWidth: "100%"}}>
           <ProposalStatus color={proposalState.color}>
@@ -186,10 +186,10 @@ export function _ProposalRow({proposalId, isLast}: {proposalId: string, isLast?:
           {proposal.proposalDescription}
         </ProposalDescription>
 
-        <PropositionVote 
+        <ProposalVote 
           proposalId={proposalId}
           proposalState={proposalState}
-          waitForBlockNumberAndEnsurePropositionStateIsPassed={waitForBlockNumberAndEnsurePropositionStateIsPassed}
+          waitForBlockNumberAndEnsureProposalStateIsPassed={waitForBlockNumberAndEnsureProposalStateIsPassed}
         />
         
         {
@@ -199,13 +199,14 @@ export function _ProposalRow({proposalId, isLast}: {proposalId: string, isLast?:
               actionName={"queue"}
               proposal={proposal}
               actionExecutionCondition={true}
-              actionDisplayCondition={propositionHasPassed(proposalState)}
+              actionDisplayCondition={proposalHasPassed(proposalState)}
             />
 
             <ProposalAction 
               actionName={"execute"}
               proposal={proposal}
-              actionDisplayCondition={propositionIsQueued(proposalState)}
+              awaitActionDisplayText={"Execution Grace Period"}
+              actionDisplayCondition={proposalIsQueued(proposalState)}
               actionExecutionCondition={canExecute}
             />
 
@@ -213,9 +214,7 @@ export function _ProposalRow({proposalId, isLast}: {proposalId: string, isLast?:
         }
       </ProposalRowWrapper>
       { !Boolean(isLast) && <ProposalSeparator/> }
-
     </Fragment>
   )
 }
 
-export const ProposalRow = _ProposalRow

@@ -44,7 +44,7 @@ export type ToastContractSend = (
 
 export type AddTokenToWallet = (tokenInfo: ERC20) => Promise<void>;
 
-export type SubmitNewColorPropositionToDao = (propositionInfo: {
+export type SubmitNewColorProposalToDao = (proposalInfo: {
   color: string;
   description: string;
 }) => Promise<void>;
@@ -54,7 +54,7 @@ export type Web3ContextFunctions = {
   updateDaoParticipationGuard: VoidCall;
   addTokenToWallet: AddTokenToWallet;
   toastContractSend: ToastContractSend;
-  submitNewColorPropositionToDao: SubmitNewColorPropositionToDao;
+  submitNewColorProposalToDao: SubmitNewColorProposalToDao;
 };
 
 export type PossibleProposalState =
