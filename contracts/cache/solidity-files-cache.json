@@ -1636,7 +1636,7 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/node_modules/@openzeppelin/contracts/governance/TimelockController.sol": {
-      "lastModificationDate": 1648743785646,
+      "lastModificationDate": 1649436456347,
       "contentHash": "59f5eb55cde7d6d3ae62c45480aff256",
       "sourceName": "@openzeppelin/contracts/governance/TimelockController.sol",
       "solcConfig": {
@@ -2165,8 +2165,8 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/GovernanceTimeLock.sol": {
-      "lastModificationDate": 1648735177026,
-      "contentHash": "20874e8e6cc860b87296ec9922c57af6",
+      "lastModificationDate": 1649436454443,
+      "contentHash": "6be6a80d85c3cf7765f50ff0e0b08c9a",
       "sourceName": "contracts/GovernanceTimeLock.sol",
       "solcConfig": {
         "version": "0.8.9",

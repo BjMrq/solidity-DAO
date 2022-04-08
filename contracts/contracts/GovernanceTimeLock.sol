@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/governance/TimelockController.sol";
 
 contract GovernanceTimeLock is TimelockController {
   constructor(
-    uint256 _blockVotingDelay,
+    uint256 _minExecutionDelay,
     address[] memory proposers,
     address[] memory executors
-  ) TimelockController(_blockVotingDelay, proposers, executors) {}
+  ) TimelockController(_minExecutionDelay, proposers, executors) {}
 }

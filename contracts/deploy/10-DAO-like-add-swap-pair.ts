@@ -22,6 +22,7 @@ import {
   queueProposal,
   executeProposal,
 } from "../helpers/contracts/propose-swap-dao"
+import { supplyLiquidityForSwapContracts } from "../helpers/tokens/founding"
 
 const waitForBlockOrMoveBlockIfDevelopment = async (
   isDevelopmentNetwork: boolean,
@@ -232,6 +233,10 @@ const daoLikeAddSwapPair: DeployFunction = async ({
   else await waitForNumberOfBlocks(4)
 
   await asyncSequentialMap(proposals, executeProposal(SwapContractFactory, GovernanceOrchestrator))
+
+  await Promise.all(
+    swapPoolsWithTokenContract.map(supplyLiquidityForSwapContracts(SwapContractFactory))
+  )
 }
 
 daoLikeAddSwapPair.tags = ["all", "swap", "governance"]

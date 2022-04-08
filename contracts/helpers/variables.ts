@@ -12,7 +12,7 @@ export const PROPOSAL_SETTINGS = {
   votingDelayBlocks: 4,
   votingPeriodBlocks: 16,
   quorumPercentage: 0,
-  executionDelaySeconds: 5,
+  executionDelaySeconds: 1,
 } as const
 
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000"
@@ -31,9 +31,7 @@ export const POSSIBLE_VOTE_VALUES = {
 export const NETWORK_CONFIG: NetworkConfigInfo = {
   localhost: {},
   hardhat: {},
-  // Price Feed Address, values can be obtained at https://docs.chain.link/docs/reference-contracts
-  // Default one is ETH/USD contract on Kovan
-  kovan: {
+  rinkeby: {
     blockConfirmations: 6,
   },
 }
