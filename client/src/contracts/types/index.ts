@@ -3,6 +3,7 @@
 /* eslint-disable */
 export type { AccessControl } from "./AccessControl";
 export type { AggregatorV3Interface } from "./AggregatorV3Interface";
+export type { AstroStake } from "./AstroStake";
 export type { AstroToken } from "./AstroToken";
 export type { AstroTokenSale } from "./AstroTokenSale";
 export type { ColorBox } from "./ColorBox";
@@ -41,6 +42,7 @@ export type { Ownable } from "./Ownable";
 export type { Ratable } from "./Ratable";
 export type { SatiToken } from "./SatiToken";
 export type { SatiTokenSale } from "./SatiTokenSale";
+export type { SimpleStake } from "./SimpleStake";
 export type { SwapContractFactory } from "./SwapContractFactory";
 export type { Swapable } from "./Swapable";
 export type { TimeLock } from "./TimeLock";

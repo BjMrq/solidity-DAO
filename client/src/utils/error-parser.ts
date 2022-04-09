@@ -19,6 +19,10 @@ export const dummyErrorParser = R.cond<Error, string>([
     "User denied transaction signature",
     "Transaction rejected"
   ),
+  ifErrorIncludeReturnMessage(
+    "lock time has not expired",
+    "Lock time has not expired"
+  ),
   ifErrorIncludeReturnMessage("Faucet is dry"),
   [R.T, R.always("Something went wrong, please contact client services")],
 ]) as (error: Error) => string;

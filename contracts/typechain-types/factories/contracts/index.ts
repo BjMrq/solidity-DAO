@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as test from "./test";
+export { AstroStake__factory } from "./AstroStake__factory";
 export { AstroToken__factory } from "./AstroToken__factory";
 export { AstroTokenSale__factory } from "./AstroTokenSale__factory";
 export { ColorBox__factory } from "./ColorBox__factory";
@@ -14,5 +15,6 @@ export { GovernanceTimeLock__factory } from "./GovernanceTimeLock__factory";
 export { ISwapable__factory } from "./ISwapable__factory";
 export { KYCValidation__factory } from "./KYCValidation__factory";
 export { Ratable__factory } from "./Ratable__factory";
+export { SimpleStake__factory } from "./SimpleStake__factory";
 export { SwapContractFactory__factory } from "./SwapContractFactory__factory";
 export { Swapable__factory } from "./Swapable__factory";

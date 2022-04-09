@@ -30,5 +30,5 @@ const deployAstroToken: DeployFunction = async ({
   // }
 }
 
-deployAstroToken.tags = ["all", "sales", "swap", "governance", "AstroToken"]
+deployAstroToken.tags = ["all", "stake", "sales", "swap", "governance", "AstroToken"]
 export default deployAstroToken

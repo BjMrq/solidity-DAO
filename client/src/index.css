@@ -11,6 +11,7 @@ body {
   border-radius: 6px !important;
   margin: auto !important;
   min-width: 100% !important;
+  box-shadow: none !important;
 }
 
 .chrome-picker > div {

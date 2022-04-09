@@ -95,7 +95,7 @@ export const proposeSwapContractDeploy = async () => {
 
   await asyncSequentialMap(proposals, queueProposal(SwapContractFactory, GovernanceOrchestrator))
 
-  await moveChainTimeFor(PROPOSAL_SETTINGS.executionDelaySeconds + 10)
+  await moveChainTimeFor(PROPOSAL_SETTINGS.executionDelayMinutes + 10)
   // await moveChainBlocksFor(2)
 
   await asyncSequentialMap(proposals, executeProposal(SwapContractFactory, GovernanceOrchestrator))

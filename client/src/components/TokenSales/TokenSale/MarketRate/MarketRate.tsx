@@ -205,7 +205,7 @@ export function MarketRate() {
   
   return ( 
     <TokenSaleContent 
-      saleTitle={"Swap tokens for ASTRO at market price using oracles (ASTRO will launch at 1$)"}
+      actionDescription={"Oracles deliver off-chain data to a smart contracts. Here an oracle get the market price of the token to swap for ASTRO (ASTRO = 1$)."}
       callToAction={{display: "Swap", callback: swapTokens}}
     >
       <TokenDiv>

@@ -4,11 +4,11 @@ import { AddMetamask } from "../../shared/AddMetamask/AddMetamask";
 
 
 export function AddAstroMetamask() {
-  const { contracts: {astroTokenContract} } = useContext(Web3Context);
+  const { contracts: {astroToken} } = useContext(Web3Context);
   
   return (
     <Fragment>
-      {astroTokenContract && <AddMetamask displayText="Add Astro" tokenContract={astroTokenContract}/>}
+      {astroToken && <AddMetamask displayText="Add Astro" tokenContract={astroToken}/>}
     </Fragment>
   );
 }

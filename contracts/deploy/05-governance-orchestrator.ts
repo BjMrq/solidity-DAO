@@ -26,5 +26,5 @@ const deployGovernanceOrchestrator: DeployFunction = async ({
   })
 }
 
-deployGovernanceOrchestrator.tags = ["all", "governance", "GovernanceOrchestrator"]
+deployGovernanceOrchestrator.tags = ["all", "swap", "sales", "governance", "GovernanceOrchestrator"]
 export default deployGovernanceOrchestrator

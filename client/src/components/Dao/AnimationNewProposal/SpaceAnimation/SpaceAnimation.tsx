@@ -6,9 +6,9 @@ import { Web3Guard } from "../../../Web3Guard/Web3Guard";
 import './style.scss';
 
 const HoverDiv = styled.div`
-  width: 70%;
+  width: 96%;
 	height: 75%;
-  margin: 80px auto 40px auto;
+  margin: 40px auto 80px auto;
 	animation: hover 5s ease-in-out infinite;
 	animation-fill-mode: forwards;
 
@@ -19,7 +19,7 @@ const HoverDiv = styled.div`
     100% { transform: translateY(0) }
   }
 
-  @media screen and (max-width: 1200px) {  
+  @media screen and (max-width: 1270px) {  
       width: 80%;
       height: 90%;
       margin: 20px auto 60px auto;
@@ -57,16 +57,16 @@ const IllustrationSVG = styled.svg`
 
 export function SpaceAnimation() {
 
-  const { contracts: {colorBoxContract}} = useContext(Web3Context);
+  const { contracts: {colorBox}} = useContext(Web3Context);
 
   const [spaceDaoColor, setSpaceDaoColor] = useState("#ff000000")
 
   useEffect(() => {
     (async () => {
-      if(colorBoxContract) {
-        setSpaceDaoColor(await colorBoxContract.methods.getColor().call());
+      if(colorBox) {
+        setSpaceDaoColor(await colorBox.methods.getColor().call());
 
-        const colorChangedEmitter = colorBoxContract.events.ColorChanged(onEventDataDo(({returnValues: {newValue}}) => {
+        const colorChangedEmitter = colorBox.events.ColorChanged(onEventDataDo(({returnValues: {newValue}}) => {
           setSpaceDaoColor(newValue)
         }))
 
@@ -76,7 +76,7 @@ export function SpaceAnimation() {
       }
     }
     )();
-  }, [colorBoxContract])
+  }, [colorBox])
 
   
   return (

@@ -15,7 +15,7 @@ const BottomDiv = styled.div`
   flex: auto;
   padding-bottom: 12px;
  
-  @media screen and (max-width: 1200px) { 
+  @media screen and (max-width: 1270px) { 
     padding-bottom: 0;
   }
 `

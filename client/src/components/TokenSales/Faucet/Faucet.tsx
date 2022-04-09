@@ -20,10 +20,10 @@ const FaucetCatchP = styled.div`
 
 export function Faucet() {
   const [showButton, setShowButton] = useState(false)
-  const { toastContractSend , contracts: {faucetContract}} = useContext(Web3Context);
+  const { toastContractSend , contracts: {faucet}} = useContext(Web3Context);
 
   const makeItRain = async () => {
-    await toastContractSend(faucetContract.methods.makeItRain(), {}, "Faucet distribution")
+    await toastContractSend(faucet.methods.makeItRain(), {}, "Faucet distribution")
   }
 
   return (

@@ -20,7 +20,7 @@ const AppBody = styled.div`
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(8px + 2vmin);
 `
 
 const Panel = styled.div`

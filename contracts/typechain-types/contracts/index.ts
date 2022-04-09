@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type * as test from "./test";
 export type { test };
+export type { AstroStake } from "./AstroStake";
 export type { AstroToken } from "./AstroToken";
 export type { AstroTokenSale } from "./AstroTokenSale";
 export type { ColorBox } from "./ColorBox";
@@ -15,5 +16,6 @@ export type { GovernanceTimeLock } from "./GovernanceTimeLock";
 export type { ISwapable } from "./ISwapable";
 export type { KYCValidation } from "./KYCValidation";
 export type { Ratable } from "./Ratable";
+export type { SimpleStake } from "./SimpleStake";
 export type { SwapContractFactory } from "./SwapContractFactory";
 export type { Swapable } from "./Swapable";

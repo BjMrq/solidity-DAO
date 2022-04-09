@@ -132,8 +132,8 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/SwapContractFactory.sol": {
-      "lastModificationDate": 1649351299123,
-      "contentHash": "7d6b152084a87a4f269c586459b8de89",
+      "lastModificationDate": 1649527685030,
+      "contentHash": "096c3d9254581915c0440bd6e2c3c59f",
       "sourceName": "contracts/SwapContractFactory.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -2344,8 +2344,8 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/AstroTokenSale.sol": {
-      "lastModificationDate": 1649351340449,
-      "contentHash": "c4d380c898b046870b8152ef2264809a",
+      "lastModificationDate": 1649527647215,
+      "contentHash": "65a05dd084e6a73f8c8d66821477988c",
       "sourceName": "contracts/AstroTokenSale.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -2387,6 +2387,95 @@
       ],
       "artifacts": [
         "AstroTokenSale"
+      ]
+    },
+    "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/SimpleStake.sol": {
+      "lastModificationDate": 1649540692490,
+      "contentHash": "ad043177e4bdad582646f6c970ee7802",
+      "sourceName": "contracts/SimpleStake.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.9"
+      ],
+      "artifacts": [
+        "SimpleStake"
+      ]
+    },
+    "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/AstroStake.sol": {
+      "lastModificationDate": 1649534024579,
+      "contentHash": "19011696254151c41717f20bad8bbbb0",
+      "sourceName": "contracts/AstroStake.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./SimpleStake.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.9"
+      ],
+      "artifacts": [
+        "AstroStake"
       ]
     }
   }

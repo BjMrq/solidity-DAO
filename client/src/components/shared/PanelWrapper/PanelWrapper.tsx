@@ -13,7 +13,7 @@ const PanelTitle = styled.div`
 const PanelTop = styled.div<{isFirstPanel: boolean}>`
   margin: 60px auto;
 
-  @media screen and (max-width: 1200px) {  
+  @media screen and (max-width: 1270px) {  
     margin: ${({isFirstPanel}) => isFirstPanel ? "60px auto" : "120px auto"};
   }
 
@@ -29,7 +29,7 @@ const PanelBody = styled.div<{isFirstPanel: boolean}>`
   align-items: flex-start;
   margin: 0 auto;
 
-  @media screen and (max-width: 1200px) {  
+  @media screen and (max-width: 1270px) {  
     min-height: ${({isFirstPanel}) => isFirstPanel ? "100vh" : "100%"};
   }
 `

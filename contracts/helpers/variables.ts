@@ -1,8 +1,9 @@
 import { NetworkConfigInfo } from "./types"
 
 export const ASTRO_TOKEN_SUPPLY = {
-  total: "1000000000",
+  total: "100000000000",
   sale: "5000000",
+  stake: "5000000",
   swap: "500000000",
 } as const
 
@@ -12,7 +13,7 @@ export const PROPOSAL_SETTINGS = {
   votingDelayBlocks: 4,
   votingPeriodBlocks: 16,
   quorumPercentage: 0,
-  executionDelaySeconds: 1,
+  executionDelayMinutes: 1,
 } as const
 
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000"

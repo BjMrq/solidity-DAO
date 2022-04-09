@@ -19,7 +19,7 @@ export function ProposalVote({
 {
   proposalId: string, proposalState: PossibleProposalState, waitForBlockNumberAndEnsureProposalStateIsPassed: (proposalId: string, blockNumber: number, proposalStateToHavePassed: PossibleProposalState) => Promise<void>
 }) {
-  const { contracts: {governanceOrchestrator, astroTokenContract}, web3Instance, currentAccount, toastContractSend, canParticipateToDao} = useContext(Web3Context);
+  const { contracts: {governanceOrchestrator, astroToken}, web3Instance, currentAccount, toastContractSend, canParticipateToDao} = useContext(Web3Context);
   const [justUpdatedVotingPower, setJustUpdatingVotingPower] = useState(false)
 
   const [votes, setVotes] = useState({
@@ -29,7 +29,7 @@ export function ProposalVote({
   })
 
   const registerNewVotingPower = async() => {
-    await toastContractSend(astroTokenContract.methods.delegate(currentAccount), {}, "Self delegation")
+    await toastContractSend(astroToken.methods.delegate(currentAccount), {}, "Self delegation")
     setJustUpdatingVotingPower(true)
   }
 

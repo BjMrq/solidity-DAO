@@ -1,7 +1,7 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types"
 import { DeployFunction } from "hardhat-deploy/types"
 import { getContractsBeforeSwapDeploy } from "../helpers/contracts/deploy"
-import { PossibleNetwork, PreSwapDeployPerNetwork, SwapTokenAddressInfo } from "../helpers/types"
+import { PossibleNetwork, PreSwapDeployPerNetwork } from "../helpers/types"
 import { ethers } from "hardhat"
 import { AstroToken, GovernanceOrchestrator, SwapContractFactory } from "../typechain-types"
 import {
@@ -9,13 +9,13 @@ import {
   ROUGH_POOL_NUMBER,
   ASTRO_TOKEN_SUPPLY,
   PROPOSAL_SETTINGS,
-  DEVELOPMENT_CHAINS,
 } from "../helpers/variables"
 import { calculateAstroSupplyWithNumberOfPools } from "../helpers/tokens/supply"
 import { asyncSequentialMap } from "../helpers/processing"
-import { moveChainBlocksFor, moveChainTimeFor } from "../helpers/chain/move-blocks"
-
-import { waitForNumberOfBlocks } from "../helpers/chain/wait-block"
+import {
+  waitForBlockOrMoveBlockIfDevelopment,
+  waitForBlockOrMoveTimeIfDevelopment,
+} from "../helpers/chain/move-blocks"
 import {
   proposeNewSwapContractDeployment,
   voteForProposal,
@@ -23,14 +23,6 @@ import {
   executeProposal,
 } from "../helpers/contracts/propose-swap-dao"
 import { supplyLiquidityForSwapContracts } from "../helpers/tokens/founding"
-
-const waitForBlockOrMoveBlockIfDevelopment = async (
-  isDevelopmentNetwork: boolean,
-  blockNumber: number
-) => {
-  if (isDevelopmentNetwork) await moveChainBlocksFor(blockNumber)
-  else await waitForNumberOfBlocks(blockNumber)
-}
 
 const daoLikeAddSwapPair: DeployFunction = async ({
   getNamedAccounts,
@@ -201,8 +193,6 @@ const daoLikeAddSwapPair: DeployFunction = async ({
 
   const swapPoolsToSubmitToDao = swapPools[currentNetwork]
 
-  const isDevelopmentNetwork = DEVELOPMENT_CHAINS.includes(currentNetwork as any)
-
   //Get tokens contract or deploy mocks (we use reduce to execute transaction once at a time)
   const swapPoolsWithTokenContract = await asyncSequentialMap(
     swapPoolsToSubmitToDao,
@@ -210,27 +200,32 @@ const daoLikeAddSwapPair: DeployFunction = async ({
   )
 
   //Deploy swap contracts with DAO
+  //Propose
+
   const proposals = await asyncSequentialMap(
     swapPoolsWithTokenContract,
     proposeNewSwapContractDeployment(SwapContractFactory, GovernanceOrchestrator)
   )
 
-  await waitForBlockOrMoveBlockIfDevelopment(
-    isDevelopmentNetwork,
-    PROPOSAL_SETTINGS.votingDelayBlocks
-  )
+  await waitForBlockOrMoveBlockIfDevelopment(currentNetwork, PROPOSAL_SETTINGS.votingDelayBlocks)
+
+  //Vote
 
   await asyncSequentialMap(proposals, voteForProposal(GovernanceOrchestrator))
 
-  await waitForBlockOrMoveBlockIfDevelopment(
-    isDevelopmentNetwork,
-    PROPOSAL_SETTINGS.votingPeriodBlocks
-  )
+  await waitForBlockOrMoveBlockIfDevelopment(currentNetwork, PROPOSAL_SETTINGS.votingPeriodBlocks)
+
+  //Queue
 
   await asyncSequentialMap(proposals, queueProposal(SwapContractFactory, GovernanceOrchestrator))
 
-  if (isDevelopmentNetwork) await moveChainTimeFor(PROPOSAL_SETTINGS.executionDelaySeconds + 10)
-  else await waitForNumberOfBlocks(4)
+  await waitForBlockOrMoveTimeIfDevelopment(
+    currentNetwork,
+    4,
+    PROPOSAL_SETTINGS.executionDelayMinutes * 60
+  )
+
+  //Execute
 
   await asyncSequentialMap(proposals, executeProposal(SwapContractFactory, GovernanceOrchestrator))
 
@@ -239,6 +234,6 @@ const daoLikeAddSwapPair: DeployFunction = async ({
   )
 }
 
-daoLikeAddSwapPair.tags = ["all", "swap", "governance"]
+daoLikeAddSwapPair.tags = ["all", "swap", "sales", "governance", "SwapContractFactory"]
 
 export default daoLikeAddSwapPair

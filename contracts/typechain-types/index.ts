@@ -56,6 +56,8 @@ export type { ERC165 } from "./@openzeppelin/contracts/utils/introspection/ERC16
 export { ERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/ERC165__factory";
 export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC165";
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
+export type { AstroStake } from "./contracts/AstroStake";
+export { AstroStake__factory } from "./factories/contracts/AstroStake__factory";
 export type { AstroToken } from "./contracts/AstroToken";
 export { AstroToken__factory } from "./factories/contracts/AstroToken__factory";
 export type { AstroTokenSale } from "./contracts/AstroTokenSale";
@@ -80,6 +82,8 @@ export type { KYCValidation } from "./contracts/KYCValidation";
 export { KYCValidation__factory } from "./factories/contracts/KYCValidation__factory";
 export type { Ratable } from "./contracts/Ratable";
 export { Ratable__factory } from "./factories/contracts/Ratable__factory";
+export type { SimpleStake } from "./contracts/SimpleStake";
+export { SimpleStake__factory } from "./factories/contracts/SimpleStake__factory";
 export type { Swapable } from "./contracts/Swapable";
 export { Swapable__factory } from "./factories/contracts/Swapable__factory";
 export type { SwapContractFactory } from "./contracts/SwapContractFactory";

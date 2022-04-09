@@ -4,6 +4,7 @@ import { gradientBackgroundCss } from "../../../style/card";
 import { backGroundColor } from "../../../style/colors";
 import { FixRate } from "./FixeRate/FixRate";
 import { MarketRate } from "./MarketRate/MarketRate";
+import { Stake } from "./Stake/Stake";
 
 const GradientCardDiv = styled.div`
   ${gradientBackgroundCss}
@@ -12,7 +13,11 @@ const GradientCardDiv = styled.div`
   
   width: 100%;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 1270px) {
+    width: 80%;
+  }
+
+  @media screen and (max-width: 800px) {
     width: 100%;
   }
 `
@@ -40,31 +45,45 @@ const SaleTypesDiv = styled.div`
   font-weight: bold;
 `
 
-const SaleTypeDiv = styled.div<{active: boolean, saleType: keyof typeof saleTypes}>`
+const saleTypes = {
+  buy: "buy",
+  stake: "stake",
+  swap: "swap"
+} as const
+
+const SaleTypeDiv = styled.div<{active: boolean, activeSellType: keyof typeof saleTypes, saleType: keyof typeof saleTypes}>`
   background-color: ${({active}) => active ? "transparent" : backGroundColor};
-  border-radius: ${({saleType}) => saleType === "fixed" ? "0 0 6px 0" : "0 0 0 6px"};
+  border-radius: ${({saleType, active, activeSellType}) => {
+    if(active)return "6px"
+    if(saleType === saleTypes.buy && activeSellType === saleTypes.swap) return "0 0 6px 0"
+    if(saleType === saleTypes.buy && activeSellType === saleTypes.stake) return "0"
+    
+    if(saleType === saleTypes.swap && activeSellType === saleTypes.buy) return "0 0 0 6px"
+    if(saleType === saleTypes.swap && activeSellType === saleTypes.stake) return "0 0 6px 0"
+    
+    if(saleType === saleTypes.stake && activeSellType === saleTypes.buy) return "0"
+    if(saleType === saleTypes.stake && activeSellType === saleTypes.swap) return "0 0 0 6px"
+
+  }};
   width: 100%;
   padding: 20px;
 `
 
 
-const saleTypes = {
-  fixed: "fixed",
-  market: "market"
-} as const
-
 export function TokenSale() {
-  const [saleType, setSaleType] = useState<keyof typeof saleTypes>(saleTypes.market)
+  const [saleType, setSaleType] = useState<keyof typeof saleTypes>(saleTypes.buy)
   
   return (
     <GradientCardDiv>
       <SaleTypesDiv>
-        <SaleTypeDiv onClick={() => setSaleType(saleTypes.market)} active={ saleType === saleTypes.market} saleType={saleType}>Market Rate</SaleTypeDiv>
-        <SaleTypeDiv onClick={() => setSaleType(saleTypes.fixed)} active={ saleType === saleTypes.fixed} saleType={saleType}>Fix Rate</SaleTypeDiv>
+        <SaleTypeDiv onClick={() => setSaleType(saleTypes.buy)} active={ saleType === saleTypes.buy} saleType={saleTypes.buy} activeSellType={saleType}>Buy</SaleTypeDiv>
+        <SaleTypeDiv onClick={() => setSaleType(saleTypes.swap)} active={ saleType === saleTypes.swap} saleType={saleTypes.swap} activeSellType={saleType}>Swap</SaleTypeDiv>
+        <SaleTypeDiv onClick={() => setSaleType(saleTypes.stake)} active={ saleType === saleTypes.stake} saleType={saleTypes.stake} activeSellType={saleType}>Stake</SaleTypeDiv>
       </SaleTypesDiv>
       <TokenSaleCard>
-        {saleType === saleTypes.market && <MarketRate/>}
-        {saleType === saleTypes.fixed && <FixRate/>}
+        {saleType === saleTypes.buy && <FixRate/>}
+        {saleType === saleTypes.swap && <MarketRate/>}
+        {saleType === saleTypes.stake && <Stake/>}
       </TokenSaleCard>
     </GradientCardDiv>
   );

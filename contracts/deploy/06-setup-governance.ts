@@ -33,6 +33,6 @@ const setupGovernance: DeployFunction = async ({ getNamedAccounts }: HardhatRunt
   )
 }
 
-setupGovernance.tags = ["all", "swap", "governance"]
+setupGovernance.tags = ["all", "swap", "sales", "governance"]
 
 export default setupGovernance

@@ -48,7 +48,7 @@ describe("AstroToken", () => {
 
   it("Is not possible to send more token than total available supply", async () => {
     await expect(
-      AstroToken.transfer(namedAccounts.astroReceiver, "1000000000000000000000000001")
+      AstroToken.transfer(namedAccounts.astroReceiver, "100000000000000000000000000001")
     ).to.be.revertedWith("ERC20: transfer amount exceeds balance")
 
     const receiverAccountBalance = await AstroToken.balanceOf(namedAccounts.astroReceiver)

@@ -11,11 +11,11 @@ const deployGovernanceTimeLock: DeployFunction = async ({
 
   await deploy("GovernanceTimeLock", {
     from: deployer,
-    args: [PROPOSAL_SETTINGS.executionDelaySeconds, [], []],
+    args: [PROPOSAL_SETTINGS.executionDelayMinutes, [], []],
     log: true,
     waitConfirmations: awaitDeployForBlocks(network.name),
   })
 }
 
-deployGovernanceTimeLock.tags = ["all", "swap", "governance", "GovernanceTimeLock"]
+deployGovernanceTimeLock.tags = ["all", "swap", "sales", "governance", "GovernanceTimeLock"]
 export default deployGovernanceTimeLock

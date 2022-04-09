@@ -36,7 +36,7 @@ contract SwapContractFactory is Ownable, Utils {
 
     require(
       !deployedSwapContractsRegistry[deployedPair].deployed,
-      "Swap contract already deployed"
+      "already deployed"
     );
 
     swapPairs.push(deployedPair);

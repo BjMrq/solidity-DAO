@@ -24,7 +24,7 @@ contract AstroTokenSale is Crowdsale {
     internal
     view
   {
-    require(address(_addressToValidate).balance >= _requiredAmount, "not enough Ether sent");
+    require(address(_addressToValidate).balance >= _requiredAmount, "not enough Ether");
   }
 
   function _preValidatePurchase(address _buyer, uint256 _weiAmount) internal view override {

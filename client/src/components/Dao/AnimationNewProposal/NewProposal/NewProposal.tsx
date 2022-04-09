@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { ChromePicker } from 'react-color';
 import styled from "styled-components";
 import { Web3Context } from "../../../../contracts/context";
+import { gradientBackgroundCss } from "../../../../style/card";
 import { borderRadius } from "../../../../style/characteristics";
 import { lightColor } from "../../../../style/colors";
 import { inputLike } from "../../../../style/input-like";
@@ -12,8 +13,9 @@ const NewProposalCardDiv = styled.div`
   margin: 0 auto;
   padding: 40px;
   border-radius: ${borderRadius};
-  border: 2px solid ${lightColor};
+  /* border: 2px solid ${lightColor}; */
   box-shadow: 11px 16px 8px rgba(0, 0, 0, 0.4);
+  ${gradientBackgroundCss}
 `
 
 const NewProposalTitle = styled.div`
