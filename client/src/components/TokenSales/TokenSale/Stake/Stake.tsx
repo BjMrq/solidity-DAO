@@ -63,10 +63,14 @@ export function Stake() {
     }
   }, [astroStake])
 
+  //TODO review
+  const getDaysNumberSince = (stakeTimeStamp: string | number) => Math.floor((Number(stakeTimeStamp) - Number(String(+new Date).slice(0, -3))) / (3600 * 24))
   
-  const getDaysNumberSince = (stakeTimeStamp: string | number) =>  Math.floor((Number(stakeTimeStamp) - Number(String(+new Date).slice(0, -3))) / (3600 * 24))
-  
-  const numberOfDaysBeforeRelease = (stakeTimeStamp: string | number, lockTimeInDays: string | number) => Number(lockTimeInDays) - getDaysNumberSince(stakeTimeStamp)
+  const numberOfDaysBeforeRelease = (stakeTimeStamp: string | number, lockTimeInDays: string | number) => {
+    const daysBeforeRelease = Number(lockTimeInDays) - getDaysNumberSince(stakeTimeStamp)
+    if(daysBeforeRelease >= 0) return daysBeforeRelease
+    return 0
+  }
 
   useEffect(() => {
     if(currentlyStaking && astroStake){
@@ -100,7 +104,11 @@ export function Stake() {
             <StakeInfo>
               Staked tokens: {toToken(currentStake.amount)} ASTRO
               <br/>
-              Time until release: {numberOfDaysBeforeRelease(currentStake.timestamp, stakingSettings.lockDays)} days
+              Time until release: {numberOfDaysBeforeRelease(currentStake.timestamp, stakingSettings.lockDays) > 1 ? 
+                `${numberOfDaysBeforeRelease(currentStake.timestamp, stakingSettings.lockDays)} days`  
+                :
+                `${numberOfDaysBeforeRelease(currentStake.timestamp, stakingSettings.lockDays)} day`            
+              }
             </StakeInfo>
             {
               numberOfDaysBeforeRelease(currentStake.timestamp, stakingSettings.lockDays) === 0
