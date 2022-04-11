@@ -2,6 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { PossibleSwapToken } from "../../../contracts/types";
 import { bordered } from "../../../style/input-like";
+import { toToken } from "../../../utils/token";
 
 const Container = styled.div`
   width: 100%;
@@ -99,11 +100,13 @@ export function TokenPseudoInput({
   tokenToDisplay,
   inputDisabled,
   inputValue,
+  currentBalance,
   setInputValue,
   onTokenClick
 }: {
   multipleTokenChoice?: boolean,
   inputLabel?: string,
+  currentBalance?: string,
   tokenToDisplay: { 
     name: PossibleSwapToken,
     logo: JSX.Element,
@@ -124,7 +127,14 @@ export function TokenPseudoInput({
             {multipleTokenChoice && <DownArrow/>}
           </DownArrowDiv>
         </TokenSelect>
-        <PayAmountInput type="text" placeholder="0" value={inputValue !== "0" ? inputValue : ""} disabled={inputDisabled} onChange={({target: {value}}) => setInputValue && setInputValue(value.replace(/[^0-9.]/g, '') || "0")}/>
+        <PayAmountInput
+          type="text"
+          placeholder={
+            currentBalance ? parseFloat(toToken(currentBalance)).toFixed(4) : "0"
+          }
+          value={inputValue !== "0" ? inputValue : ""} 
+          disabled={inputDisabled} 
+          onChange={({target: {value}}) => setInputValue && setInputValue(value.replace(/[^0-9.]/g, '') || "0")}/>
       </TokenPseudoInputDiv>
     </Container>
   );

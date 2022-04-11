@@ -58,6 +58,9 @@
   "linkReferences": {},
   "deployedLinkReferences": {},
   "networks": {
+    "4": {
+      "address": "0x5A27dB09ee67eC8B07cE0c5d9256a8e3F966633f"
+    },
     "1337": {
       "address": "0x78B87F8BF649d070380EEDf24A23ba20477727e9"
     }

@@ -4,6 +4,7 @@ import { Web3Context } from "../../../../../../contracts/context";
 import { tokenLogos } from "../../../../../../contracts/crypto-logos";
 import { PossibleSwapToken } from "../../../../../../contracts/types";
 import { ERC20 } from "../../../../../../contracts/types/ERC20";
+import { ifMountedSetDataStateWith } from "../../../../../../utils/state-update";
 import { toToken } from "../../../../../../utils/token";
 import { AddMetamask } from "../../../../../shared/AddMetamask/AddMetamask";
 
@@ -59,13 +60,16 @@ export function TokenToSelect({
   const { currentAccount} = useContext(Web3Context);
   const [tokenBalance, setTokenBalance] = useState("0")
 
+  const balanceIsAPositiveSmallNumber = (balance: number) => balance < 0.001 && balance > 0
+
   useEffect(() => {
-    (async () => {
-      const fullBalance = toToken(await tokenContract.methods.balanceOf(currentAccount).call())
-      const flooredBalance = fullBalance.includes(".") ? fullBalance.slice(0, -16) : fullBalance
-      setTokenBalance(flooredBalance)
-    }
-    )();
+    ifMountedSetDataStateWith(async () => {
+      const fullBalance = parseFloat(toToken(await tokenContract.methods.balanceOf(currentAccount).call()))
+      
+      if(balanceIsAPositiveSmallNumber(fullBalance)) return fullBalance.toFixed(8)
+      else return fullBalance.toFixed(4)
+
+    }, setTokenBalance)
   }, [])
 
 

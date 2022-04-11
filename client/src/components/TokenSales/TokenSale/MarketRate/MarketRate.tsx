@@ -6,6 +6,7 @@ import { Web3Context } from "../../../../contracts/context";
 import { tokenLogos } from "../../../../contracts/crypto-logos";
 import { PossibleSwapToken, SwapContractInfo } from "../../../../contracts/types";
 import { hasMoreThanOne } from "../../../../utils";
+import { ifMountedSetDataStateWith } from "../../../../utils/state-update";
 import { getPossiblePairedSwapToken, getPossibleSwapContractFromSellToken, getTokenPairMatchingSwapContract, toUnit } from "../../../../utils/token";
 import { TokenPseudoInput } from "../../../shared/TokenPseudoInput/TokenPseudoInput";
 import { TokenSaleContent } from "../TokenSaleContent";
@@ -52,18 +53,19 @@ type SwapInfo = {
 
 type UseBinanceWebSocket = { sendJsonMessage: (jsonMessage: BinanceStreamSubscriptionInfo) => void, lastJsonMessage: BinanceWebsocketMessage | undefined }
 
-const noPricePlaceholder = "0"
+const zeroString = "0"
 
 export function MarketRate() { 
 
-  const { contracts: {swapContracts}, toastContractSend, updateDaoParticipationGuard} = useContext(Web3Context);
+  const { contracts: {swapContracts}, toastContractSend, updateDaoParticipationGuard, currentAccount} = useContext(Web3Context);
 
   const [sellTokenSelectionModalOpen, setSellTokenSelectionModalOpen] = useState(false)
   const [buyTokenSelectionModalOpen, setBuyTokenSelectionModalOpen] = useState(false)
 
   const [presentedSwapContract, setPresentedSwapContract] = useState<SwapContractInfo>(swapContracts[0])
   
-  const [sellingAmount, setSellingAmount] = useState(noPricePlaceholder)
+  const [sellingAmount, setSellingAmount] = useState(zeroString)
+  const [sellTokenCurrentAmount, setSellTokenCurrentAmount] = useState<string>(zeroString)
   const [selectedSellToken, setSelectedSellToken] = useState<PossibleSwapToken>(tokenLogos.WBTC.name)
 
   const [selectedBuyToken, setSelectedBuyToken] = useState<PossibleSwapToken>(tokenLogos.ASTRO.name)
@@ -72,7 +74,7 @@ export function MarketRate() {
 
 
   const swapInfo = useRef<SwapInfo>({sellTokenType: "baseToken", swapMethod: "swapBaseForQuoteToken"})
-  const currentPriceRate = useRef<string>(noPricePlaceholder)
+  const currentPriceRate = useRef<string>(zeroString)
 
 
   const { sendJsonMessage, lastJsonMessage: priceSocketMessage }: UseBinanceWebSocket = useWebSocket(
@@ -88,16 +90,16 @@ export function MarketRate() {
   const selectSellToken = (sellTokenName: PossibleSwapToken) => {
     setSelectedSellToken(sellTokenName)
     setSellTokenSelectionModalOpen(false)
-    setSellingAmount(noPricePlaceholder)
+    setSellingAmount(zeroString)
     const newPossibleSwapContracts = getPossibleSwapContractFromSellToken(swapContracts, sellTokenName)
     setPossibleSwapContractFromSellTokenSelect(newPossibleSwapContracts)
     changeProposedBuyTokenIfNotSupported(newPossibleSwapContracts, sellTokenName)
-    currentPriceRate.current = noPricePlaceholder
+    currentPriceRate.current = zeroString
   }
 
   const selectBuyToken = (buyTokenName: PossibleSwapToken) => {
     setSelectedBuyToken(buyTokenName)
-    currentPriceRate.current = noPricePlaceholder
+    currentPriceRate.current = zeroString
     setBuyTokenSelectionModalOpen(false)
   }
 
@@ -135,6 +137,14 @@ export function MarketRate() {
   ,
   [presentedSwapContract]
   )
+
+  useEffect(() => {
+    if(presentedSwapContract?.pairName && sellingAmount === zeroString) 
+      ifMountedSetDataStateWith(
+        presentedSwapContract[swapInfo.current.sellTokenType].contract
+          .methods.balanceOf(currentAccount).call
+        , setSellTokenCurrentAmount)
+  }, [presentedSwapContract, sellingAmount])
 
   
 
@@ -198,7 +208,7 @@ export function MarketRate() {
 
     if(presentedSwapContract.pairName.includes("ASTRO")) updateDaoParticipationGuard()
 
-    setSellingAmount(noPricePlaceholder)
+    setSellingAmount(zeroString)
   }
 
 
@@ -211,6 +221,7 @@ export function MarketRate() {
       <TokenDiv>
         <TokenPseudoInput 
           inputLabel="Sell"
+          currentBalance={sellTokenCurrentAmount}
           multipleTokenChoice={true}
           onTokenClick={() => setSellTokenSelectionModalOpen(true)}
           tokenToDisplay={tokenLogos[selectedSellToken]}
@@ -224,9 +235,9 @@ export function MarketRate() {
           multipleTokenChoice={hasMoreThanOne(possibleSwapContractFromSellTokenSelect)}
           onTokenClick={() => hasMoreThanOne(possibleSwapContractFromSellTokenSelect) && setBuyTokenSelectionModalOpen(true)}
           tokenToDisplay={tokenLogos[selectedBuyToken]}
-          inputValue={(currentPriceRate.current !== noPricePlaceholder && sellingAmount !== noPricePlaceholder) ? 
+          inputValue={(currentPriceRate.current !== zeroString && sellingAmount !== zeroString) ? 
             calculateDisplayPrice(currentPriceRate.current, sellingAmount) :
-            noPricePlaceholder}
+            zeroString}
           inputDisabled={true}
         />
       </TokenDiv>

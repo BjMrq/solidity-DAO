@@ -602,6 +602,9 @@
   "linkReferences": {},
   "deployedLinkReferences": {},
   "networks": {
+    "4": {
+      "address": "0xA7F1Cc209DA766496B61875a8862F65ca120e91e"
+    },
     "1337": {
       "address": "0xEcb87dd4B2f02d9a748356F92E6d71285229d589"
     }

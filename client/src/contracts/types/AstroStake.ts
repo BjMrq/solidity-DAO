@@ -24,8 +24,10 @@ export interface EventOptions {
 export type NewStake = ContractEventLog<{
   stakerAddress: string;
   stakedAmount: string;
+  timestamp: string;
   0: string;
   1: string;
+  2: string;
 }>;
 export type OwnershipTransferred = ContractEventLog<{
   previousOwner: string;

@@ -23,7 +23,7 @@ const GradientCardDiv = styled.div`
 `
 
 const TokenSaleCard = styled.div`
-  height: 53vh;
+  min-height: 53vh;
   border-radius: 6px;
   box-shadow: 11px 16px 8px rgba(0, 0, 0, 0.4);
   padding: 8% 15%;

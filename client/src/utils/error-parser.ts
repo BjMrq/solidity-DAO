@@ -14,6 +14,10 @@ export const dummyErrorParser = R.cond<Error, string>([
   ifErrorIncludeReturnMessage("invalid address"),
   ifErrorIncludeReturnMessage("invalid signature"),
   ifErrorIncludeReturnMessage("Lock time has not expired"),
+  ifErrorIncludeReturnMessage(
+    "transfer amount exceeds balance",
+    "You do not have the required amount"
+  ),
   ifErrorIncludeReturnMessage("vote not currently active", "Vote is closed"),
   ifErrorIncludeReturnMessage(
     "User denied transaction signature",

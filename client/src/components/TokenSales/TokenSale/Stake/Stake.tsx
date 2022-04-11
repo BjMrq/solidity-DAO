@@ -8,19 +8,17 @@ import { toToken, toUnit } from "../../../../utils/token";
 import { TokenPseudoInput } from "../../../shared/TokenPseudoInput/TokenPseudoInput";
 import { TokenSaleContent } from "../TokenSaleContent";
 
-const StakeSettingInfo = styled.div`
+const StakeInfoTitle = styled.div`
   width: 100%;
-  font-size: 1em;
+  margin: auto;
   text-align: left;
   font-weight: bold;
-  line-height: 45px;
 `
 
 const StakeInfo = styled.div`
   width: 100%;
   font-size: 1em;
-  text-align: center;
-  font-weight: bold;
+  text-align: left;
   line-height: 45px;
 `
 
@@ -30,6 +28,7 @@ export function Stake() {
   const [currentlyStaking, setCurrentlyStaking]= useState(false)
   const [stakingSettings, setSettingsSetting]= useState({interestRate: "0", lockDays: "0"})
   const [currentStake, setCurrentStake]= useState({amount: "0", timestamp: "0"})
+  const [currentAstroBalance, setCurrentAstroBalance] = useState("0")
 
 
   const stakeAstro = async () => {
@@ -43,11 +42,14 @@ export function Stake() {
   }
 
   const unStakeAstro = async () => {
-    if(stakingAstroAmount !== "0") {
-      await toastContractSend(astroStake.methods.unStakeTokens(), {}, "Unstake")
-      setCurrentlyStaking(false)
-    }
+    await toastContractSend(astroStake.methods.unStakeTokens(), {}, "Unstake")
+    setCurrentlyStaking(false)
   }
+
+  useEffect(() => {
+    if(stakingAstroAmount === "") ifMountedSetDataStateWith(astroToken.methods.balanceOf(currentAccount).call
+      , setCurrentAstroBalance)
+  }, [currentAccount, stakingAstroAmount])
 
   useEffect(() => {
     if(astroStake)
@@ -63,7 +65,7 @@ export function Stake() {
     }
   }, [astroStake])
 
-  //TODO review
+
   const getDaysNumberSince = (stakeTimeStamp: string | number) => Math.floor((Number(stakeTimeStamp) - Number(String(+new Date).slice(0, -3))) / (3600 * 24))
   
   const numberOfDaysBeforeRelease = (stakeTimeStamp: string | number, lockTimeInDays: string | number) => {
@@ -82,15 +84,17 @@ export function Stake() {
     <TokenSaleContent 
       actionDescription={"Defi staking is the action of locking up your token in a smart contracts for a period of time to earn rewards or interest. Stake your ASTRO for a daily interest."}
     >
+      <StakeInfo>
+        <StakeInfoTitle>Staking infos:</StakeInfoTitle>
+      Daily interest rate: {Number(stakingSettings.interestRate) * 0.001 }%
+        <br/>
+      Minimal lock time: {stakingSettings.lockDays} days
+      </StakeInfo>
       {
         !currentlyStaking ?
           <Fragment>
-            <StakeSettingInfo>
-            Daily interest rate: {Number(stakingSettings.interestRate) * 0.001 }%
-              <br/>
-            Minimal lock time: {stakingSettings.lockDays} days
-            </StakeSettingInfo>
             <TokenPseudoInput
+              currentBalance={currentAstroBalance}
               tokenToDisplay={tokenLogos["ASTRO"]}
               inputValue={stakingAstroAmount}
               setInputValue={setStakingAmount}
@@ -102,6 +106,7 @@ export function Stake() {
           : 
           <Fragment>
             <StakeInfo>
+              <StakeInfoTitle>Your stake:</StakeInfoTitle>
               Staked tokens: {toToken(currentStake.amount)} ASTRO
               <br/>
               Time until release: {numberOfDaysBeforeRelease(currentStake.timestamp, stakingSettings.lockDays) > 1 ? 

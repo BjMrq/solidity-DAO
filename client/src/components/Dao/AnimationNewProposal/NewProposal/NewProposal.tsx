@@ -8,6 +8,13 @@ import { lightColor } from "../../../../style/colors";
 import { inputLike } from "../../../../style/input-like";
 import { Button } from "../../../../style/tags/button";
 
+const DaoExplanation = styled.div`
+  justify-self: start;
+  text-align: justify;
+  width: 100%;
+  font-size: 0.75em;
+  margin: 40px 0;
+`
 
 const NewProposalCardDiv = styled.div`
   margin: 0 auto;
@@ -75,6 +82,7 @@ export function NewProposal() {
       <NewProposalTitle>
         Propose a new Astro Light color
       </NewProposalTitle>
+      <DaoExplanation>ⓘ A <strong>DAO or Decentralized Autonomous Organization</strong> which means that decisions are voted and taken as a community instead of central authority. <strong>Anyone can propose</strong> a change to be made usually thought calling a specific function of a <strong>smart contract managed by the DAO</strong>. Then any one that have a voting power can review the proposal and vote in favor or against it. Here voting power is calculated thought possession of the Astro Light <strong>ERC20 token</strong>, it could also have been through an NFT or other mechanism. Once a proposal has been voted <strong>anyone</strong> can execute it.</DaoExplanation>
       <ProposalElements>
         <ProposalColorPickerDiv>
           {/* Styling of color picker in index.css */}

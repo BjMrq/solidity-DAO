@@ -258,7 +258,7 @@ export default function Web3ContextProvider({
   const TransactionSuccessToast = ({ data }: ToastContentProps<TransactionReceipt>, transactionDisplayName: string) => (
     <div>
       <div>{transactionDisplayName} succeeded</div>
-      <a target="_blank" style= {{color: "#23379d", textDecoration: "none", fontSize: "1.2rem"}} href={`https://kovan.etherscan.io/tx/${data?.transactionHash}`}>🔎 view on etherscan</a>
+      <a target="_blank" style= {{color: "#23379d", textDecoration: "none", fontSize: "1.2rem"}} href={`https://rinkeby.etherscan.io/tx/${data?.transactionHash}`}>🔎 view on etherscan</a>
     </div>
   ) as ReactElement
   

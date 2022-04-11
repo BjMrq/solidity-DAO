@@ -176,7 +176,9 @@ export function ProposalRow({proposalId, isLast}: {proposalId: string, isLast?: 
         Contracts:
         </ProposalDescriptionSubLabel>
         <ProposalDescription style={{overflowWrap: "anywhere"}}>
-          {proposal.targets.join(", ")}
+          {proposal.targets.map((contractAddress, index) => {
+            return (<a target="_blank" key={`${index}-${contractAddress}`} href={`https://rinkeby.etherscan.io/address/${contractAddress}#code`}>🔎 {contractAddress}</a>)
+          })}
         </ProposalDescription>
         <ProposalDescriptionLabel>
         Proposal Description:

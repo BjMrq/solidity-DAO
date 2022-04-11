@@ -111,6 +111,9 @@
   "linkReferences": {},
   "deployedLinkReferences": {},
   "networks": {
+    "4": {
+      "address": "0xc093D301E57153478AF8cAbd22E673A0aa5ea43b"
+    },
     "1337": {
       "address": "0x8A4835AaB5723F1E33147a466C21fA185B7CDcD1"
     }
