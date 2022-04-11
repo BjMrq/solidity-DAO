@@ -80,7 +80,7 @@ export function NewProposal() {
       <NewProposalTitle>
         Propose a new Astro Light color
       </NewProposalTitle>
-      <DaoExplanation>ⓘ A <strong>DAO or Decentralized Autonomous Organization</strong> which means that decisions are voted and taken as a community instead of central authority. <strong>Anyone can propose</strong> a change to be made usually thought calling a specific function of a <strong>smart contract managed by the DAO</strong>. Then any one that have a voting power can review the proposal and vote in favor or against it. Here voting power is calculated thought possession of the Astro Light <strong>ERC20 token</strong>, it could also have been through an NFT or other mechanism. Once a proposal has been voted <strong>anyone</strong> can execute it.</DaoExplanation>
+      <DaoExplanation>ⓘ A <strong>DAO or Decentralized Autonomous Organization</strong> is an organizations where decisions are voted and taken as a community instead of central authority. <strong>Anyone can propose</strong> a change to be made usually thought calling a specific function of a <strong>smart contract managed by the DAO</strong>. Then any one that have a voting power can review the proposal and vote in favor or against it. Here voting power is calculated thought possession of the Astro Light <strong>ERC20 token</strong>, it could also have been through an NFT or other mechanism. Once a proposal has been voted <strong>anyone</strong> can execute it.</DaoExplanation>
       <ProposalElements>
         <ProposalColorPickerDiv>
           {/* Styling of color picker in index.css */}
