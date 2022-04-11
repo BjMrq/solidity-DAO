@@ -85,7 +85,7 @@ export function Stake() {
       actionDescription={"Defi staking is the action of locking up your token in a smart contracts for a period of time to earn rewards or interest. Stake your ASTRO for a daily interest."}
     >
       <StakeInfo>
-        <StakeInfoTitle>Staking infos:</StakeInfoTitle>
+        <StakeInfoTitle>Staking infos</StakeInfoTitle>
       Daily interest rate: {Number(stakingSettings.interestRate) * 0.001 }%
         <br/>
       Minimal lock time: {stakingSettings.lockDays} days
@@ -106,7 +106,7 @@ export function Stake() {
           : 
           <Fragment>
             <StakeInfo>
-              <StakeInfoTitle>Your stake:</StakeInfoTitle>
+              <StakeInfoTitle>Your stake</StakeInfoTitle>
               Staked tokens: {toToken(currentStake.amount)} ASTRO
               <br/>
               Time until release: {numberOfDaysBeforeRelease(currentStake.timestamp, stakingSettings.lockDays) > 1 ? 

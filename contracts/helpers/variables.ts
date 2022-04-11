@@ -13,7 +13,7 @@ export const PROPOSAL_SETTINGS = {
   votingDelayBlocks: 4,
   votingPeriodBlocks: 16,
   quorumPercentage: 0,
-  executionDelaySeconds: 10,
+  executionDelaySeconds: 15,
 } as const
 
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000"

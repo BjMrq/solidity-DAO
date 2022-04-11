@@ -19,6 +19,7 @@ import AstroSaleAbi from "./abis/deployments/AstroTokenSale.json";
 import ColorBoxAbi from "./abis/deployments/ColorBox.json";
 import FaucetAbi from "./abis/deployments/Faucet.json";
 import GovernanceOrchestratorAbi from "./abis/deployments/GovernanceOrchestrator.json";
+import GovernanceTimeLockAbi from "./abis/deployments/GovernanceTimeLock.json";
 import SwapContractFactoryAbi from "./abis/deployments/SwapContractFactory.json";
 import { AbiWithNetworks, AddTokenToWallet, DeployedNetwork, EthereumAvailableGuard, PossibleSwapToken, SubmitNewColorProposalToDao, SwapContractInfo, ToastContractSend, VoidCall, Web3ContextFunctions } from "./types";
 import { AstroStake } from "./types/AstroStake";
@@ -29,6 +30,7 @@ import { ERC20 } from "./types/ERC20";
 import { ERC20TokensSwap } from "./types/ERC20TokensSwap";
 import { Faucet } from "./types/Faucet";
 import { GovernanceOrchestrator } from "./types/GovernanceOrchestrator";
+import { GovernanceTimeLock } from "./types/GovernanceTimeLock";
 import { SwapContractFactory } from "./types/SwapContractFactory";
 import { buildDescriptionWithFunctionDetails } from "./utils";
 
@@ -47,6 +49,7 @@ const initialWeb3ContextState = {
     astroToken: undefined as unknown as AstroToken,
     colorBox: undefined as unknown as ColorBox,
     governanceOrchestrator: undefined as unknown as GovernanceOrchestrator,
+    governanceTimeLock: undefined as unknown as GovernanceTimeLock,
     astroStake: undefined as unknown as AstroStake,
     swapContracts: [] as SwapContractInfo[]
   },
@@ -184,6 +187,11 @@ export default function Web3ContextProvider({
       GovernanceOrchestratorAbi.networks[chainId].address
     ) as unknown as GovernanceOrchestrator
 
+    const governanceTimeLock = new web3InstanceRef.current.eth.Contract(
+      GovernanceTimeLockAbi.abi as AbiWithNetworks["abi"],
+      GovernanceTimeLockAbi.networks[chainId].address
+    ) as unknown as GovernanceTimeLock
+
     setWeb3ContractsState({
       astroToken,
       faucet,
@@ -192,6 +200,7 @@ export default function Web3ContextProvider({
       factorySwap,
       colorBox,
       governanceOrchestrator,
+      governanceTimeLock,
       swapContracts: await loadSwapContacts(factorySwap)
     })
     
