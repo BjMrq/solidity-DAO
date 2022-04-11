@@ -1,8 +1,9 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types"
 import { DeployFunction } from "hardhat-deploy/types"
 import { awaitDeployForBlocks, NETWORK_CONFIG, ASTRO_TOKEN_SUPPLY } from "../helpers/variables"
-import { ethers, network } from "hardhat"
+import { ethers } from "hardhat"
 import { toSmallestUnit } from "../helpers/tokens/utils"
+import { unlessOnDevelopmentChainVerifyContract } from "../helpers/contracts/deploy"
 
 const delegateVote = async (astroTokenAddress: string, delegatedAccount: string) => {
   const astroToken = await ethers.getContractAt("AstroToken", astroTokenAddress)
@@ -13,21 +14,22 @@ const delegateVote = async (astroTokenAddress: string, delegatedAccount: string)
 const deployAstroToken: DeployFunction = async ({
   getNamedAccounts,
   deployments: { deploy },
+  network: { name: networkName },
 }: HardhatRuntimeEnvironment) => {
   const { deployer } = await getNamedAccounts()
 
-  const astroToken = await deploy("AstroToken", {
+  const astroTokenArguments = [toSmallestUnit(ASTRO_TOKEN_SUPPLY.total)]
+
+  const AstroToken = await deploy("AstroToken", {
     from: deployer,
-    args: [toSmallestUnit(ASTRO_TOKEN_SUPPLY.total)],
+    args: astroTokenArguments,
     log: true,
-    waitConfirmations: awaitDeployForBlocks(network.name),
+    waitConfirmations: awaitDeployForBlocks(networkName),
   })
 
-  await delegateVote(astroToken.address, deployer)
+  if (AstroToken.newlyDeployed) await delegateVote(AstroToken.address, deployer)
 
-  // if (!DEVELOPMENT_CHAINS.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
-  //   await verify(governanceToken.address, [])
-  // }
+  await unlessOnDevelopmentChainVerifyContract(networkName, AstroToken.address, astroTokenArguments)
 }
 
 deployAstroToken.tags = ["all", "stake", "sales", "swap", "governance", "AstroToken"]

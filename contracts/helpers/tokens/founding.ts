@@ -30,3 +30,23 @@ export const supplyLiquidityForSwapContracts =
     await baseToken.contract.transfer(swapContractAddress, baseTokenLiquidity)
     await quoteToken.contract.transfer(swapContractAddress, quoteTokenLiquidity)
   }
+
+export const sendTokensFromERC20ContractAddress = async (
+  erc20ContractAddress: string,
+  addressToTransferTo: string,
+  amountToTransfer: string
+) =>
+  (await ethers.getContractAt("ERC20", erc20ContractAddress)).transfer(
+    addressToTransferTo,
+    amountToTransfer
+  )
+
+export const supplyChainLinkTokenForPriceFeedUsage =
+  (SwapContractFactory: SwapContractFactory, chainLinkContract: ERC20, linkAmount: string) =>
+  async ({ swapContract: { pairName } }: SwapDeployTokenInfo) => {
+    const { swapContractAddress } = await SwapContractFactory.deployedSwapContractsRegistry(
+      pairName
+    )
+
+    await chainLinkContract.transfer(swapContractAddress, linkAmount)
+  }

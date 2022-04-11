@@ -178,7 +178,7 @@ export interface SimpleStakeInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "NewStake(address,uint256)": EventFragment;
+    "NewStake(address,uint256,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "UnStake(address,uint256,uint256)": EventFragment;
   };
@@ -191,9 +191,10 @@ export interface SimpleStakeInterface extends utils.Interface {
 export interface NewStakeEventObject {
   stakerAddress: string;
   stakedAmount: BigNumber;
+  timestamp: BigNumber;
 }
 export type NewStakeEvent = TypedEvent<
-  [string, BigNumber],
+  [string, BigNumber, BigNumber],
   NewStakeEventObject
 >;
 
@@ -436,13 +437,15 @@ export interface SimpleStake extends BaseContract {
   };
 
   filters: {
-    "NewStake(address,uint256)"(
+    "NewStake(address,uint256,uint256)"(
       stakerAddress?: string | null,
-      stakedAmount?: BigNumberish | null
+      stakedAmount?: BigNumberish | null,
+      timestamp?: BigNumberish | null
     ): NewStakeEventFilter;
     NewStake(
       stakerAddress?: string | null,
-      stakedAmount?: BigNumberish | null
+      stakedAmount?: BigNumberish | null,
+      timestamp?: BigNumberish | null
     ): NewStakeEventFilter;
 
     "OwnershipTransferred(address,address)"(

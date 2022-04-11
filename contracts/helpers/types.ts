@@ -74,7 +74,10 @@ export type SwapDeployTokenInfo = {
   }
 }
 
-export type PreSwapDeployPerNetwork = Record<PossibleNetwork, PreSwapDeployTokenInfo[]>
+export type PreSwapDeployPerNetwork = Record<
+  PossibleNetwork,
+  { pairs: PreSwapDeployTokenInfo[]; chainLinkTokenAddress?: string }
+>
 
 export type NetworkConfigItem = {
   ethUsdPriceFeed?: string

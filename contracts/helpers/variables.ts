@@ -13,7 +13,7 @@ export const PROPOSAL_SETTINGS = {
   votingDelayBlocks: 4,
   votingPeriodBlocks: 16,
   quorumPercentage: 0,
-  executionDelayMinutes: 1,
+  executionDelaySeconds: 10,
 } as const
 
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000"
@@ -38,6 +38,6 @@ export const NETWORK_CONFIG: NetworkConfigInfo = {
 }
 
 export const awaitDeployForBlocks = (networkName: string) =>
-  NETWORK_CONFIG[networkName].blockConfirmations || 1
+  NETWORK_CONFIG[networkName]?.blockConfirmations || 1
 
 export const ROUGH_POOL_NUMBER = 16

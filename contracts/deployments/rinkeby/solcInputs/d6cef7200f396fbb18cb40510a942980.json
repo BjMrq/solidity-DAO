@@ -1,0 +1,35 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/Faucet.sol": {
+      "content": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.9;\n\ncontract Faucet {\n  mapping(address => uint256) public lockTime;\n\n  uint64 private faucetDistribution = 0.01 ether;\n\n  event Request(address _beneficiary, uint256 _balance);\n\n  function makeItRain() external payable {\n    require(block.timestamp > lockTime[msg.sender], \"Lock time has not expired\");\n    // require(\n    //     _beneficiary.balance <= 0.2 ether,\n    //     \"You already have enough ether to play around with\"\n    // );\n    require(address(this).balance >= faucetDistribution, \"Faucet is dry\");\n\n    (bool success, ) = msg.sender.call{value: faucetDistribution}(\"\");\n    require(success, \"Transfer failed.\");\n\n    lockTime[msg.sender] = block.timestamp + 1 days;\n  }\n\n  receive() external payable {}\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

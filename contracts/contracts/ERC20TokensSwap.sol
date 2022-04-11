@@ -84,6 +84,8 @@ contract ERC20TokensSwap is Context, Swapable {
     return quoteTokenToExchange;
   }
 
+  // base/quote
+
   function swapBaseForQuoteToken(uint256 _baseTokenAmount) external payable override {
     requireHasEnoughBaseToken(_msgSender(), _baseTokenAmount);
 
@@ -92,8 +94,9 @@ contract ERC20TokensSwap is Context, Swapable {
     requireHasEnoughQuoteToken(address(this), quoteTokenAmount);
 
     baseToken.transferFrom(_msgSender(), address(this), _baseTokenAmount);
+
     quoteToken.transfer(_msgSender(), quoteTokenAmount);
 
-    emit SwapTransferInfo(_msgSender(), msg.value, quoteTokenAmount);
+    emit SwapTransferInfo(_msgSender(), _baseTokenAmount, quoteTokenAmount);
   }
 }

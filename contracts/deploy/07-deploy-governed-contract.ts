@@ -1,31 +1,36 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types"
 import { DeployFunction } from "hardhat-deploy/types"
-import { ethers, network } from "hardhat"
+import { ethers } from "hardhat"
 import { ColorBox } from "../typechain-types"
 import { withAwaitConfirmation } from "../helpers/chain/wait-transactions"
 import { awaitDeployForBlocks } from "../helpers/variables"
+import { unlessOnDevelopmentChainVerifyContract } from "../helpers/contracts/deploy"
 
 const deployGovernedContract: DeployFunction = async ({
   getNamedAccounts,
   deployments: { deploy },
+  network: { name: networkName },
 }: HardhatRuntimeEnvironment) => {
   const { deployer } = await getNamedAccounts()
 
-  const ColorBox = await ethers.getContractAt<ColorBox>(
-    "ColorBox",
-    (
-      await deploy("ColorBox", {
-        from: deployer,
-        args: ["#6038ca"],
-        log: true,
-        waitConfirmations: awaitDeployForBlocks(network.name),
-      })
-    ).address
-  )
+  const colorBoxArguments = ["#6038ca"]
 
-  const GovernanceTimeLock = ethers.getContract("GovernanceTimeLock", deployer)
+  const ColorBoxDeployment = await deploy("ColorBox", {
+    from: deployer,
+    args: colorBoxArguments,
+    log: true,
+    waitConfirmations: awaitDeployForBlocks(networkName),
+  })
 
-  await withAwaitConfirmation(ColorBox.transferOwnership((await GovernanceTimeLock).address))
+  if (ColorBoxDeployment.newlyDeployed) {
+    const ColorBox = await ethers.getContractAt<ColorBox>("ColorBox", ColorBoxDeployment.address)
+
+    await unlessOnDevelopmentChainVerifyContract(networkName, ColorBox.address, colorBoxArguments)
+
+    const GovernanceTimeLock = ethers.getContract("GovernanceTimeLock", deployer)
+
+    await withAwaitConfirmation(ColorBox.transferOwnership((await GovernanceTimeLock).address))
+  }
 }
 
 deployGovernedContract.tags = ["all", "swap", "governance", "SwapContractFactory", "ColorBox"]

@@ -2,8 +2,10 @@ import "hardhat-deploy"
 import "hardhat-gas-reporter"
 import "@nomiclabs/hardhat-waffle"
 import "@nomiclabs/hardhat-ethers"
+import "@nomiclabs/hardhat-etherscan"
 import "@typechain/hardhat"
 import { HardhatUserConfig } from "hardhat/types"
+import "dotenv/config"
 
 const hardhatConfig: HardhatUserConfig = {
   defaultNetwork: "hardhat",
@@ -33,6 +35,13 @@ const hardhatConfig: HardhatUserConfig = {
         mnemonic: "torch blur drum ridge venue surface ecology round pond happy maximum crush",
       },
     },
+    rinkeby: {
+      url: process.env.RINKERY_NODE_ENDPOINT,
+      accounts: { mnemonic: process.env.TESNET_MNEMONIC },
+    },
+  },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY,
   },
   namedAccounts: {
     deployer: { default: 0 },

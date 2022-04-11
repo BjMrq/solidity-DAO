@@ -38,7 +38,7 @@ export const queueAndExecuteProposal = async (
     )
   )
 
-  await moveChainTimeFor(PROPOSAL_SETTINGS.executionDelayMinutes + 10)
+  await moveChainTimeFor(PROPOSAL_SETTINGS.executionDelaySeconds + 10)
   // await moveChainBlocksFor(1)
 
   await withAwaitConfirmation(

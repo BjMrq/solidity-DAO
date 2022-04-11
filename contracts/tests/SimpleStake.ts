@@ -84,7 +84,7 @@ describe("AstroStake", () => {
     )
   })
 
-  it.only("You can only un have one staking", async () => {
+  it("You can only un have one staking", async () => {
     const astroTokensToStake = toSmallestUnit("100")
 
     await buyAndStakeTokens(namedSigners.astroBuyer, astroTokensToStake)

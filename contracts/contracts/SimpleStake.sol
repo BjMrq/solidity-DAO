@@ -22,7 +22,11 @@ contract SimpleStake is Ownable {
   uint256 public stakeInterestRateWithFourDecimals;
   uint256 public stakeLockTimeDay;
 
-  event NewStake(address indexed stakerAddress, uint256 indexed stakedAmount);
+  event NewStake(
+    address indexed stakerAddress,
+    uint256 indexed stakedAmount,
+    uint256 indexed timestamp
+  );
 
   event UnStake(
     address indexed stakerAddress,
@@ -68,9 +72,11 @@ contract SimpleStake is Ownable {
   function processStake(uint256 _stakedAmount) private {
     Erc20Token.transferFrom(msg.sender, address(this), _stakedAmount);
 
-    lastStakesRegistry[msg.sender] = Stake({amount: _stakedAmount, timestamp: block.timestamp});
+    uint256 timestamp = block.timestamp;
 
-    emit NewStake(msg.sender, _stakedAmount);
+    lastStakesRegistry[msg.sender] = Stake({amount: _stakedAmount, timestamp: timestamp});
+
+    emit NewStake(msg.sender, _stakedAmount, timestamp);
   }
 
   function stakeTokens(uint256 _amountToStakeInWei) public {

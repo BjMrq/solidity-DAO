@@ -268,8 +268,8 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/ERC20TokensSwap.sol": {
-      "lastModificationDate": 1649351299124,
-      "contentHash": "917894e95ec520f36f00489e7334f0ab",
+      "lastModificationDate": 1649609012831,
+      "contentHash": "0045c66605027a733f96a3b5072d7f3d",
       "sourceName": "contracts/ERC20TokensSwap.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -1323,7 +1323,7 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/node_modules/@openzeppelin/contracts/governance/Governor.sol": {
-      "lastModificationDate": 1649194835590,
+      "lastModificationDate": 1649614167862,
       "contentHash": "28514954183285e570ab4889d2dbfe54",
       "sourceName": "@openzeppelin/contracts/governance/Governor.sol",
       "solcConfig": {
@@ -1636,7 +1636,7 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/node_modules/@openzeppelin/contracts/governance/TimelockController.sol": {
-      "lastModificationDate": 1649436456347,
+      "lastModificationDate": 1649614167862,
       "contentHash": "59f5eb55cde7d6d3ae62c45480aff256",
       "sourceName": "@openzeppelin/contracts/governance/TimelockController.sol",
       "solcConfig": {
@@ -2123,7 +2123,7 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/Faucet.sol": {
-      "lastModificationDate": 1648746029483,
+      "lastModificationDate": 1649607470094,
       "contentHash": "29177c9667301ba710cd73c33100ac10",
       "sourceName": "contracts/Faucet.sol",
       "solcConfig": {
@@ -2390,8 +2390,8 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/SimpleStake.sol": {
-      "lastModificationDate": 1649540692490,
-      "contentHash": "ad043177e4bdad582646f6c970ee7802",
+      "lastModificationDate": 1649611954770,
+      "contentHash": "de967d0ed25eced8d76723218c743b00",
       "sourceName": "contracts/SimpleStake.sol",
       "solcConfig": {
         "version": "0.8.9",
