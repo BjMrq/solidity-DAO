@@ -5,7 +5,7 @@ import { executeScriptWith } from "./helpers/execute-script"
 export const updateGovernanceSettings = async () => {
   const GovernanceTimeLock = await ethers.getContract<GovernanceTimeLock>("GovernanceTimeLock")
 
-  GovernanceTimeLock.connect(GovernanceTimeLock.address).updateDelay(10)
+  await (await GovernanceTimeLock.connect(GovernanceTimeLock.address).updateDelay(10)).wait(1)
 }
 
 executeScriptWith(updateGovernanceSettings())

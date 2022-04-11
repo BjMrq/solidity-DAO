@@ -19,9 +19,9 @@ export const gradientBackgroundCss = css`
 
   background-size: 300% 300%;
 
-  -webkit-animation: GradientMove 60s ease infinite;
-  -moz-animation: GradientMove 60s ease infinite;
-  animation: GradientMove 60s ease infinite;
+  -webkit-animation: GradientMove 55s ease infinite;
+  -moz-animation: GradientMove 55s ease infinite;
+  animation: GradientMove 55s ease infinite;
 
   @-webkit-keyframes GradientMove {
     0% {
