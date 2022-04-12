@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
-import { Web3Context } from "../../../contracts/context";
 import { SmallButton } from "../../../style/tags/button";
 
 const FaucetDiv = styled.div`
@@ -20,17 +19,17 @@ const FaucetCatchP = styled.div`
 
 export function Faucet() {
   const [showButton, setShowButton] = useState(false)
-  const { toastContractSend , contracts: {faucet}} = useContext(Web3Context);
+  // const { toastContractSend , contracts: {faucet}} = useContext(Web3Context);
 
-  const makeItRain = async () => {
-    await toastContractSend(faucet.methods.makeItRain(), {}, "Faucet distribution")
-  }
+  // const makeItRain = async () => {
+  //   await toastContractSend(faucet.methods.makeItRain(), {}, "Faucet distribution")
+  // }
 
   return (
     <FaucetDiv onMouseEnter={() => setShowButton(true)}
       onMouseLeave={() => setShowButton(false)}>
       <FaucetCatchP >Psss.. no ETH?</FaucetCatchP>
-      {showButton && <SmallButton onClick={makeItRain}>Make it rain</SmallButton>}
+      {showButton && <a target="_blank" href="https://faucets.chain.link/rinkeby"><SmallButton >Get some here</SmallButton></a>}
     </FaucetDiv>
   );
 }
