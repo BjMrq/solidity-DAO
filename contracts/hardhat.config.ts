@@ -22,7 +22,7 @@ const hardhatConfig: HardhatUserConfig = {
     hardhat: {
       chainId: 1337,
       accounts: {
-        mnemonic: "torch blur drum ridge venue surface ecology round pond happy maximum crush",
+        mnemonic: process.env.DEVELOPMENT_MNEMONIC,
       },
       mining: {
         auto: true,
@@ -32,7 +32,7 @@ const hardhatConfig: HardhatUserConfig = {
     localhost: {
       chainId: 1337,
       accounts: {
-        mnemonic: "torch blur drum ridge venue surface ecology round pond happy maximum crush",
+        mnemonic: process.env.DEVELOPMENT_MNEMONIC,
       },
     },
     rinkeby: {
