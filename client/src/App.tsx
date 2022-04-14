@@ -28,12 +28,11 @@ const Panel = styled.div`
   margin: 0;
   padding: 0 4%;
   height: 100%;
- @media screen and (max-width: 1200px) { 
+ @media screen and (max-width: 1270px) { 
     width: 92%;
     padding: 0 4%;
  }
 `
-
 
 function App() {
 

@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from "styled-components";
 import { ReactComponent as ASTROLogo } from '../../contracts/crypto-logos/ASTRO.svg';
 import { PanelWrapper } from "../shared/PanelWrapper/PanelWrapper";
-import { Web3Guard } from "../Web3Guard/Web3Guard";
 import { AddAstroMetamask } from "./AddAstroMetamask/AddAstroMetamask";
 import { Faucet } from "./Faucet/Faucet";
 import { TokenSale } from "./TokenSale/TokenSale";
@@ -16,7 +15,7 @@ const BottomDiv = styled.div`
   padding-bottom: 12px;
  
   @media screen and (max-width: 1270px) { 
-    padding-bottom: 0;
+    padding-bottom: 10px;
   }
 `
 
@@ -41,14 +40,13 @@ export function TokenSales() {
           <div>Astro Light</div>
         </TopDivSale>
       }>
-      <Web3Guard displayButton>
+      <Fragment>
         <TokenSale/>
         <BottomDiv>
           <Faucet/>
           <AddAstroMetamask/>
         </BottomDiv>
-      </Web3Guard>
-
+      </Fragment>
     </PanelWrapper>
    
   );

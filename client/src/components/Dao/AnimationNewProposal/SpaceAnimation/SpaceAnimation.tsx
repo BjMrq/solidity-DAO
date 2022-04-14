@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import styled from "styled-components";
 import { Web3Context } from "../../../../contracts/context";
 import { onEventDataDo } from "../../../../contracts/utils";
-import { Web3Guard } from "../../../Web3Guard/Web3Guard";
+import { Web3Guard } from "../../../shared/Web3Guards/Web3Guard/Web3Guard";
 import './style.scss';
 
 const HoverDiv = styled.div`

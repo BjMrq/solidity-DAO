@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from 'react';
-import { Web3Context } from "../../../contracts/context";
-import { Button } from "../../../style/tags/button";
+import { Web3Context } from "../../../../contracts/context";
+import { Button } from "../../../../style/tags/button";
 
 
 export function Connect() {

@@ -7,6 +7,7 @@ import { borderRadius } from "../../../../style/characteristics";
 import { inputLike } from "../../../../style/input-like";
 import { Button } from "../../../../style/tags/button";
 import { ifMountedSetDataStateWith } from "../../../../utils/state-update";
+import { Web3Guard } from "../../../shared/Web3Guards/Web3Guard/Web3Guard";
 
 const DaoExplanation = styled.div`
   justify-self: start;
@@ -108,50 +109,53 @@ export function NewProposal() {
         Propose a new Astro Light color
       </NewProposalTitle>
       <DaoExplanation>ⓘ A <strong>DAO or Decentralized Autonomous Organization</strong> is an organizations where decisions are voted and taken as a community instead of central authority. <strong>Anyone can propose</strong> a change to be made usually thought calling a specific function of a <strong>smart contract managed by the DAO</strong>. Then any one that have a voting power can review the proposal and vote in favor or against it. Here voting power is calculated thought possession of the Astro Light <strong>ERC20 token</strong>, it could also have been through an NFT or other mechanism. Once a proposal has been voted <strong>anyone</strong> can execute it.</DaoExplanation>
-      
-      <DaoInfoTitle>DAO settings</DaoInfoTitle>
-      <DaoInfo>
-        Vote delay: {daoSettings.votingDelay} blocks
-        <br/>
-        Vote period: {daoSettings.votingPeriod} blocks
-        <br/>
-        Execution delay: {daoSettings.executionDelay} seconds
-      </DaoInfo>
 
-      <ProposalElements>
-        <ProposalColorPickerDiv>
-          {/* Styling of color picker in index.css */}
-          <ChromePicker
-            color={proposedColor}
-            onChange={(color: {hex: string}) => setProposedColor(color.hex)}/>
-        </ProposalColorPickerDiv>
-        <div style={{ minWidth: "5%"}}></div>
-        <ProposalDescriptionDiv>
-          <ProposalDescriptionInput 
-            placeholder="Describe why you want to make this change to the DAO.." 
-            spellCheck={true}
-            onChange= {({target: {value}}) => setProposalDescription(value)}
-            value={proposalDescription}
-          />
-        </ProposalDescriptionDiv>
-        <ProposalButtonDiv>
-          {
-            canParticipateToDao 
-              ?
-              <Button 
-                style={{width: "100%", whiteSpace: "normal"}}
-                onClick={submitProposal}>
+      <Web3Guard displayButton>
+
+        <DaoInfoTitle>DAO settings</DaoInfoTitle>
+        <DaoInfo>
+        Vote delay: {daoSettings.votingDelay} blocks
+          <br/>
+        Vote period: {daoSettings.votingPeriod} blocks
+          <br/>
+        Execution delay: {daoSettings.executionDelay} seconds
+        </DaoInfo>
+
+        <ProposalElements>
+          <ProposalColorPickerDiv>
+            {/* Styling of color picker in index.css */}
+            <ChromePicker
+              color={proposedColor}
+              onChange={(color: {hex: string}) => setProposedColor(color.hex)}/>
+          </ProposalColorPickerDiv>
+          <div style={{ minWidth: "5%"}}></div>
+          <ProposalDescriptionDiv>
+            <ProposalDescriptionInput 
+              placeholder="Describe why you want to make this change to the DAO.." 
+              spellCheck={true}
+              onChange= {({target: {value}}) => setProposalDescription(value)}
+              value={proposalDescription}
+            />
+          </ProposalDescriptionDiv>
+          <ProposalButtonDiv>
+            {
+              canParticipateToDao 
+                ?
+                <Button 
+                  style={{width: "100%", whiteSpace: "normal"}}
+                  onClick={submitProposal}>
                   Emit Proposal 📡
-              </Button> :
-              <Button 
-                style={{width: "100%", whiteSpace: "normal"}}
-                disabled
-              >
+                </Button> :
+                <Button 
+                  style={{width: "100%", whiteSpace: "normal"}}
+                  disabled
+                >
                 Hold ASTRO to make a proposal
-              </Button>
-          }
-        </ProposalButtonDiv>
-      </ProposalElements>
+                </Button>
+            }
+          </ProposalButtonDiv>
+        </ProposalElements>
+      </Web3Guard>
     </NewProposalCardDiv>
   );
 }

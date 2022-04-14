@@ -1,6 +1,6 @@
 import React from 'react';
 import { PanelWrapper } from "../../shared/PanelWrapper/PanelWrapper";
-import { Web3Guard } from "../../Web3Guard/Web3Guard";
+import { Web3Guard } from "../../shared/Web3Guards/Web3Guard/Web3Guard";
 import { ProposalsList } from "./ProposalsList/ProposalsList";
 
 

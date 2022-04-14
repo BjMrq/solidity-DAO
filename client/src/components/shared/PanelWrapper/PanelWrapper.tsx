@@ -14,11 +14,11 @@ const PanelTop = styled.div<{isFirstPanel: boolean}>`
   margin: 60px auto;
 
   @media screen and (max-width: 1270px) {  
-    margin: ${({isFirstPanel}) => isFirstPanel ? "60px auto" : "120px auto"};
+    margin: ${({isFirstPanel}) => isFirstPanel ? "50px auto" : "100px auto"};
   }
 
   @media screen and (max-width: 600px) {  
-    margin: ${({isFirstPanel}) => isFirstPanel ? "40px auto" : "80px auto"};;
+    margin: ${({isFirstPanel}) => isFirstPanel ? "35px auto" : "70px auto"};;
   }
 `
 

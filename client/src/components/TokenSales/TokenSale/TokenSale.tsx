@@ -33,9 +33,14 @@ const TokenSaleCard = styled.div`
   flex-wrap: wrap;
   flex-direction: column;
 
+  @media screen and (max-width: 1270px) { 
+      padding: 6% 10%;
+      min-height: 50vh;
+  }
+
   @media screen and (max-width: 600px) { 
       padding: 6% 10%;
-      height: 50vh;
+      min-height: 53vh;
   }
 `
 
