@@ -8,7 +8,7 @@ export function Connect() {
   
   return (
     <Fragment>
-      <Button onClick={initWeb3}>Connect to access</Button>
+      <Button onClick={initWeb3}>Connect to access 🛰</Button>
     </Fragment>
   );
 }
