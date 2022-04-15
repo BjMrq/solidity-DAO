@@ -60,7 +60,7 @@
       "type": "function"
     }
   ],
-  "transactionHash": "0xcbbb63e45953db64b95a6a331950a298109e9fa4f5e49487e2596b8ecdd6794f",
+  "transactionHash": "0xd38452bcab96ec567d30823dbe6e35d366cebbdf7affc5f04aa8eab3c4ccd2a9",
   "receipt": {
     "to": null,
     "from": "0xAb7F4B57AFdb29A4F7263B662E1D0B4fF94B7f4A",
@@ -68,17 +68,17 @@
     "transactionIndex": 0,
     "gasUsed": "159103",
     "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-    "blockHash": "0x471a2568c30618ceece05d402ac05778320d3a2609ef697bd67a718a3d2b4982",
-    "transactionHash": "0xcbbb63e45953db64b95a6a331950a298109e9fa4f5e49487e2596b8ecdd6794f",
+    "blockHash": "0x4088d5e53a0ff6db0d8c2750f2e3377e221f36fd5f0e9de9dbec87b8d6c449bd",
+    "transactionHash": "0xd38452bcab96ec567d30823dbe6e35d366cebbdf7affc5f04aa8eab3c4ccd2a9",
     "logs": [],
-    "blockNumber": 4,
+    "blockNumber": 5,
     "cumulativeGasUsed": "159103",
     "status": 1,
     "byzantium": true
   },
   "args": [],
   "numDeployments": 1,
-  "solcInputHash": "4aece685a7b7833d44337e1ae8bb529b",
+  "solcInputHash": "ab0aa8fb554df5a9e6e7f58c60c1f6cf",
   "metadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"KYCCompletedRegistry\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_buyer\",\"type\":\"address\"}],\"name\":\"requireKYCCompletion\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_userAddress\",\"type\":\"address\"}],\"name\":\"seKYCCompletedFor\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_userAddress\",\"type\":\"address\"}],\"name\":\"seKYCRevokedFor\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/KYCValidation.sol\":\"KYCValidation\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/KYCValidation.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.8.9;\\n\\ncontract KYCValidation {\\n    mapping(address => bool) public KYCCompletedRegistry;\\n\\n    function seKYCCompletedFor(address _userAddress) external {\\n        KYCCompletedRegistry[_userAddress] = true;\\n    }\\n\\n    function seKYCRevokedFor(address _userAddress) external {\\n        KYCCompletedRegistry[_userAddress] = false;\\n    }\\n\\n    function isKYCCompletedFor(address _userAddress) internal view returns (bool) {\\n        return KYCCompletedRegistry[_userAddress];\\n    }\\n\\n    function requireKYCCompletion(address _buyer) external view {\\n        require(isKYCCompletedFor(_buyer), \\\"You must complete KYC before purchasing tokens\\\");\\n    }\\n}\\n\",\"keccak256\":\"0x3acfeca0edd5775b85019523fe0c963a88ce533b27e04b2b3865f851bad0dbe7\",\"license\":\"MIT\"}},\"version\":1}",
   "bytecode": "0x608060405234801561001057600080fd5b506101ea806100206000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c806311e1464b1461005157806337d6c8821461006657806387c1172f1461009d578063b33d5a1f146100cc575b600080fd5b61006461005f366004610184565b6100fe565b005b610089610074366004610184565b60006020819052908152604090205460ff1681565b604051901515815260200160405180910390f35b6100646100ab366004610184565b6001600160a01b03166000908152602081905260409020805460ff19169055565b6100646100da366004610184565b6001600160a01b03166000908152602081905260409020805460ff19166001179055565b6001600160a01b03811660009081526020819052604090205460ff166101815760405162461bcd60e51b815260206004820152602e60248201527f596f75206d75737420636f6d706c657465204b5943206265666f72652070757260448201526d63686173696e6720746f6b656e7360901b606482015260840160405180910390fd5b50565b60006020828403121561019657600080fd5b81356001600160a01b03811681146101ad57600080fd5b939250505056fea264697066735822122094d3a6c1c4c77b03e6cade4f47635fcb3346e78ee4c03ffeb213030f45eb54f464736f6c63430008090033",
   "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061004c5760003560e01c806311e1464b1461005157806337d6c8821461006657806387c1172f1461009d578063b33d5a1f146100cc575b600080fd5b61006461005f366004610184565b6100fe565b005b610089610074366004610184565b60006020819052908152604090205460ff1681565b604051901515815260200160405180910390f35b6100646100ab366004610184565b6001600160a01b03166000908152602081905260409020805460ff19169055565b6100646100da366004610184565b6001600160a01b03166000908152602081905260409020805460ff19166001179055565b6001600160a01b03811660009081526020819052604090205460ff166101815760405162461bcd60e51b815260206004820152602e60248201527f596f75206d75737420636f6d706c657465204b5943206265666f72652070757260448201526d63686173696e6720746f6b656e7360901b606482015260840160405180910390fd5b50565b60006020828403121561019657600080fd5b81356001600160a01b03811681146101ad57600080fd5b939250505056fea264697066735822122094d3a6c1c4c77b03e6cade4f47635fcb3346e78ee4c03ffeb213030f45eb54f464736f6c63430008090033",

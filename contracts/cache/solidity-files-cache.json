@@ -2390,8 +2390,8 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/SimpleStake.sol": {
-      "lastModificationDate": 1649611954770,
-      "contentHash": "de967d0ed25eced8d76723218c743b00",
+      "lastModificationDate": 1649972042860,
+      "contentHash": "726033c84d2638726775e6f182857fb0",
       "sourceName": "contracts/SimpleStake.sol",
       "solcConfig": {
         "version": "0.8.9",

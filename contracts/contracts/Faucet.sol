@@ -17,10 +17,11 @@ contract Faucet {
     // );
     require(address(this).balance >= faucetDistribution, "Faucet is dry");
 
+    lockTime[msg.sender] = block.timestamp + 1 days;
+    
     (bool success, ) = msg.sender.call{value: faucetDistribution}("");
     require(success, "Transfer failed.");
 
-    lockTime[msg.sender] = block.timestamp + 1 days;
   }
 
   receive() external payable {}

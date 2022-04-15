@@ -13,6 +13,8 @@ contract SimpleStake is Ownable {
     uint256 timestamp;
   }
 
+  //todo review event for saubmitted vote
+
   address[] public stakersAddress;
   mapping(address => Stake) public lastStakesRegistry;
 
@@ -112,8 +114,8 @@ contract SimpleStake is Ownable {
 
     require(totalStakedDays >= stakeLockTimeDay, "lock time has not expired");
 
-    processUnStake(senderStake, totalStakedDays);
-
     updateUnStakeTracker();
+
+    processUnStake(senderStake, totalStakedDays);
   }
 }
