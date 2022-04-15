@@ -3,7 +3,7 @@ import { expect } from "chai"
 import { BigNumber, Signer } from "ethers"
 import { ethers } from "hardhat"
 import { toSmallestUnit } from "../helpers/tokens/utils"
-import { Faucet } from "../typechain-types"
+import { Faucet, FaucetReentrancyAttacker__factory } from "../typechain-types"
 import { deployNewContract } from "./utils/deploy-new"
 
 const fundFaucet = async (faucetProvider: Signer, faucetInstanceAddress: string) =>
@@ -15,11 +15,13 @@ const fundFaucet = async (faucetProvider: Signer, faucetInstanceAddress: string)
 describe("Faucet", () => {
   let faucetFounder: SignerWithAddress
   let faucetUser: SignerWithAddress
+  let deployer: SignerWithAddress
   let Faucet: Faucet
 
   beforeEach(async () => {
     faucetFounder = await ethers.getNamedSigner("faucetFounder")
     faucetUser = await ethers.getNamedSigner("faucetFounder")
+    deployer = await ethers.getNamedSigner("deployer")
 
     Faucet = await deployNewContract("Faucet")
 
@@ -45,6 +47,21 @@ describe("Faucet", () => {
 
     expect(distributedAmount.toString().length).equal(16)
     expect(distributedAmount.toString().startsWith("99")).equal(true)
+  })
+
+  it.only("Is not vulnerable to reentrancy attacks", async () => {
+    const FaucetReentrancyAttackerFactory =
+      await ethers.getContractFactory<FaucetReentrancyAttacker__factory>("FaucetReentrancyAttacker")
+
+    const FaucetReentrancyAttacker = await FaucetReentrancyAttackerFactory.deploy(Faucet.address)
+
+    await expect(FaucetReentrancyAttacker.connect(deployer).attack()).to.be.revertedWith(
+      "Transfer failed."
+    )
+
+    const faucetBalanceAfterAttack = await ethers.provider.getBalance(Faucet.address)
+
+    expect(faucetBalanceAfterAttack).to.not.equal("0")
   })
 
   // it("Does not send ether to addresses with lot of ether", async () => {

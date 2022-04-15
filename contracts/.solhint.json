@@ -5,6 +5,7 @@
       "error",
       "^0.8.0"
     ],
+    "avoid-low-level-calls": "off",
     "mark-callable-contracts": "off",
     "no-empty-blocks": "off",
     "var-name-mixedcase": "off",

@@ -2123,8 +2123,8 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/Faucet.sol": {
-      "lastModificationDate": 1649607470094,
-      "contentHash": "29177c9667301ba710cd73c33100ac10",
+      "lastModificationDate": 1650033690729,
+      "contentHash": "6d4e00ff2c9fa76b3ad37d30ffca9859",
       "sourceName": "contracts/Faucet.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -2390,8 +2390,8 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/SimpleStake.sol": {
-      "lastModificationDate": 1649972042860,
-      "contentHash": "726033c84d2638726775e6f182857fb0",
+      "lastModificationDate": 1649986213081,
+      "contentHash": "4a13ea9883b37f8a0fb7fd4d3309ebf9",
       "sourceName": "contracts/SimpleStake.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -2435,7 +2435,7 @@
       ]
     },
     "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/AstroStake.sol": {
-      "lastModificationDate": 1649534024579,
+      "lastModificationDate": 1650032392809,
       "contentHash": "19011696254151c41717f20bad8bbbb0",
       "sourceName": "contracts/AstroStake.sol",
       "solcConfig": {
@@ -2476,6 +2476,51 @@
       ],
       "artifacts": [
         "AstroStake"
+      ]
+    },
+    "/Users/bmarquis/Crypto/solidity-DAO/contracts/contracts/test/FaucetReentrancyAttacker.sol": {
+      "lastModificationDate": 1650033625729,
+      "contentHash": "2fa66eeb97fa0353db1f15a7e521e50a",
+      "sourceName": "contracts/test/FaucetReentrancyAttacker.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "../Faucet.sol",
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.9"
+      ],
+      "artifacts": [
+        "FaucetReentrancyAttacker"
       ]
     }
   }

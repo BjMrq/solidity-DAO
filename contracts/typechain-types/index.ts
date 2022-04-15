@@ -88,6 +88,8 @@ export type { Swapable } from "./contracts/Swapable";
 export { Swapable__factory } from "./factories/contracts/Swapable__factory";
 export type { SwapContractFactory } from "./contracts/SwapContractFactory";
 export { SwapContractFactory__factory } from "./factories/contracts/SwapContractFactory__factory";
+export type { FaucetReentrancyAttacker } from "./contracts/test/FaucetReentrancyAttacker";
+export { FaucetReentrancyAttacker__factory } from "./factories/contracts/test/FaucetReentrancyAttacker__factory";
 export type { MockERC20Token } from "./contracts/test/MockERC20Token";
 export { MockERC20Token__factory } from "./factories/contracts/test/MockERC20Token__factory";
 export type { MockV3Aggregator } from "./contracts/test/MockV3Aggregator";

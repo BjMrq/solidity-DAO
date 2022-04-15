@@ -20,8 +20,8 @@ contract Faucet {
     lockTime[msg.sender] = block.timestamp + 1 days;
     
     (bool success, ) = msg.sender.call{value: faucetDistribution}("");
+    
     require(success, "Transfer failed.");
-
   }
 
   receive() external payable {}
