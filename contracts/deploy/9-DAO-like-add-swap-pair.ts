@@ -58,23 +58,6 @@ const daoLikeAddSwapPair: DeployFunction = async ({
       pairs: [
         {
           baseToken: {
-            name: "Wrapped BTC",
-            symbol: "WBTC",
-          },
-          quoteToken: {
-            address: AstroToken.address,
-          },
-          priceFeed: {
-            rate: "4100000000000",
-          },
-          swapContract: {
-            pairName: "WBTC/ASTRO",
-            baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
-            quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
-          },
-        },
-        {
-          baseToken: {
             name: "Basic Attention Token",
             symbol: "BAT",
           },
@@ -86,6 +69,23 @@ const daoLikeAddSwapPair: DeployFunction = async ({
           },
           swapContract: {
             pairName: "BAT/ASTRO",
+            baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
+            quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
+          },
+        },
+        {
+          baseToken: {
+            name: "Wrapped BTC",
+            symbol: "WBTC",
+          },
+          quoteToken: {
+            address: AstroToken.address,
+          },
+          priceFeed: {
+            rate: "4100000000000",
+          },
+          swapContract: {
+            pairName: "WBTC/ASTRO",
             baseTokenLiquidity: MOCK_ERC20_SWAP_SUPPLY,
             quoteTokenLiquidity: astroSupplyPerLiquiditySwap,
           },
