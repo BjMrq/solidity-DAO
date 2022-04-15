@@ -49,7 +49,7 @@ describe("Faucet", () => {
     expect(distributedAmount.toString().startsWith("99")).equal(true)
   })
 
-  it.only("Is not vulnerable to reentrancy attacks", async () => {
+  it("Is not vulnerable to reentrancy attacks", async () => {
     const FaucetReentrancyAttackerFactory =
       await ethers.getContractFactory<FaucetReentrancyAttacker__factory>("FaucetReentrancyAttacker")
 
