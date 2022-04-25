@@ -39,6 +39,7 @@
   "dependencies": {
     "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "dotenv": "^16.0.0",
+    "faucetli": "^1.0.3",
     "hardhat-gas-reporter": "^1.0.8"
   }
 }

@@ -17,6 +17,7 @@ export type { ERC20TokensSwap } from "./ERC20TokensSwap";
 export type { ERC20Votes } from "./ERC20Votes";
 export type { EthQuoteSwap } from "./EthQuoteSwap";
 export type { Faucet } from "./Faucet";
+export type { FaucetReentrancyAttacker } from "./FaucetReentrancyAttacker";
 export type { GovernanceOrchestrator } from "./GovernanceOrchestrator";
 export type { GovernanceTimeLock } from "./GovernanceTimeLock";
 export type { Governator } from "./Governator";
