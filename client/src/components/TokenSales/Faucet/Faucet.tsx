@@ -28,7 +28,7 @@ export function Faucet() {
   return (
     <FaucetDiv onMouseEnter={() => setShowButton(true)}
       onMouseLeave={() => setShowButton(false)}>
-      <FaucetCatchP >Pssst.. no ETH?</FaucetCatchP>
+      <FaucetCatchP >Psst.. no ETH?</FaucetCatchP>
       {showButton && <a target="_blank" href="https://faucets.chain.link/rinkeby"><SmallButton >Get some here</SmallButton></a>}
     </FaucetDiv>
   );
