@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from "styled-components";
 import { SmallButton } from "../../../style/tags/button";
 
@@ -28,7 +28,7 @@ export function Faucet() {
   return (
     <FaucetDiv onMouseEnter={() => setShowButton(true)}
       onMouseLeave={() => setShowButton(false)}>
-      <FaucetCatchP >Psss.. no ETH?</FaucetCatchP>
+      <FaucetCatchP >Pssst.. no ETH?</FaucetCatchP>
       {showButton && <a target="_blank" href="https://faucets.chain.link/rinkeby"><SmallButton >Get some here</SmallButton></a>}
     </FaucetDiv>
   );
